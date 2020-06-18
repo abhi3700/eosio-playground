@@ -1,0 +1,7 @@
+# ignore files
+*.exe
+*.out
+test*
+
+# ignore folders
+.svn/

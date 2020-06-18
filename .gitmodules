@@ -1,0 +1,3 @@
+[submodule "libs/eos-api"]
+	path = libs/eos-api
+	url = https://github.com/provable-things/eos-api.git
