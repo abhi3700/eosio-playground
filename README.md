@@ -97,6 +97,7 @@ Follow the steps:
 ##### NOTE: Make a bash file for all the `git` & `svn` operations - [setup.sh](https://github.com/abhi3700/eosio-playground/blob/master/setup.sh)
 
 ## Contracts
+* [x] [Quickstart](./quickstart.md)
 * [x] [**Hello**](https://github.com/abhi3700/eosio-playground/tree/master/hello)
 * [ ] **CRUD**
 * [ ] **Todo**
@@ -123,3 +124,12 @@ Follow the steps:
   - https://github.com/lottery100/lottery100/
 * **BP Info.**
   - https://github.com/greymass/producerjson
+
+## Commands
+* `cleos`: [How to guides](https://developers.eos.io/manuals/eos/latest/cleos/how-to-guides/index)
+
+## Deploy a contract [on Testnet]
+* Ensure you have a wallet created locally
+* Create an EOS account with public keys (owner & active)
+* Now, link this EOS account with your wallet created by importing the public key using private key (secret to you)
+* Now, deploy contract (`.wasm`) to your testnet from wallet by setting e.g. `cabeos1test1@active`
