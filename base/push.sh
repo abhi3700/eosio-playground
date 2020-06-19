@@ -1,0 +1,1 @@
+cleos -u http://jungle2.cryptolions.io:80 push action cabeos1test1 set '["156", "abhijit roy"]' -p cabeos1test1@active
