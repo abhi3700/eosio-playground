@@ -10,10 +10,16 @@ class [[eosio::contract]] hello : public contract {
 public:
 	using contract::contract;
 
-	[[eosio::action]]
-	void hi(string a) {
+	[[eosio::action("hiany")]]
+	void hiany(string a) {
 		print("Hello, ", a);
+	}
+
+	[[eosio::action("hiname")]]
+	void hiname(name user) {
+		require_auth(user);
+		print("Hello, your EOS name is, ", user);
 	}
 };
 
-EOSIO_DISPATCH(hello, (hi))
+EOSIO_DISPATCH(hello, (hiany) (hiname))
