@@ -1,0 +1,31 @@
+{
+    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT ",
+    "version": "eosio::abi/1.1",
+    "types": [],
+    "structs": [
+        {
+            "name": "putval",
+            "base": "",
+            "fields": [
+                {
+                    "name": "num",
+                    "type": "int32"
+                },
+                {
+                    "name": "str",
+                    "type": "string"
+                }
+            ]
+        }
+    ],
+    "actions": [
+        {
+            "name": "putval",
+            "type": "putval",
+            "ricardian_contract": ""
+        }
+    ],
+    "tables": [],
+    "ricardian_clauses": [],
+    "variants": []
+}
