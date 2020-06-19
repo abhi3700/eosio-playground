@@ -11,15 +11,18 @@ public:
 	using contract::contract;
 
 	[[eosio::action("hiany")]]
-	void hiany(string a) {
+	void hi_any(string a) {
 		print("Hello, ", a);
 	}
 
 	[[eosio::action("hiname")]]
-	void hiname(name user) {
+	void hi_name(name user) {
 		require_auth(user);
 		print("Hello, your EOS name is, ", user);
 	}
 };
 
-EOSIO_DISPATCH(hello, (hiany) (hiname))
+
+
+// deprecated in eosio.cdt v1.7.0
+// EOSIO_DISPATCH(hello, (hiany) (hiname))

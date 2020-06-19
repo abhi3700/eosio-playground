@@ -4,7 +4,7 @@
     "types": [],
     "structs": [
         {
-            "name": "hiany",
+            "name": "hi_any",
             "base": "",
             "fields": [
                 {
@@ -14,7 +14,7 @@
             ]
         },
         {
-            "name": "hiname",
+            "name": "hi_name",
             "base": "",
             "fields": [
                 {
@@ -27,12 +27,12 @@
     "actions": [
         {
             "name": "hiany",
-            "type": "hiany",
+            "type": "hi_any",
             "ricardian_contract": ""
         },
         {
             "name": "hiname",
-            "type": "hiname",
+            "type": "hi_name",
             "ricardian_contract": ""
         }
     ],
