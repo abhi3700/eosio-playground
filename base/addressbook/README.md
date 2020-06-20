@@ -192,6 +192,23 @@ $ cleost get table cabeos1test2 cabeos1test2 people
   "next_key": ""
 }
 ```
+* Show the data of `cabeos1user1` in the table,
+```console
+$ cleost get table cabeos1test2 cabeos1test2 people --lower cabeos1user1
+{
+  "rows": [{
+      "key": "cabeos1user1",
+      "first_name": "abhijit",
+      "last_name": "roy",
+      "street": "r79, (top floor) \n Sec-74",
+      "city": "Mohali",
+      "state": "Punjab"
+    }
+  ],
+  "more": false,
+  "next_key": ""
+}
+```
 
 * Check for: A user is not able to add other user's data
 ```console
@@ -483,5 +500,15 @@ $ cleost get table cabeos1test2 cabeos1test2 people
   "next_key": ""
 }
 ```
+* Show the data of `cabeos1user2` in the table,
+```console
+$ cleost get table cabeos1test2 cabeos1test2 people --lower cabeos1user2
+{
+  "rows": [],
+  "more": false,
+  "next_key": ""
+}
+```
+
 
 
