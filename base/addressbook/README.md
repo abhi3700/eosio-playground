@@ -1,3 +1,30 @@
+## RAM table
+* Here, the table is found in the contract (obviously as it is deployed there)
+* Who pays for each row?
+	- Here, each person pays for its own piece of data
+* Where do you define that?
+	- in the emplace, modify method of multi-index table
+```cpp
+addresses.emplace(user, [&]( auto& row ) {
+      row.key = user;
+      row.first_name = first_name;
+      row.last_name = last_name;
+      row.street = street;
+      row.city = city;
+      row.state = state;
+    });
+...
+...
+addresses.modify(iterator, user, [&]( auto& row ) {
+      row.key = user;
+      row.first_name = first_name;
+      row.last_name = last_name;
+      row.street = street;
+      row.city = city;
+      row.state = state;
+    });
+```
+
 ## Compile
 * Compile the contract
 ```console
@@ -39,30 +66,30 @@ warning: transaction executed locally, but may not be confirmed by the network y
 $ cleost get account cabeos1test2
 created: 2020-06-19T23:32:38.000
 permissions:
-     owner     1:    1 EOS6RfC8G85q8ZYeota1g8Fb4YpJ2vBxaKBoByzLZEG1qQQCPwvp6
-        active     1:    1 EOS6RfC8G85q8ZYeota1g8Fb4YpJ2vBxaKBoByzLZEG1qQQCPwvp6
+	 owner     1:    1 EOS6RfC8G85q8ZYeota1g8Fb4YpJ2vBxaKBoByzLZEG1qQQCPwvp6
+		active     1:    1 EOS6RfC8G85q8ZYeota1g8Fb4YpJ2vBxaKBoByzLZEG1qQQCPwvp6
 memory:
-     quota:     173.4 KiB    used:     114.7 KiB
+	 quota:     173.4 KiB    used:     114.7 KiB
 
 net bandwidth:
-     staked:          1.0000 EOS           (total stake delegated from account to self)
-     delegated:       0.0000 EOS           (total staked delegated to account from others)
-     used:             5.211 KiB
-     available:        57.53 KiB
-     limit:            62.74 KiB
+	 staked:          1.0000 EOS           (total stake delegated from account to self)
+	 delegated:       0.0000 EOS           (total staked delegated to account from others)
+	 used:             5.211 KiB
+	 available:        57.53 KiB
+	 limit:            62.74 KiB
 
 cpu bandwidth:
-     staked:          1.0000 EOS           (total stake delegated from account to self)
-     delegated:       0.0000 EOS           (total staked delegated to account from others)
-     used:               739 us
-     available:        58.25 ms
-     limit:            58.99 ms
+	 staked:          1.0000 EOS           (total stake delegated from account to self)
+	 delegated:       0.0000 EOS           (total staked delegated to account from others)
+	 used:               739 us
+	 available:        58.25 ms
+	 limit:            58.99 ms
 
 EOS balances:
-     liquid:           80.0000 EOS
-     staked:            2.0000 EOS
-     unstaking:         0.0000 EOS
-     total:            82.0000 EOS
+	 liquid:           80.0000 EOS
+	 staked:            2.0000 EOS
+	 unstaking:         0.0000 EOS
+	 total:            82.0000 EOS
 
 producers:     <not voted>
 ```
@@ -72,24 +99,24 @@ producers:     <not voted>
 $ cleost get account cabeos1user2
 created: 2020-06-18T21:23:02.000
 permissions:
-     owner     1:    1 EOS5oU8s1CX9fRBsqM1PHiuf1L4s1H8BdTxP2Vx1WP5bhoUbWXByu
-        active     1:    1 EOS5oU8s1CX9fRBsqM1PHiuf1L4s1H8BdTxP2Vx1WP5bhoUbWXByu
+	 owner     1:    1 EOS5oU8s1CX9fRBsqM1PHiuf1L4s1H8BdTxP2Vx1WP5bhoUbWXByu
+		active     1:    1 EOS5oU8s1CX9fRBsqM1PHiuf1L4s1H8BdTxP2Vx1WP5bhoUbWXByu
 memory:
-     quota:     5.365 KiB    used:     3.365 KiB
+	 quota:     5.365 KiB    used:     3.365 KiB
 
 net bandwidth:
-     staked:          1.0000 EOS           (total stake delegated from account to self)
-     delegated:       0.0000 EOS           (total staked delegated to account from others)
-     used:                 0 bytes
-     available:        62.74 KiB
-     limit:            62.74 KiB
+	 staked:          1.0000 EOS           (total stake delegated from account to self)
+	 delegated:       0.0000 EOS           (total staked delegated to account from others)
+	 used:                 0 bytes
+	 available:        62.74 KiB
+	 limit:            62.74 KiB
 
 cpu bandwidth:
-     staked:          1.0000 EOS           (total stake delegated from account to self)
-     delegated:       0.0000 EOS           (total staked delegated to account from others)
-     used:                 0 us
-     available:        58.99 ms
-     limit:            58.99 ms
+	 staked:          1.0000 EOS           (total stake delegated from account to self)
+	 delegated:       0.0000 EOS           (total staked delegated to account from others)
+	 used:                 0 us
+	 available:        58.99 ms
+	 limit:            58.99 ms
 
 producers:     <not voted>
 ```
@@ -108,30 +135,30 @@ warning: transaction executed locally, but may not be confirmed by the network y
 $ cleost get account cabeos1test2
 created: 2020-06-19T23:32:38.000
 permissions:
-     owner     1:    1 EOS6RfC8G85q8ZYeota1g8Fb4YpJ2vBxaKBoByzLZEG1qQQCPwvp6
-        active     1:    1 EOS6RfC8G85q8ZYeota1g8Fb4YpJ2vBxaKBoByzLZEG1qQQCPwvp6
+	 owner     1:    1 EOS6RfC8G85q8ZYeota1g8Fb4YpJ2vBxaKBoByzLZEG1qQQCPwvp6
+		active     1:    1 EOS6RfC8G85q8ZYeota1g8Fb4YpJ2vBxaKBoByzLZEG1qQQCPwvp6
 memory:
-     quota:     173.4 KiB    used:     114.7 KiB
+	 quota:     173.4 KiB    used:     114.7 KiB
 
 net bandwidth:
-     staked:          1.0000 EOS           (total stake delegated from account to self)
-     delegated:       0.0000 EOS           (total staked delegated to account from others)
-     used:             5.211 KiB
-     available:        57.53 KiB
-     limit:            62.74 KiB
+	 staked:          1.0000 EOS           (total stake delegated from account to self)
+	 delegated:       0.0000 EOS           (total staked delegated to account from others)
+	 used:             5.211 KiB
+	 available:        57.53 KiB
+	 limit:            62.74 KiB
 
 cpu bandwidth:
-     staked:          1.0000 EOS           (total stake delegated from account to self)
-     delegated:       0.0000 EOS           (total staked delegated to account from others)
-     used:               739 us
-     available:        58.25 ms
-     limit:            58.99 ms
+	 staked:          1.0000 EOS           (total stake delegated from account to self)
+	 delegated:       0.0000 EOS           (total staked delegated to account from others)
+	 used:               739 us
+	 available:        58.25 ms
+	 limit:            58.99 ms
 
 EOS balances:
-     liquid:           80.0000 EOS
-     staked:            2.0000 EOS
-     unstaking:         0.0000 EOS
-     total:            82.0000 EOS
+	 liquid:           80.0000 EOS
+	 staked:            2.0000 EOS
+	 unstaking:         0.0000 EOS
+	 total:            82.0000 EOS
 
 producers:     <not voted>
 ```	
@@ -141,24 +168,24 @@ producers:     <not voted>
 $ cleost get account cabeos1user2
 created: 2020-06-18T21:23:02.000
 permissions:
-     owner     1:    1 EOS5oU8s1CX9fRBsqM1PHiuf1L4s1H8BdTxP2Vx1WP5bhoUbWXByu
-        active     1:    1 EOS5oU8s1CX9fRBsqM1PHiuf1L4s1H8BdTxP2Vx1WP5bhoUbWXByu
+	 owner     1:    1 EOS5oU8s1CX9fRBsqM1PHiuf1L4s1H8BdTxP2Vx1WP5bhoUbWXByu
+		active     1:    1 EOS5oU8s1CX9fRBsqM1PHiuf1L4s1H8BdTxP2Vx1WP5bhoUbWXByu
 memory:
-     quota:     5.365 KiB    used:      3.54 KiB
+	 quota:     5.365 KiB    used:      3.54 KiB
 
 net bandwidth:
-     staked:          1.0000 EOS           (total stake delegated from account to self)
-     delegated:       0.0000 EOS           (total staked delegated to account from others)
-     used:               161 bytes
-     available:        62.59 KiB
-     limit:            62.74 KiB
+	 staked:          1.0000 EOS           (total stake delegated from account to self)
+	 delegated:       0.0000 EOS           (total staked delegated to account from others)
+	 used:               161 bytes
+	 available:        62.59 KiB
+	 limit:            62.74 KiB
 
 cpu bandwidth:
-     staked:          1.0000 EOS           (total stake delegated from account to self)
-     delegated:       0.0000 EOS           (total staked delegated to account from others)
-     used:               288 us
-     available:         58.7 ms
-     limit:            58.99 ms
+	 staked:          1.0000 EOS           (total stake delegated from account to self)
+	 delegated:       0.0000 EOS           (total staked delegated to account from others)
+	 used:               288 us
+	 available:         58.7 ms
+	 limit:            58.99 ms
 
 producers:     <not voted>
 ```
@@ -173,20 +200,50 @@ producers:     <not voted>
 $ cleost get table cabeos1test2 cabeos1test2 people
 {
   "rows": [{
-      "key": "cabeos1user1",
-      "first_name": "abhijit",
-      "last_name": "roy",
-      "street": "r79, (top floor) \n Sec-74",
-      "city": "Mohali",
-      "state": "Punjab"
-    },{
-      "key": "cabeos1user2",
-      "first_name": "ramesh",
-      "last_name": "bhattacharya",
-      "street": "2-lane park street",
-      "city": "Kolkata",
-      "state": "West Bengal"
-    }
+	  "key": "cabeos1user1",
+	  "first_name": "abhijit",
+	  "last_name": "roy",
+	  "street": "r79, (top floor) \n Sec-74",
+	  "city": "Mohali",
+	  "state": "Punjab"
+	},{
+	  "key": "cabeos1user2",
+	  "first_name": "ramesh",
+	  "last_name": "bhattacharya",
+	  "street": "2-lane park street",
+	  "city": "Kolkata",
+	  "state": "West Bengal"
+	}
+  ],
+  "more": false,
+  "next_key": ""
+}
+```
+* Now, see the entire table with the ram_payer
+```console
+$ cleost get table cabeos1test2 cabeos1test2 people --show-payer
+{
+  "rows": [{
+	  "data": {
+		"key": "cabeos1user1",
+		"first_name": "abhijit",
+		"last_name": "roy",
+		"street": "r79, (top floor) \n Sec-74",
+		"city": "Mohali",
+		"state": "Punjab"
+	  },
+	  "payer": "cabeos1user1"
+	},{
+	  "data": {
+		"key": "cabeos1user2",
+		"first_name": "ramesh",
+		"last_name": "bhattacharya",
+		"street": "2-lane park street",
+		"city": "Kolkata",
+		"state": "West Bengal"
+	  },
+	  "payer": "cabeos1user2"
+	}
   ],
   "more": false,
   "next_key": ""
@@ -197,13 +254,13 @@ $ cleost get table cabeos1test2 cabeos1test2 people
 $ cleost get table cabeos1test2 cabeos1test2 people --lower cabeos1user1
 {
   "rows": [{
-      "key": "cabeos1user1",
-      "first_name": "abhijit",
-      "last_name": "roy",
-      "street": "r79, (top floor) \n Sec-74",
-      "city": "Mohali",
-      "state": "Punjab"
-    }
+	  "key": "cabeos1user1",
+	  "first_name": "abhijit",
+	  "last_name": "roy",
+	  "street": "r79, (top floor) \n Sec-74",
+	  "city": "Mohali",
+	  "state": "Punjab"
+	}
   ],
   "more": false,
   "next_key": ""
@@ -229,30 +286,30 @@ pending console output:
 $ cleost get account cabeos1test2
 created: 2020-06-19T23:32:38.000
 permissions:
-     owner     1:    1 EOS6RfC8G85q8ZYeota1g8Fb4YpJ2vBxaKBoByzLZEG1qQQCPwvp6
-        active     1:    1 EOS6RfC8G85q8ZYeota1g8Fb4YpJ2vBxaKBoByzLZEG1qQQCPwvp6
+	 owner     1:    1 EOS6RfC8G85q8ZYeota1g8Fb4YpJ2vBxaKBoByzLZEG1qQQCPwvp6
+		active     1:    1 EOS6RfC8G85q8ZYeota1g8Fb4YpJ2vBxaKBoByzLZEG1qQQCPwvp6
 memory:
-     quota:     173.4 KiB    used:     114.7 KiB
+	 quota:     173.4 KiB    used:     114.7 KiB
 
 net bandwidth:
-     staked:          1.0000 EOS           (total stake delegated from account to self)
-     delegated:       0.0000 EOS           (total staked delegated to account from others)
-     used:             5.211 KiB
-     available:        57.53 KiB
-     limit:            62.74 KiB
+	 staked:          1.0000 EOS           (total stake delegated from account to self)
+	 delegated:       0.0000 EOS           (total staked delegated to account from others)
+	 used:             5.211 KiB
+	 available:        57.53 KiB
+	 limit:            62.74 KiB
 
 cpu bandwidth:
-     staked:          1.0000 EOS           (total stake delegated from account to self)
-     delegated:       0.0000 EOS           (total staked delegated to account from others)
-     used:               739 us
-     available:        58.25 ms
-     limit:            58.99 ms
+	 staked:          1.0000 EOS           (total stake delegated from account to self)
+	 delegated:       0.0000 EOS           (total staked delegated to account from others)
+	 used:               739 us
+	 available:        58.25 ms
+	 limit:            58.99 ms
 
 EOS balances:
-     liquid:           80.0000 EOS
-     staked:            2.0000 EOS
-     unstaking:         0.0000 EOS
-     total:            82.0000 EOS
+	 liquid:           80.0000 EOS
+	 staked:            2.0000 EOS
+	 unstaking:         0.0000 EOS
+	 total:            82.0000 EOS
 
 producers:     <not voted>
 ```
@@ -262,24 +319,24 @@ producers:     <not voted>
 $ cleost get account cabeos1user3
 created: 2020-06-18T21:28:00.500
 permissions:
-     owner     1:    1 EOS4yCYGzJAo5sTGPtL8mGS2TgfLagykrodBWGaDApNRY8KWfHJ75
-        active     1:    1 EOS4yCYGzJAo5sTGPtL8mGS2TgfLagykrodBWGaDApNRY8KWfHJ75
+	 owner     1:    1 EOS4yCYGzJAo5sTGPtL8mGS2TgfLagykrodBWGaDApNRY8KWfHJ75
+		active     1:    1 EOS4yCYGzJAo5sTGPtL8mGS2TgfLagykrodBWGaDApNRY8KWfHJ75
 memory:
-     quota:     5.365 KiB    used:     3.365 KiB
+	 quota:     5.365 KiB    used:     3.365 KiB
 
 net bandwidth:
-     staked:          1.0000 EOS           (total stake delegated from account to self)
-     delegated:       0.0000 EOS           (total staked delegated to account from others)
-     used:                 0 bytes
-     available:        62.74 KiB
-     limit:            62.74 KiB
+	 staked:          1.0000 EOS           (total stake delegated from account to self)
+	 delegated:       0.0000 EOS           (total staked delegated to account from others)
+	 used:                 0 bytes
+	 available:        62.74 KiB
+	 limit:            62.74 KiB
 
 cpu bandwidth:
-     staked:          1.0000 EOS           (total stake delegated from account to self)
-     delegated:       0.0000 EOS           (total staked delegated to account from others)
-     used:                 0 us
-     available:        58.99 ms
-     limit:            58.99 ms
+	 staked:          1.0000 EOS           (total stake delegated from account to self)
+	 delegated:       0.0000 EOS           (total staked delegated to account from others)
+	 used:                 0 us
+	 available:        58.99 ms
+	 limit:            58.99 ms
 
 producers:     <not voted>
 ```
@@ -299,30 +356,30 @@ pending console output:         ]
 $ cleost get account cabeos1test2
 created: 2020-06-19T23:32:38.000
 permissions:
-     owner     1:    1 EOS6RfC8G85q8ZYeota1g8Fb4YpJ2vBxaKBoByzLZEG1qQQCPwvp6
-        active     1:    1 EOS6RfC8G85q8ZYeota1g8Fb4YpJ2vBxaKBoByzLZEG1qQQCPwvp6
+	 owner     1:    1 EOS6RfC8G85q8ZYeota1g8Fb4YpJ2vBxaKBoByzLZEG1qQQCPwvp6
+		active     1:    1 EOS6RfC8G85q8ZYeota1g8Fb4YpJ2vBxaKBoByzLZEG1qQQCPwvp6
 memory:
-     quota:     173.4 KiB    used:     114.7 KiB
+	 quota:     173.4 KiB    used:     114.7 KiB
 
 net bandwidth:
-     staked:          1.0000 EOS           (total stake delegated from account to self)
-     delegated:       0.0000 EOS           (total staked delegated to account from others)
-     used:             5.211 KiB
-     available:        57.53 KiB
-     limit:            62.74 KiB
+	 staked:          1.0000 EOS           (total stake delegated from account to self)
+	 delegated:       0.0000 EOS           (total staked delegated to account from others)
+	 used:             5.211 KiB
+	 available:        57.53 KiB
+	 limit:            62.74 KiB
 
 cpu bandwidth:
-     staked:          1.0000 EOS           (total stake delegated from account to self)
-     delegated:       0.0000 EOS           (total staked delegated to account from others)
-     used:               739 us
-     available:        58.25 ms
-     limit:            58.99 ms
+	 staked:          1.0000 EOS           (total stake delegated from account to self)
+	 delegated:       0.0000 EOS           (total staked delegated to account from others)
+	 used:               739 us
+	 available:        58.25 ms
+	 limit:            58.99 ms
 
 EOS balances:
-     liquid:           80.0000 EOS
-     staked:            2.0000 EOS
-     unstaking:         0.0000 EOS
-     total:            82.0000 EOS
+	 liquid:           80.0000 EOS
+	 staked:            2.0000 EOS
+	 unstaking:         0.0000 EOS
+	 total:            82.0000 EOS
 
 producers:     <not voted>
 ```	
@@ -332,24 +389,24 @@ producers:     <not voted>
 $ cleost get account cabeos1user3
 created: 2020-06-18T21:28:00.500
 permissions:
-     owner     1:    1 EOS4yCYGzJAo5sTGPtL8mGS2TgfLagykrodBWGaDApNRY8KWfHJ75
-        active     1:    1 EOS4yCYGzJAo5sTGPtL8mGS2TgfLagykrodBWGaDApNRY8KWfHJ75
+	 owner     1:    1 EOS4yCYGzJAo5sTGPtL8mGS2TgfLagykrodBWGaDApNRY8KWfHJ75
+		active     1:    1 EOS4yCYGzJAo5sTGPtL8mGS2TgfLagykrodBWGaDApNRY8KWfHJ75
 memory:
-     quota:     5.365 KiB    used:     3.365 KiB
+	 quota:     5.365 KiB    used:     3.365 KiB
 
 net bandwidth:
-     staked:          1.0000 EOS           (total stake delegated from account to self)
-     delegated:       0.0000 EOS           (total staked delegated to account from others)
-     used:                 0 bytes
-     available:        62.74 KiB
-     limit:            62.74 KiB
+	 staked:          1.0000 EOS           (total stake delegated from account to self)
+	 delegated:       0.0000 EOS           (total staked delegated to account from others)
+	 used:                 0 bytes
+	 available:        62.74 KiB
+	 limit:            62.74 KiB
 
 cpu bandwidth:
-     staked:          1.0000 EOS           (total stake delegated from account to self)
-     delegated:       0.0000 EOS           (total staked delegated to account from others)
-     used:                 0 us
-     available:        58.99 ms
-     limit:            58.99 ms
+	 staked:          1.0000 EOS           (total stake delegated from account to self)
+	 delegated:       0.0000 EOS           (total staked delegated to account from others)
+	 used:                 0 us
+	 available:        58.99 ms
+	 limit:            58.99 ms
 
 producers:     <not voted>
 ```
@@ -359,30 +416,30 @@ producers:     <not voted>
 $ cleost get account cabeos1test2
 created: 2020-06-19T23:32:38.000
 permissions:
-     owner     1:    1 EOS6RfC8G85q8ZYeota1g8Fb4YpJ2vBxaKBoByzLZEG1qQQCPwvp6
-        active     1:    1 EOS6RfC8G85q8ZYeota1g8Fb4YpJ2vBxaKBoByzLZEG1qQQCPwvp6
+	 owner     1:    1 EOS6RfC8G85q8ZYeota1g8Fb4YpJ2vBxaKBoByzLZEG1qQQCPwvp6
+		active     1:    1 EOS6RfC8G85q8ZYeota1g8Fb4YpJ2vBxaKBoByzLZEG1qQQCPwvp6
 memory:
-     quota:     173.4 KiB    used:     114.7 KiB
+	 quota:     173.4 KiB    used:     114.7 KiB
 
 net bandwidth:
-     staked:          1.0000 EOS           (total stake delegated from account to self)
-     delegated:       0.0000 EOS           (total staked delegated to account from others)
-     used:             5.211 KiB
-     available:        57.53 KiB
-     limit:            62.74 KiB
+	 staked:          1.0000 EOS           (total stake delegated from account to self)
+	 delegated:       0.0000 EOS           (total staked delegated to account from others)
+	 used:             5.211 KiB
+	 available:        57.53 KiB
+	 limit:            62.74 KiB
 
 cpu bandwidth:
-     staked:          1.0000 EOS           (total stake delegated from account to self)
-     delegated:       0.0000 EOS           (total staked delegated to account from others)
-     used:               739 us
-     available:        58.25 ms
-     limit:            58.99 ms
+	 staked:          1.0000 EOS           (total stake delegated from account to self)
+	 delegated:       0.0000 EOS           (total staked delegated to account from others)
+	 used:               739 us
+	 available:        58.25 ms
+	 limit:            58.99 ms
 
 EOS balances:
-     liquid:           80.0000 EOS
-     staked:            2.0000 EOS
-     unstaking:         0.0000 EOS
-     total:            82.0000 EOS
+	 liquid:           80.0000 EOS
+	 staked:            2.0000 EOS
+	 unstaking:         0.0000 EOS
+	 total:            82.0000 EOS
 
 producers:     <not voted>
 ```
@@ -392,24 +449,24 @@ producers:     <not voted>
 $ cleost get account cabeos1user2
 created: 2020-06-18T21:23:02.000
 permissions:
-     owner     1:    1 EOS5oU8s1CX9fRBsqM1PHiuf1L4s1H8BdTxP2Vx1WP5bhoUbWXByu
-        active     1:    1 EOS5oU8s1CX9fRBsqM1PHiuf1L4s1H8BdTxP2Vx1WP5bhoUbWXByu
+	 owner     1:    1 EOS5oU8s1CX9fRBsqM1PHiuf1L4s1H8BdTxP2Vx1WP5bhoUbWXByu
+		active     1:    1 EOS5oU8s1CX9fRBsqM1PHiuf1L4s1H8BdTxP2Vx1WP5bhoUbWXByu
 memory:
-     quota:     5.365 KiB    used:      3.54 KiB
+	 quota:     5.365 KiB    used:      3.54 KiB
 
 net bandwidth:
-     staked:          1.0000 EOS           (total stake delegated from account to self)
-     delegated:       0.0000 EOS           (total staked delegated to account from others)
-     used:               161 bytes
-     available:        62.59 KiB
-     limit:            62.74 KiB
+	 staked:          1.0000 EOS           (total stake delegated from account to self)
+	 delegated:       0.0000 EOS           (total staked delegated to account from others)
+	 used:               161 bytes
+	 available:        62.59 KiB
+	 limit:            62.74 KiB
 
 cpu bandwidth:
-     staked:          1.0000 EOS           (total stake delegated from account to self)
-     delegated:       0.0000 EOS           (total staked delegated to account from others)
-     used:               288 us
-     available:         58.7 ms
-     limit:            58.99 ms
+	 staked:          1.0000 EOS           (total stake delegated from account to self)
+	 delegated:       0.0000 EOS           (total staked delegated to account from others)
+	 used:               288 us
+	 available:         58.7 ms
+	 limit:            58.99 ms
 
 producers:     <not voted>
 ```
@@ -428,30 +485,30 @@ warning: transaction executed locally, but may not be confirmed by the network y
 $ cleost get account cabeos1test2
 created: 2020-06-19T23:32:38.000
 permissions:
-     owner     1:    1 EOS6RfC8G85q8ZYeota1g8Fb4YpJ2vBxaKBoByzLZEG1qQQCPwvp6
-        active     1:    1 EOS6RfC8G85q8ZYeota1g8Fb4YpJ2vBxaKBoByzLZEG1qQQCPwvp6
+	 owner     1:    1 EOS6RfC8G85q8ZYeota1g8Fb4YpJ2vBxaKBoByzLZEG1qQQCPwvp6
+		active     1:    1 EOS6RfC8G85q8ZYeota1g8Fb4YpJ2vBxaKBoByzLZEG1qQQCPwvp6
 memory:
-     quota:     173.4 KiB    used:     114.7 KiB
+	 quota:     173.4 KiB    used:     114.7 KiB
 
 net bandwidth:
-     staked:          1.0000 EOS           (total stake delegated from account to self)
-     delegated:       0.0000 EOS           (total staked delegated to account from others)
-     used:             5.211 KiB
-     available:        57.53 KiB
-     limit:            62.74 KiB
+	 staked:          1.0000 EOS           (total stake delegated from account to self)
+	 delegated:       0.0000 EOS           (total staked delegated to account from others)
+	 used:             5.211 KiB
+	 available:        57.53 KiB
+	 limit:            62.74 KiB
 
 cpu bandwidth:
-     staked:          1.0000 EOS           (total stake delegated from account to self)
-     delegated:       0.0000 EOS           (total staked delegated to account from others)
-     used:               739 us
-     available:        58.25 ms
-     limit:            58.99 ms
+	 staked:          1.0000 EOS           (total stake delegated from account to self)
+	 delegated:       0.0000 EOS           (total staked delegated to account from others)
+	 used:               739 us
+	 available:        58.25 ms
+	 limit:            58.99 ms
 
 EOS balances:
-     liquid:           80.0000 EOS
-     staked:            2.0000 EOS
-     unstaking:         0.0000 EOS
-     total:            82.0000 EOS
+	 liquid:           80.0000 EOS
+	 staked:            2.0000 EOS
+	 unstaking:         0.0000 EOS
+	 total:            82.0000 EOS
 
 producers:     <not voted>
 ```	
@@ -461,24 +518,24 @@ producers:     <not voted>
 $ cleost get account cabeos1user2
 created: 2020-06-18T21:23:02.000
 permissions:
-     owner     1:    1 EOS5oU8s1CX9fRBsqM1PHiuf1L4s1H8BdTxP2Vx1WP5bhoUbWXByu
-        active     1:    1 EOS5oU8s1CX9fRBsqM1PHiuf1L4s1H8BdTxP2Vx1WP5bhoUbWXByu
+	 owner     1:    1 EOS5oU8s1CX9fRBsqM1PHiuf1L4s1H8BdTxP2Vx1WP5bhoUbWXByu
+		active     1:    1 EOS5oU8s1CX9fRBsqM1PHiuf1L4s1H8BdTxP2Vx1WP5bhoUbWXByu
 memory:
-     quota:     5.365 KiB    used:     3.365 KiB
+	 quota:     5.365 KiB    used:     3.365 KiB
 
 net bandwidth:
-     staked:          1.0000 EOS           (total stake delegated from account to self)
-     delegated:       0.0000 EOS           (total staked delegated to account from others)
-     used:               260 bytes
-     available:        62.49 KiB
-     limit:            62.74 KiB
+	 staked:          1.0000 EOS           (total stake delegated from account to self)
+	 delegated:       0.0000 EOS           (total staked delegated to account from others)
+	 used:               260 bytes
+	 available:        62.49 KiB
+	 limit:            62.74 KiB
 
 cpu bandwidth:
-     staked:          1.0000 EOS           (total stake delegated from account to self)
-     delegated:       0.0000 EOS           (total staked delegated to account from others)
-     used:               371 us
-     available:        58.62 ms
-     limit:            58.99 ms
+	 staked:          1.0000 EOS           (total stake delegated from account to self)
+	 delegated:       0.0000 EOS           (total staked delegated to account from others)
+	 used:               371 us
+	 available:        58.62 ms
+	 limit:            58.99 ms
 
 producers:     <not voted>
 ```
@@ -488,13 +545,13 @@ producers:     <not voted>
 $ cleost get table cabeos1test2 cabeos1test2 people
 {
   "rows": [{
-      "key": "cabeos1user1",
-      "first_name": "abhijit",
-      "last_name": "roy",
-      "street": "r79, (top floor) \n Sec-74",
-      "city": "Mohali",
-      "state": "Punjab"
-    }
+	  "key": "cabeos1user1",
+	  "first_name": "abhijit",
+	  "last_name": "roy",
+	  "street": "r79, (top floor) \n Sec-74",
+	  "city": "Mohali",
+	  "state": "Punjab"
+	}
   ],
   "more": false,
   "next_key": ""

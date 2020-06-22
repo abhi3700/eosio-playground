@@ -19,8 +19,6 @@ public:
 		string state ) {
 		require_auth(user);
 
-
-		print("get_code(): ", get_code(), " | ");	// for debugging
 		print("get_self(): ", get_self(), " | ");	// for debugging
 		print("get_first_receiver(): ", get_first_receiver(), " | ");	// for debugging
 		print("get_first_receiver() value: ", get_first_receiver().value, " |");	// for debugging
@@ -62,7 +60,7 @@ public:
 	}
 
 private:
-	struct [[eosio::table]] person
+	struct [[eosio::table("people")]] person
 	{
 		name key;
 		string first_name;

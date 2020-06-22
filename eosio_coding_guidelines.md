@@ -224,6 +224,31 @@ This action explains that the transfer function requires the authorization of th
 This action helps in getting notification to the account. This explains that the current action to be delivered to the account name.
 
 
+## Troubleshoot
+* If this error found during pushing action
+```console
+$ cleost push action cabeos1test2 upsert '["cabeos1user1", "abhijit", "roy", "r79, (top floor) \n Sec-74", "Mohali", "Punjab"]' -p cabeos1user1@active
+Error 3050004: eosio_assert_code assertion failure
+Error Details:
+assertion failure with error code: 8000000000000000000
+pending console output:
+```
+	- this means check for the this line
+```cpp
+class [[eosio::contract("cabeos1test2")]] addressbook : public contract
+```
+	- just remove this `("cabeos1test2")`, & you will see that, the output is in front of you like this:
+```cpp
+class [[eosio::contract]] addressbook : public contract
+```
+```console
+$ cleost push action cabeos1test2 upsert '["cabeos1user1", "abhijit", "roy", "r79, (top floor) \n Sec-74", "Mohali", "Punjab"]' -p cabeos1user1@active
+executed transaction: ceca02d079c4bb6709658ecf91f5a277f7e1019a464456a4093f150ae7929491  152 bytes  536 us
+#  cabeos1test2 <= cabeos1test2::upsert         {"user":"cabeos1user1","first_name":"abhijit","last_name":"roy","street":"r79, (top floor) \n Sec-74...
+>> get_self(): cabeos1test2 | get_first_receiver(): cabeos1test2 | get_first_receiver() value: 4723900389413761568 |
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+
 
 ## References
 * [EOSIO Developer Portal](https://developers.eos.io/)
