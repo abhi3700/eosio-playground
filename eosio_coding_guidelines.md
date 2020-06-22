@@ -26,13 +26,58 @@
 	- __ram_payer__ is defined inside the multi-index table var i.e. e.g. 
 	- __permission authority__ is defined at `require_auth()`.
 	- account, where the data gets stored. This account could be same as the permission authority or even ram_payer.
-* Monitor 
+* types
+	- External actions
+	- Inline actions
+		+ Type-1: action calls to another action within same contract
+		+ Type-2: action of one contract calls to action of another contract.
+
 
 ## Table
-* `TABLE` is equal to `struct [[eosio::table]]`  
+* `TABLE` is equal to `struct [[eosio::table]]`
+* 2 params
+	- 1. `code`: specifies the owner of this table. 
+		+ Here we use the `get_self()` function which will pass the name of this contract.
+	- 2. `scope`: ensures the uniqueness of the table.
+		+ Scopes were originally intended to separate table state in order to allow for parallel computation on the individual sub-tables. However, currently inter-blockchain communication has been prioritized over parallelism. Because of this, scopes are currently only used to logically separate the tables as in the case of eosio.token. [Source](https://developers.eos.io/welcome/latest/getting-started/smart-contract-development/data-persistence)
+		+ In this case, since we only have one table we can use the value from `get_first_receiver()`. The value returned from the get_first_receiver function is the account name on which this contract is deployed to.
+	- E.g. below to instantiate a table:
+```cpp
+address_index addresses(get_self(), get_first_receiver().value);
+```
+	- Also, based on the `code` & `scope` defined in the action for table, one can get the table data using `cleos` like this:
+```console
+$ cleost get table cabeos1test2 cabeos1test2 people --show-payer
+{
+  "rows": [{
+      "data": {
+        "key": "cabeos1user1",
+        "first_name": "abhijit",
+        "last_name": "roy",
+        "street": "r79, (top floor) \n Sec-74",
+        "city": "Mohali",
+        "state": "Punjab"
+      },
+      "payer": "cabeos1user1"
+    },{
+      "data": {
+        "key": "cabeos1user2",
+        "first_name": "ramesh",
+        "last_name": "bhattacharya",
+        "street": "2-lane park street",
+        "city": "Kolkata",
+        "state": "West Bengal"
+      },
+      "payer": "cabeos1user2"
+    }
+  ],
+  "more": false,
+  "next_key": ""
+}
+```
+* In EOSIO, we have multi-index table insprired from Boost Multi-index library. For more, look at the next section below.
 
-
-## Multi-index
+### Multi-index
 * [How to Guide](https://developers.eos.io/manuals/eosio.cdt/v1.7/how-to-guides/multi-index/index/)
 * Each smart contract using multi index table reserves a partition of the RAM cache, which is controlled using table name, code and scope. [Source](https://medium.com/@moonxfamily/multi-index-table-ram-infrastructure-of-eos-9e78fb5fed13)
 * Multi Index tables provide a fast access to data storage and can be accessed by smart contract. Therefore, the Dapps are required to store application data in the Multi index Tables, and the blockchain records the transactions by interacting with the smart contact. [Source](https://medium.com/@moonxfamily/multi-index-table-ram-infrastructure-of-eos-9e78fb5fed13)
@@ -69,18 +114,51 @@ return ac.balance;							// now, return member i.e. 'supply' of struct 'st'
 	- Create a type
 		+ Use C++ `typedef`/`using` to define a type based on Multi Index Table Index, such as: tablename, the struct, additional indexes
 	- Create Local Variables inside actions or functions
-* Multi-index DB table storage: Take the [addressbook example](./base/addressbook/addressbook.cpp)
+* Multi-index methods
+	- `emplace`: Create a record in the table. This method accepts 2 arguments: [Source](https://developers.eos.io/welcome/latest/getting-started/smart-contract-development/data-persistence)
+		+ 1. the "payer" of the given record who pays the storage usage
+		+ 2. callback function: the lambda function (to create a reference, i.e. capture all params by reference) which updates the field data in the particular row. This function is going to follow once it's predecessor job is done i.e. the payer RAM balance storage is deducted
+		+ E.g. below:
+```cpp
+addresses.emplace(user, [&]( auto& row ) {
+      row.key = user;
+      row.first_name = first_name;
+      row.last_name = last_name;
+      row.street = street;
+      row.city = city;
+      row.state = state;
+    });
+``` 
+	- `modify`: Update a record in the table. This method accepts 3 arguments: [Source](https://developers.eos.io/welcome/latest/getting-started/smart-contract-development/data-persistence)
+		+ a. The iterator defined earlier, presently set to the user as declared when calling this action.
+		+ b. The "payer", who will pay for the storage cost of this row, in this case, the user.
+		+ c. The callback function that actually modifies the row.* Multi-index DB table storage: Take the [addressbook example](./base/addressbook/addressbook.cpp)
+		+ E.g. below:
+```cpp
+addresses.modify(iterator, user, [&]( auto& row ) {
+      row.key = user;
+      row.first_name = first_name;
+      row.last_name = last_name;
+      row.street = street;
+      row.city = city;
+      row.state = state;
+    });
+```
 	- Case-1: [tabletest1](./base/tabletest1)
 		+ action permission: user
-		+ action ram_payer: user
 ```cpp
 void create(name user, string first_name) {
 	require_auth(user);
-
-
-
+	...
+	...
 }
 ```
+		+ action ram_payer: user
+
+	- Case-2: [tabletest2](./base/tabletest2)
+		+ action permission: user
+		+ action ram_payer: contract ac
+
 
 ```console
 $ cleost push action cabeos1test2 create '["cabeos1user1", "Abhijit"]' -p cabeos1test2
