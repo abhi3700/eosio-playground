@@ -108,10 +108,20 @@ $ cleost push action cabeos1test2 create '["cabeos1user1", "Abhijit"]' -p cabeos
 > - With a valet name, many rows can be found in RAM table
 
 
+## Permission
+* Multisig
+
+## Notification
+* “A notification is a function to deliver success action to designated user once the action is successfully completed.” [Source](https://link.medium.com/flTeJNKdw7)
+* When using inline action, you need to add permission ‘contract@eosio.code’, to user’s account. However, it’s not easy to apply to service because most of users are reluctant to add it to their own account. So notification function is used mainly in service instead of adding permission. [Source](https://link.medium.com/flTeJNKdw7)
+* A notification is a function to deliver success action to designated user once the action is successfully completed.
+	- E.g. - When actions are made within contracts or using external contracts, there is very helpful way of checking if its properly done or not is by getting notification. eosio.token is a good instance to understand how a transfer actions are made and how the notification is made.
+
 ## Coding syntax
 ### Data types
 * `name` - [Source](https://developers.eos.io/manuals/eosio.cdt/latest/structeosio_1_1name)
 	- e.g `name.value`
+
 ### print [All](https://developers.eos.io/manuals/eosio.cdt/v1.7/best-practices/debugging_a_smart_contract/#print)
 * `print`
 ```cpp
@@ -122,9 +132,12 @@ print("Name, ", nm);
 ```cpp
 print_f("Name : %\n", nm);
 ```
+
 ### Contracts
 * `get_self()` - gives the contract account name
 * `get_first_receiver()`
+* code vs receiver [Source]()
+	-
 
 ### Permission
 * `require_auth( account name )`
