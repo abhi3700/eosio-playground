@@ -24,6 +24,130 @@ addresses.modify(iterator, user, [&]( auto& row ) {
       row.state = state;
     });
 ```
+* Security bug: Here, on pushing the same action with same data, the CPU, NET consumption was getting increased.
+	- Around `NET: 152 bytes, CPU: 412 bytes` are getting increased, after 2nd time pushed with the same data.
+
+> NOTE: No change in RAM although.
+
+```console
+abhi3700@Abhijit:/mnt/f/Coding/github_repos/eosio-playground/base/addressbook
+$ cleost push action cabeos1test2 upsert '["cabeos1user1", "abhijit", "roy", "r79, (top floor) \n Sec-74", "Mohali", "Punjab"]' -p cabeos1user1@active
+executed transaction: e36af3551be882e3e6edd66e210ac12613a95652ad446a6ece282b54e066cc73  152 bytes  667 us
+#  cabeos1test2 <= cabeos1test2::upsert         {"user":"cabeos1user1","first_name":"abhijit","last_name":"roy","street":"r79, (top floor) \n Sec-74...
+>> get_self(): cabeos1test2 | get_first_receiver(): cabeos1test2 | get_first_receiver() value: 4723900389413761568 |
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+abhi3700@Abhijit:/mnt/f/Coding/github_repos/eosio-playground/base/addressbook$ cleost get account cabeos1user1
+created: 2020-06-18T21:21:46.500
+permissions:
+     owner     1:    1 EOS7L5cABCRbkk9XSPY9qiTzUV5jMoPWWmehe29fW23qK5j3M6Se9
+        active     1:    1 EOS7L5cABCRbkk9XSPY9qiTzUV5jMoPWWmehe29fW23qK5j3M6Se9
+memory:
+     quota:     5.365 KiB    used:     3.643 KiB
+
+net bandwidth:
+     staked:          1.0000 EOS           (total stake delegated from account to self)
+     delegated:       0.0000 EOS           (total staked delegated to account from others)
+     used:               306 bytes
+     available:        62.45 KiB
+     limit:            62.74 KiB
+
+cpu bandwidth:
+     staked:          1.0000 EOS           (total stake delegated from account to self)
+     delegated:       0.0000 EOS           (total staked delegated to account from others)
+     used:               360 us
+     available:        5.588 ms
+     limit:            5.948 ms
+
+EOS balances:
+     liquid:           20.0000 EOS
+     staked:            2.0000 EOS
+     unstaking:         0.0000 EOS
+     total:            22.0000 EOS
+
+producers:     <not voted>
+
+abhi3700@Abhijit:/mnt/f/Coding/github_repos/eosio-playground/base/addressbook
+$ cleost push action cabeos1test2 upsert '["cabeos1user1", "abhijit", "roy", "r79, (top floor) \n Sec-74", "Mohali", "Punjab"]' -p cabeos1user1@active
+executed transaction: 591701344a80f582f7bcb48750684d04a72942602dcfcacb4c6c2c9c4136c5a2  152 bytes  531 us
+#  cabeos1test2 <= cabeos1test2::upsert         {"user":"cabeos1user1","first_name":"abhijit","last_name":"roy","street":"r79, (top floor) \n Sec-74...
+>> get_self(): cabeos1test2 | get_first_receiver(): cabeos1test2 | get_first_receiver() value: 4723900389413761568 |
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+abhi3700@Abhijit:/mnt/f/Coding/github_repos/eosio-playground/base/addressbook$ cleost get account cabeos1user1
+created: 2020-06-18T21:21:46.500
+permissions:
+     owner     1:    1 EOS7L5cABCRbkk9XSPY9qiTzUV5jMoPWWmehe29fW23qK5j3M6Se9
+        active     1:    1 EOS7L5cABCRbkk9XSPY9qiTzUV5jMoPWWmehe29fW23qK5j3M6Se9
+memory:
+     quota:     5.365 KiB    used:     3.643 KiB
+
+net bandwidth:
+     staked:          1.0000 EOS           (total stake delegated from account to self)
+     delegated:       0.0000 EOS           (total staked delegated to account from others)
+     used:               458 bytes
+     available:         62.3 KiB
+     limit:            62.74 KiB
+
+cpu bandwidth:
+     staked:          1.0000 EOS           (total stake delegated from account to self)
+     delegated:       0.0000 EOS           (total staked delegated to account from others)
+     used:               772 us
+     available:        5.493 ms
+     limit:            6.265 ms
+
+EOS balances:
+     liquid:           20.0000 EOS
+     staked:            2.0000 EOS
+     unstaking:         0.0000 EOS
+     total:            22.0000 EOS
+
+producers:     <not voted>
+```
+	- So, there is a security glitch, which can be exploited by repetitive pushing & consuming all the NET & CPU Bandwidths of the user.
+	- Therefore, check for all the params & only then the transaction will be pushed successfully.
+	- previously, the contract code was:
+```cpp
+		else {
+			// Now, modify the new data
+			addresses.modify(it, user, [&]( auto& row ) {
+				row.key = user;
+				row.first_name = first_name;
+				row.last_name = last_name;
+				row.street = street;
+				row.city = city;
+				row.state = state;
+			});
+		}
+```
+	- the updated code is
+```cpp
+		else {
+			// check whether the new data is same as stored
+			check(it->first_name != first_name, "first_name must be different than stored one.");
+			check(it->last_name != last_name, "last_name must be different than stored one.");
+			check(it->street != street, "street must be different than stored one.");
+			check(it->city != city, "city must be different than stored one.");
+			check(it->state != state, "state must be different than stored one.");
+
+			// Now, modify the new data
+			addresses.modify(it, user, [&]( auto& row ) {
+				row.key = user;
+				row.first_name = first_name;
+				row.last_name = last_name;
+				row.street = street;
+				row.city = city;
+				row.state = state;
+			});
+		}
+
+```
+	- Now, pushing the same data gives this output
+```console
+$ cleost push action cabeos1test2 upsert '["cabeos1user1", "abhijit", "roy", "r79, (top floor) \n Sec-74", "Mohali", "Punjab"]' -p cabeos1user1@active
+Error 3050003: eosio_assert_message assertion failure
+Error Details:
+assertion failure with message: first_name must be different than stored one.
+pending console output: get_self(): cabeos1test2 | get_first_receiver(): cabeos1test2 | get_first_receiver() value: 4723900389413761568 |
+```
 
 ## Compile
 * Compile the contract
@@ -566,6 +690,7 @@ $ cleost get table cabeos1test2 cabeos1test2 people --lower cabeos1user2
   "next_key": ""
 }
 ```
+* 
 
 
 
