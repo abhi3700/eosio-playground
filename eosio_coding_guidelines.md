@@ -75,6 +75,7 @@ $ cleost get table cabeos1test2 cabeos1test2 people --show-payer
   "next_key": ""
 }
 ```
+* To ensure table, one param should e
 * In EOSIO, we have multi-index table insprired from Boost Multi-index library. For more, look at the next section below.
 
 ### Multi-index
@@ -115,6 +116,35 @@ return ac.balance;							// now, return member i.e. 'supply' of struct 'st'
 		+ Use C++ `typedef`/`using` to define a type based on Multi Index Table Index, such as: tablename, the struct, additional indexes
 	- Create Local Variables inside actions or functions
 * Multi-index methods
+	- `find`: for querying an entry
+```cpp
+...
+address_index addresses(get_self(), get_first_receiver().value);
+auto it = addresses.find(user.value);
+...
+...
+```
+		+ retrieving items, For retrieving a record by its primary key we simply run:
+```cpp
+auto itr = proposals.find(proposal_id)
+```
+		+ The iterator on itself can return the current object by object dereference or as object instance:
+```cpp
+print(eosioitr->property) // reference
+print((*itr).property) // instance
+Proposal proposal = *itr // get object instance
+```
+		+ Next & previous objects
+```cpp
+auto nextitr = itr++;
+auto previtr = itr--;
+```
+	
+		> NOTE: For me to understand a subject, it really helps for me to understand the underlying functionality, and it usually also reveals the simplicity of it. This is also the case with EOS, upon digging through code, the `.find()` method simply runs the `std::find_if` functionality that checks if the looped item has the correct primary key:
+```cpp
+ptr._item->primary_key() == input_primary
+```
+
 	- `emplace`: Create a record in the table. This method accepts 2 arguments: [Source](https://developers.eos.io/welcome/latest/getting-started/smart-contract-development/data-persistence)
 		+ 1. the "payer" of the given record who pays the storage usage
 		+ 2. callback function: the lambda function (to create a reference, i.e. capture all params by reference) which updates the field data in the particular row. This function is going to follow once it's predecessor job is done i.e. the payer RAM balance storage is deducted
