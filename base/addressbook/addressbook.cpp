@@ -38,11 +38,7 @@ public:
 		}
 		else {
 			// check whether the new data is same as stored
-			check(it->first_name != first_name, "first_name must be different than stored one.");
-			check(it->last_name != last_name, "last_name must be different than stored one.");
-			check(it->street != street, "street must be different than stored one.");
-			check(it->city != city, "city must be different than stored one.");
-			check(it->state != state, "state must be different than stored one.");
+			check((it->first_name != first_name) && (it->last_name != last_name) && (it->street != street) && (it->city != city) && (it->state != state), "All data is same as stored");
 
 			// Now, modify the new data
 			addresses.modify(it, user, [&]( auto& row ) {

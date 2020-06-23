@@ -27,7 +27,7 @@ addresses.modify(iterator, user, [&]( auto& row ) {
 * Security bug: Here, on pushing the same action with same data, the CPU, NET consumption was getting increased.
 	- Around `NET: 152 bytes, CPU: 412 bytes` are getting increased, after 2nd time pushed with the same data.
 
-> NOTE: No change in RAM although.
+	> NOTE: No change in RAM although.
 
 ```console
 abhi3700@Abhijit:/mnt/f/Coding/github_repos/eosio-playground/base/addressbook
@@ -122,11 +122,7 @@ producers:     <not voted>
 ```cpp
 		else {
 			// check whether the new data is same as stored
-			check(it->first_name != first_name, "first_name must be different than stored one.");
-			check(it->last_name != last_name, "last_name must be different than stored one.");
-			check(it->street != street, "street must be different than stored one.");
-			check(it->city != city, "city must be different than stored one.");
-			check(it->state != state, "state must be different than stored one.");
+			check((it->first_name != first_name) && (it->last_name != last_name) && (it->street != street) && (it->city != city) && (it->state != state), "All data is same as stored");
 
 			// Now, modify the new data
 			addresses.modify(it, user, [&]( auto& row ) {
@@ -318,78 +314,6 @@ producers:     <not voted>
 > - Here, 2 rows of 2 users (`cabeos1user1`, `cabeos1user2`) has been entered.
 > - Here, the user (person) who gives the details of the address, is the payer of RAM. Also, the CPU, NET is also consumed, as the permission was taken by the user & not the contract.
 > - And this can be set (the RAM payer), while configuring the multi-index table.
-
-* Show the table till now
-```console
-$ cleost get table cabeos1test2 cabeos1test2 people
-{
-  "rows": [{
-	  "key": "cabeos1user1",
-	  "first_name": "abhijit",
-	  "last_name": "roy",
-	  "street": "r79, (top floor) \n Sec-74",
-	  "city": "Mohali",
-	  "state": "Punjab"
-	},{
-	  "key": "cabeos1user2",
-	  "first_name": "ramesh",
-	  "last_name": "bhattacharya",
-	  "street": "2-lane park street",
-	  "city": "Kolkata",
-	  "state": "West Bengal"
-	}
-  ],
-  "more": false,
-  "next_key": ""
-}
-```
-* Now, see the entire table with the ram_payer
-```console
-$ cleost get table cabeos1test2 cabeos1test2 people --show-payer
-{
-  "rows": [{
-	  "data": {
-		"key": "cabeos1user1",
-		"first_name": "abhijit",
-		"last_name": "roy",
-		"street": "r79, (top floor) \n Sec-74",
-		"city": "Mohali",
-		"state": "Punjab"
-	  },
-	  "payer": "cabeos1user1"
-	},{
-	  "data": {
-		"key": "cabeos1user2",
-		"first_name": "ramesh",
-		"last_name": "bhattacharya",
-		"street": "2-lane park street",
-		"city": "Kolkata",
-		"state": "West Bengal"
-	  },
-	  "payer": "cabeos1user2"
-	}
-  ],
-  "more": false,
-  "next_key": ""
-}
-```
-* Show the data of `cabeos1user1` in the table,
-```console
-$ cleost get table cabeos1test2 cabeos1test2 people --lower cabeos1user1
-{
-  "rows": [{
-	  "key": "cabeos1user1",
-	  "first_name": "abhijit",
-	  "last_name": "roy",
-	  "street": "r79, (top floor) \n Sec-74",
-	  "city": "Mohali",
-	  "state": "Punjab"
-	}
-  ],
-  "more": false,
-  "next_key": ""
-}
-```
 
 * Check for: A user is not able to add other user's data
 ```console
@@ -664,6 +588,102 @@ cpu bandwidth:
 producers:     <not voted>
 ```
 
+## Table
+* Show the table till now
+```console
+$ cleost get table cabeos1test2 cabeos1test2 people
+{
+  "rows": [{
+	  "key": "cabeos1user1",
+	  "first_name": "abhijit",
+	  "last_name": "roy",
+	  "street": "r79, (top floor) \n Sec-74",
+	  "city": "Mohali",
+	  "state": "Punjab"
+	},{
+	  "key": "cabeos1user2",
+	  "first_name": "ramesh",
+	  "last_name": "bhattacharya",
+	  "street": "2-lane park street",
+	  "city": "Kolkata",
+	  "state": "West Bengal"
+	}
+  ],
+  "more": false,
+  "next_key": ""
+}
+```
+* Now, see the entire table with the ram_payer
+```console
+$ cleost get table cabeos1test2 cabeos1test2 people --show-payer
+{
+  "rows": [{
+	  "data": {
+		"key": "cabeos1user1",
+		"first_name": "abhijit",
+		"last_name": "roy",
+		"street": "r79, (top floor) \n Sec-74",
+		"city": "Mohali",
+		"state": "Punjab"
+	  },
+	  "payer": "cabeos1user1"
+	},{
+	  "data": {
+		"key": "cabeos1user2",
+		"first_name": "ramesh",
+		"last_name": "bhattacharya",
+		"street": "2-lane park street",
+		"city": "Kolkata",
+		"state": "West Bengal"
+	  },
+	  "payer": "cabeos1user2"
+	}
+  ],
+  "more": false,
+  "next_key": ""
+}
+```
+* Show the data of `cabeos1user1` in the table,
+```console
+$ cleost get table cabeos1test2 cabeos1test2 people --lower cabeos1user1
+{
+  "rows": [{
+	  "key": "cabeos1user1",
+	  "first_name": "abhijit",
+	  "last_name": "roy",
+	  "street": "r79, (top floor) \n Sec-74",
+	  "city": "Mohali",
+	  "state": "Punjab"
+	}
+  ],
+  "more": false,
+  "next_key": ""
+}
+```
+* Show the data in reverse order
+```console
+$ cleost get table cabeos1test2 cabeos1test2 people -r
+{
+  "rows": [{
+      "key": "cabeos1user2",
+      "first_name": "ramesh",
+      "last_name": "bhattacharya",
+      "street": "2-lane park street",
+      "city": "Kolkata",
+      "state": "West Bengal"
+    },{
+      "key": "cabeos1user1",
+      "first_name": "abhijit",
+      "last_name": "roy",
+      "street": "r79, (top floor) \n Sec-74",
+      "city": "Mohali",
+      "state": "Punjab"
+    }
+  ],
+  "more": false,
+  "next_key": ""
+}
+```
 * Show the table till now. Here, one user's data is erased.
 ```console
 $ cleost get table cabeos1test2 cabeos1test2 people
@@ -690,7 +710,18 @@ $ cleost get table cabeos1test2 cabeos1test2 people --lower cabeos1user2
   "next_key": ""
 }
 ```
-* 
+* Show the table data in JSON binary
+```console
+$ cleost get table cabeos1test2 cabeos1test2 people --binary
+{
+  "rows": [
+    "10aec23a60aa8e4107616268696a697403726f79197237392c2028746f7020666c6f6f7229200a205365632d3734064d6f68616c690650756e6a6162",
+    "20aec23a60aa8e410672616d6573680c62686174746163686172796112322d6c616e65207061726b20737472656574074b6f6c6b6174610b576573742042656e67616c"
+  ],
+  "more": false,
+  "next_key": ""
+}
+```
 
 
 
