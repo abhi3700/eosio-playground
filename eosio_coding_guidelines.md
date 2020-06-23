@@ -223,6 +223,24 @@ This action explains that the transfer function requires the authorization of th
 * `require_recipient( account name )`
 This action helps in getting notification to the account. This explains that the current action to be delivered to the account name.
 
+## Debugging contracts
+Basically, try to see the values of local variables defined in the action
+* So, try to see the variables like this:
+	- Here, in the console, the 3 vars output can be seen.
+```cpp
+		print("get_self(): ", get_self(), " | ");	// for debugging
+		print("get_first_receiver(): ", get_first_receiver(), " | ");	// for debugging
+		print("get_first_receiver() value: ", get_first_receiver().value, " |");	// for debugging
+```
+
+```console
+$ cleost push action cabeos1test2 upsert '["cabeos1user1", "abhijit", "roy", "r79, (top floor) \n Sec-74", "Mohali", "Punjab"]' -p cabeos1user1@active
+executed transaction: 71b204a40f008a24779a3f739af718a48299562b97837cc805be284f858ce319  152 bytes  257 us
+#  cabeos1test2 <= cabeos1test2::upsert         {"user":"cabeos1user1","first_name":"abhijit","last_name":"roy","street":"r79, (top floor) \n Sec-74...
+>> get_self(): cabeos1test2 | get_first_receiver(): cabeos1test2 | get_first_receiver() value: 4723900389413761568 |
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+
 
 ## Troubleshoot
 * If this error found during pushing action
