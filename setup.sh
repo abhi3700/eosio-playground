@@ -94,6 +94,20 @@ else
 	git submodule add https://github.com/provable-things/eos-api.git eos-api
 	cd ../
 fi
+# -----------------------------------------------------------------
+# eos-examples by Provable things
+cd libs/
+if [[ -d "eos-examples" ]]; then
+	# echo "eos-api folder exist"
+	cd eos-api
+	git pull
+	cd ../../
+else
+	# echo "eos-api folder NOT exist"
+	git submodule add https://github.com/provable-things/eos-examples.git eos-examples
+	cd ../
+fi
+
 
 
 
