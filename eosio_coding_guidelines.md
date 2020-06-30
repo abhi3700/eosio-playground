@@ -83,7 +83,7 @@ $ cleost get table cabeos1test2 cabeos1test2 people --show-payer
 * Each smart contract using multi index table reserves a partition of the RAM cache, which is controlled using table name, code and scope. [Source](https://medium.com/@moonxfamily/multi-index-table-ram-infrastructure-of-eos-9e78fb5fed13)
 * Multi Index tables provide a fast access to data storage and can be accessed by smart contract. Therefore, the Dapps are required to store application data in the Multi index Tables, and the blockchain records the transactions by interacting with the smart contact. [Source](https://medium.com/@moonxfamily/multi-index-table-ram-infrastructure-of-eos-9e78fb5fed13)
 * Multi Index Tables support using multiple indexes on the data. The primary index type must be unit64_t and must be unique, but the secondary indexes can have duplicates. If you want to index on a string you will need to convert this to an integer type and store the results in a field that you then index. Up to 16 indexes are allowed.
-* max. no. of columns: `uint32_t` i.e. 4 billion (approx.).
+* max. no. of columns: `uint32_t` i.e. 4 billion (approx.). [Source](https://t.me/c/1139062279/226525)
 * primary index: mandatory to define. & must be `uint64_t` & must be unique.
 	- if `name` data type is defined as primary_index, then the get_func will return `n.value`
 * secondary index type: optional (max 16) & can have duplicates like a valet in Zomato linked linked to multiple orders i.e. rows in table.
@@ -303,3 +303,4 @@ warning: transaction executed locally, but may not be confirmed by the network y
 * [Understanding The eosio.token Contract](https://medium.com/eoseoul/codeos-essential-knowledge-in-eos-contact-development-9c9b1bf26d0c)
 * [The Dispatcher – First Line Of Defense In Any EOS Smart Contract](https://chainsecurity.com/the-dispatcher-first-line-of-defense-in-any-eos-smart-contract/)
 * [[CODEOS] Essential knowledge in EOS contract development](https://medium.com/eoseoul/codeos-essential-knowledge-in-eos-contact-development-9c9b1bf26d0c)
+* [How to estimate RAM/CPU/NET cost for your EOS DApp](https://medium.com/leclevietnam/eos-resource-allocation-98bb6cb84497)
