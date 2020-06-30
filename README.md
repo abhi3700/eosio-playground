@@ -128,6 +128,10 @@ Follow the steps:
 ## Commands
 * `cleos`: [How to guides](https://developers.eos.io/manuals/eos/latest/cleos/how-to-guides/index)
 
+## EOSIO DApp Tools
+* EOSIO SDK for Java - https://github.com/EOSIO/eosio-java
+* EOSIO SDK for C++ - https://github.com/EOSIO/eos/blob/master/programs/cleos/main.cpp
+
 ## Deploy a contract [on Testnet]
 * Ensure you have a wallet created locally
 * Create an EOS account with public keys (owner & active)
