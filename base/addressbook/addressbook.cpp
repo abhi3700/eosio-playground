@@ -4,9 +4,14 @@
 using eosio::contract;
 using eosio::print;
 using eosio::multi_index;
+using eosio::indexed_by;
+using eosio::const_mem_fun;
 using eosio::name;
 using std::string;
 using eosio::check;
+using eosio::checksum256;
+// using eosio::time_point_sec;
+// using eosio::time_point_sec::operator;
 
 class [[eosio::contract]] addressbook : public contract
 {
@@ -15,13 +20,13 @@ public:
 
 	[[eosio::action]]
 	void upsert(
-		name user, string first_name, string last_name, string street, string city,
+		name user, string first_name, string last_name, uint64_t age, string street, string city,
 		string state ) {
 		require_auth(user);
 
-		print("get_self(): ", get_self(), " | ");	// for debugging
-		print("get_first_receiver(): ", get_first_receiver(), " | ");	// for debugging
-		print("get_first_receiver() value: ", get_first_receiver().value, " |");	// for debugging
+		// print("get_self(): ", get_self(), " | ");	// for debugging
+		// print("get_first_receiver(): ", get_first_receiver(), " | ");	// for debugging
+		// print("get_first_receiver() value: ", get_first_receiver().value, " |");	// for debugging
 
 		address_index addresses(get_self(), get_first_receiver().value);
 		auto it = addresses.find(user.value);
@@ -31,20 +36,28 @@ public:
 				row.key = user;
 				row.first_name = first_name;
 				row.last_name = last_name;
+				row.age = age;
 				row.street = street;
 				row.city = city;
 				row.state = state;
 			});
 		}
 		else {
-			// check whether the new data is same as stored
-			check((it->first_name != first_name) && (it->last_name != last_name) && (it->street != street) && (it->city != city) && (it->state != state), "All data is same as stored");
+			// check whether either of the new data is different
+			check((it->first_name != first_name) || (it->last_name != last_name) || (it->age != age) || (it->street != street) || (it->city != city) || (it->state != state), "All data is same as stored");
+			// print((it->first_name != first_name), " |");	// for debugging
+			// print((it->last_name != last_name), " |");	// for debugging
+			// print((it->age != age), " |");	// for debugging
+			// print((it->street != street), " |");	// for debugging
+			// print((it->city != city), " |");	// for debugging
+			// print((it->state != state), " |");	// for debugging
 
 			// Now, modify the new data
 			addresses.modify(it, user, [&]( auto& row ) {
 				row.key = user;
 				row.first_name = first_name;
 				row.last_name = last_name;
+				row.age = age;
 				row.street = street;
 				row.city = city;
 				row.state = state;
@@ -63,20 +76,98 @@ public:
 		addresses.erase(it);
 	}
 
+	template<typename T>
+	void eraseall(T& table) {
+	  auto itr = table.begin();
+	  while(itr != table.end()) {
+		itr = table.erase(itr);
+	  }
+	}
+
+	ACTION deleteall() {
+		require_auth(get_self());
+
+		address_index addresses(get_self(), get_first_receiver().value);
+		// auto it = addresses.begin();
+		// while(it != addresses.end()) {
+		//     addresses.erase(it);
+		// }
+		eraseall(addresses);
+	}
+
+// 	ACTION deleteallper(uint64_t pLimit, uint128_t pLastId){
+// 		// block or it will run forever
+// 		if(pLimit > 0){
+// 			address_index addresses(get_self(), get_first_receiver().value);
+// 			uint64_t count = 0;
+
+// 			// iterate over first index 
+// 			for(auto itr = addresses.begin(); itr != addresses.end() && count!=pLimit;) {
+// 				// delete element and update iterator reference
+// 				itr = addresses.erase(itr);
+// 				count++;
+// 			}
+
+// /*			// iterate over second index 
+// 			testIndex2 test2(get_self(), get_self()); // code, scope
+// 			count = 0;
+// 			for(auto itr = test2.begin(); itr != test2.end() && count!=pLimit;) {
+// 				// delete element and update iterator reference
+// 				itr = test2.erase(itr);
+// 				count++;
+// 			}
+// */
+// 			// are elements left in one of the indices?
+// 			if(addresses.begin() != addresses.end()/* || test2.begin() != test2.end()*/){
+// 					// build new transactions which will call the same function
+// 					uint64_t time = time_point_sec::time_point_sec();
+// 					checksum256 calc_hash; // fc::sha256
+// 					uint128_t toHash, id2;
+
+
+// 					toHash = ((uint128_t(get_self()) << 64) | uint128_t(time));
+// 					// If not the first call use the pLastId to generate unique 
+// 					if(pLastId != 0){
+// 						toHash = toHash | pLastId;
+// 					}
+
+// 					// Build a Hash so the transaction ids get distinct
+// 					sha256(reinterpret_cast<char *>(&toHash), 128, &calc_hash); 
+// 					id2 = *reinterpret_cast<uint128_t *>(&calc_hash);
+
+// 					// First Transaction with unhashed id and passed id as input
+// 					transaction out;
+// 					out.actions.emplace_back(permission_level{get_self(), N(active)}, get_self(), N(dtseq), std::make_tuple(pLimit, toHash));
+// 					out.send(toHash, get_self());
+
+// 					// Second Transction with hashed id and passed id as input
+// 					transaction out2;
+
+// 					out2.actions.emplace_back(permission_level{get_self(), N(active)}, get_self(), N(dtseq), std::make_tuple(pLimit, id2));
+// 					out2.send(id2, get_self());
+// 			}
+// 		}
+// 	}
+
+
 private:
 	struct [[eosio::table("people")]] person
 	{
 		name key;
 		string first_name;
 		string last_name;
+		uint64_t age;
 		string street;
 		string city;
 		string state;
 
 		uint64_t primary_key() const {return key.value;}
+		uint64_t get_secondary_1() const { return age; }
 	};
 
-	using address_index = multi_index<"people"_n, person>;
+	using address_index = eosio::multi_index<"people"_n, person,
+							indexed_by<"byage"_n, const_mem_fun<person, uint64_t, &person::get_secondary_1>>
+							>;
 
 
 	

@@ -9,7 +9,7 @@ addresses.emplace(user, [&]( auto& row ) {
       row.key = user;
       row.first_name = first_name;
       row.last_name = last_name;
-      row.street = street;
+			row.age = age;
       row.city = city;
       row.state = state;
     });
@@ -19,6 +19,7 @@ addresses.modify(iterator, user, [&]( auto& row ) {
       row.key = user;
       row.first_name = first_name;
       row.last_name = last_name;
+			row.age = age;
       row.street = street;
       row.city = city;
       row.state = state;
@@ -31,7 +32,7 @@ addresses.modify(iterator, user, [&]( auto& row ) {
 
 ```console
 abhi3700@Abhijit:/mnt/f/Coding/github_repos/eosio-playground/base/addressbook
-$ cleost push action cabeos1test2 upsert '["cabeos1user1", "abhijit", "roy", "r79, (top floor) \n Sec-74", "Mohali", "Punjab"]' -p cabeos1user1@active
+$ cleost push action cabeos1test2 upsert '["cabeos1user1", "abhijit", "roy", 27, "r79, (top floor) \n Sec-74", "Mohali", "Punjab"]' -p cabeos1user1@active
 executed transaction: e36af3551be882e3e6edd66e210ac12613a95652ad446a6ece282b54e066cc73  152 bytes  667 us
 #  cabeos1test2 <= cabeos1test2::upsert         {"user":"cabeos1user1","first_name":"abhijit","last_name":"roy","street":"r79, (top floor) \n Sec-74...
 >> get_self(): cabeos1test2 | get_first_receiver(): cabeos1test2 | get_first_receiver() value: 4723900389413761568 |
@@ -67,7 +68,7 @@ EOS balances:
 producers:     <not voted>
 
 abhi3700@Abhijit:/mnt/f/Coding/github_repos/eosio-playground/base/addressbook
-$ cleost push action cabeos1test2 upsert '["cabeos1user1", "abhijit", "roy", "r79, (top floor) \n Sec-74", "Mohali", "Punjab"]' -p cabeos1user1@active
+$ cleost push action cabeos1test2 upsert '["cabeos1user1", "abhijit", "roy", 27, "r79, (top floor) \n Sec-74", "Mohali", "Punjab"]' -p cabeos1user1@active
 executed transaction: 591701344a80f582f7bcb48750684d04a72942602dcfcacb4c6c2c9c4136c5a2  152 bytes  531 us
 #  cabeos1test2 <= cabeos1test2::upsert         {"user":"cabeos1user1","first_name":"abhijit","last_name":"roy","street":"r79, (top floor) \n Sec-74...
 >> get_self(): cabeos1test2 | get_first_receiver(): cabeos1test2 | get_first_receiver() value: 4723900389413761568 |
@@ -138,7 +139,7 @@ producers:     <not voted>
 ```
 	- Now, pushing the same data gives this output
 ```console
-$ cleost push action cabeos1test2 upsert '["cabeos1user1", "abhijit", "roy", "r79, (top floor) \n Sec-74", "Mohali", "Punjab"]' -p cabeos1user1@active
+$ cleost push action cabeos1test2 upsert '["cabeos1user1", "abhijit", "roy", 27, "r79, (top floor) \n Sec-74", "Mohali", "Punjab"]' -p cabeos1user1@active
 Error 3050003: eosio_assert_message assertion failure
 Error Details:
 assertion failure with message: first_name must be different than stored one.
@@ -244,7 +245,7 @@ producers:     <not voted>
 	- write user's (`cabeos1user2`) address
 ```console
 ....../base/addressbook
-$ cleost push action cabeos1test2 upsert '["cabeos1user2", "ramesh", "bhattacharya", "2-lane park street", "Kolkata", "West Bengal"]' -p cabeos1user2@active
+$ cleost push action cabeos1test2 upsert '["cabeos1user2", "ramesh", "bhattacharya", 34, "2-lane park street", "Kolkata", "West Bengal"]' -p cabeos1user2@active
 executed transaction: 7de992eacf4844b205d6fb768bd25869b7fc383f4e2bb21cea068970b5712c83  152 bytes  1209 us
 #  cabeos1test2 <= cabeos1test2::upsert         {"user":"cabeos1user1","first_name":"abhijit","last_name":"roy","street":"r79, (top floor) \n Sec-74...
 warning: transaction executed locally, but may not be confirmed by the network yet         ]
@@ -589,6 +590,7 @@ producers:     <not voted>
 ```
 
 ## Table
+### Part A: Primary key
 * Show the table till now
 ```console
 $ cleost get table cabeos1test2 cabeos1test2 people
@@ -723,5 +725,78 @@ $ cleost get table cabeos1test2 cabeos1test2 people --binary
 }
 ```
 
+### Part B: Secondary key
+* Show the table after introducing the secondary key
+```console
+$ cleost get table cabeos1test2 cabeos1test2 people
+{
+  "rows": [{
+      "key": "cabeos1user1",
+      "first_name": "abhijit",
+      "last_name": "roy",
+      "age": 27,
+      "street": "r79, (top floor) \n Sec-74",
+      "city": "Mohali",
+      "state": "Punjab"
+    },{
+      "key": "cabeos1user2",
+      "first_name": "ramesh",
+      "last_name": "bhattacharya",
+      "age": 37,
+      "street": "2-lane park street",
+      "city": "Kolkata",
+      "state": "West Bengal"
+    }
+  ],
+  "more": false,
+  "next_key": ""
+}
+```
+
+* Show the table with max. age = 30. Here, `--index 2` indicates the secondary index
+```console
+$ cleost get table cabeos1test2 cabeos1test2 people --upper 30 --key-type i64 --index 2
+{
+  "rows": [{
+      "key": "cabeos1user1",
+      "first_name": "abhijit",
+      "last_name": "roy",
+      "age": 27,
+      "street": "r79, (top floor) \n Sec-74",
+      "city": "Mohali",
+      "state": "Punjab"
+    }
+  ],
+  "more": false,
+  "next_key": ""
+}
+```
+
+* Show the table with max. age = 37 (includes). Here, it includes the row with age == 37. Basically, it means "37 & below"
+```console
+$ cleost get table cabeos1test2 cabeos1test2 people --upper 37 --key-type i64 --index 2
+{
+  "rows": [{
+      "key": "cabeos1user1",
+      "first_name": "abhijit",
+      "last_name": "roy",
+      "age": 27,
+      "street": "r79, (top floor) \n Sec-74",
+      "city": "Mohali",
+      "state": "Punjab"
+    },{
+      "key": "cabeos1user2",
+      "first_name": "ramesh",
+      "last_name": "bhattacharya",
+      "age": 37,
+      "street": "2-lane park street",
+      "city": "Kolkata",
+      "state": "West Bengal"
+    }
+  ],
+  "more": false,
+  "next_key": ""
+}
+```
 
 
