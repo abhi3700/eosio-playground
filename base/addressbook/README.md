@@ -799,4 +799,77 @@ $ cleost get table cabeos1test2 cabeos1test2 people --upper 37 --key-type i64 --
 }
 ```
 
-
+## Inline actions
+* Added an inline action `send_summary` to the user as a transaction receipt
+	- define `ACTION notify()` & `send_summary()` with the same params
+```console
+$ cleost push action cabeos1test2 upsert '["cabeos1user3", "Gurvinder", "Dhillon", 54, "Dwarka, Sec-12", "Delhi", "Delhi"]' -p cabeos1user3@active
+executed transaction: 442eea8e8528695df51af5ac9300a1509737cc5de0387c8f1be4c57e22ec37b8  160 bytes  701 us
+#  cabeos1test2 <= cabeos1test2::upsert         {"user":"cabeos1user3","first_name":"Gurvinder","last_name":"Dhillon","age":54,"street":"Dwarka, Sec...
+#  cabeos1test2 <= cabeos1test2::notify         {"user":"cabeos1user3","msg":"cabeos1user3 successfully emplaced record to addressbook"}
+#  cabeos1user3 <= cabeos1test2::notify         {"user":"cabeos1user3","msg":"cabeos1user3 successfully emplaced record to addressbook"}
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+* You can check the action by entering in the browser `https://junglehistory.cryptolions.io/v2/history/get_actions?account=cabeos1user3`
+```json
+{
+	"query_time_ms":15.779,
+	"cached":false,"lib":0,
+	"total":{"value":7,"relation":"eq"},
+	"actions":[
+		{
+			"@timestamp":"2020-07-01T23:27:18.000",
+			"timestamp":"2020-07-01T23:27:18.000",
+			"block_num":99626648,
+			"trx_id":"442eea8e8528695df51af5ac9300a1509737cc5de0387c8f1be4c57e22ec37b8",
+			"act":{
+				"account":"cabeos1test2",
+				"name":"notify",
+				"authorization":[{"actor":"cabeos1test2","permission":"active"}],
+				"data":{
+					"user":"cabeos1user3",
+					"msg":"cabeos1user3 successfully emplaced record to addressbook"}
+			},
+			"notified":["cabeos1test2","cabeos1user3"],
+			"global_sequence":606820038,
+			"producer":"junglemorpho",
+			"action_ordinal":2,
+			"creator_action_ordinal":1
+		},
+		{
+			"@timestamp":"2020-07-01T23:27:18.000",
+			"timestamp":"2020-07-01T23:27:18.000",
+			"block_num":99626648,
+			"trx_id":"442eea8e8528695df51af5ac9300a1509737cc5de0387c8f1be4c57e22ec37b8",
+			"act":{
+				"account":"cabeos1test2",
+				"name":"upsert",
+				"authorization":[{"actor":"cabeos1user3","permission":"active"}],
+				"data":{
+					"user":"cabeos1user3",
+					"first_name":"Gurvinder",
+					"last_name":"Dhillon",
+					"age":"54",
+					"street":"Dwarka, Sec-12",
+					"city":"Delhi",
+					"state":"Delhi"
+				}
+			},
+			"notified":["cabeos1test2"],
+			"cpu_usage_us":936,
+			"net_usage_words":20,
+			"account_ram_deltas":[{"account":"cabeos1user3","delta":301}],
+			"global_sequence":606820037,
+			"producer":"junglemorpho",
+			"action_ordinal":1,
+			"creator_action_ordinal":0
+		}
+	]
+}
+```
+- Observations in actions response
+	+ actions are sorted by latest added
+	+ Here, 2 actions are recorded, 1st - upsert action, 2nd - notify action
+	+ The timestamp is same in both the case.
+	+ Also, the Block no. is same.
+	+ Also, the transaction id is same.  

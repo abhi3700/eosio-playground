@@ -12,6 +12,8 @@ using eosio::check;
 using eosio::checksum256;
 // using eosio::time_point_sec;
 // using eosio::time_point_sec::operator;
+using eosio::permission_level;
+using eosio::action;
 
 class [[eosio::contract]] addressbook : public contract
 {
@@ -41,6 +43,8 @@ public:
 				row.city = city;
 				row.state = state;
 			});
+
+			send_summary(user, " successfully emplaced record to addressbook");
 		}
 		else {
 			// check whether either of the new data is different
@@ -62,6 +66,8 @@ public:
 				row.city = city;
 				row.state = state;
 			});
+
+			send_summary(user, " successfully modified record to addressbook");
 		}
 	}
 
@@ -74,6 +80,8 @@ public:
 		auto it = addresses.find(user.value);
 		check(it != addresses.end(), "Record doesn't exist!");
 		addresses.erase(it);
+		
+		send_summary(user, " successfully erased record to addressbook");
 	}
 
 	template<typename T>
@@ -150,6 +158,11 @@ public:
 // 	}
 
 
+	ACTION notify(name user, string msg) {
+		require_auth(get_self());
+		require_recipient(user);
+	}
+
 private:
 	struct [[eosio::table("people")]] person
 	{
@@ -170,5 +183,12 @@ private:
 							>;
 
 
-	
+	void send_summary(name user, string msg) {
+		action(
+			permission_level(get_self(), "active"_n), 
+			get_self(),
+			"notify"_n,
+			std::make_tuple(user, name{user}.to_string() + msg)
+			).send();
+	}
 };
