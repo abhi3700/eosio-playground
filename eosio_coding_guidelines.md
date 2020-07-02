@@ -258,7 +258,8 @@ $ cleost push action cabeos1test2 create '["cabeos1user1", "Abhijit"]' -p cabeos
 $ cleost set account permission cabeos1test2 active --add-code
 executed transaction: 244cca344fc48d88fbed39b6a297e15e4c06ff5cacedbff15a36eb9325b9ef97  184 bytes  215 us
 #         eosio <= eosio::updateauth            {"account":"cabeos1test2","permission":"active","parent":"owner","auth":{"threshold":1,"keys":[{"key...
-warn  2020-07-01T22:07:41.973 cleos     main.cpp:506                  print_result   warning: transaction executed locally, but may not be confirmed by the network yet```
+warn  2020-07-01T22:07:41.973 cleos     main.cpp:506                  print_result   warning: transaction executed locally, but may not be confirmed by the network yet
+```
 * A notification is a function to deliver success action to designated user once the action is successfully completed.
 	- E.g. - When actions are made within contracts or using external contracts, there is very helpful way of checking if its properly done or not is by getting notification. `eosio.token` is a good instance to understand how a transfer actions are made and how the notification is made.
 
