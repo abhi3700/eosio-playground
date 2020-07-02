@@ -182,7 +182,7 @@ private:
 							indexed_by<"byage"_n, const_mem_fun<person, uint64_t, &person::get_secondary_1>>
 							>;
 
-
+	// Adding inline action to an action - "notify" in the same contract
 	void send_summary(name user, string msg) {
 		action(
 			permission_level(get_self(), "active"_n), 
