@@ -193,6 +193,37 @@ void create(name user, string first_name) {
 ```console
 $ cleost push action cabeos1test2 create '["cabeos1user1", "Abhijit"]' -p cabeos1test2
 ```
+
+* ##### Create an action to delete all the Table data at once
+	- __M-1:__ Mainly used (during development)
+```cpp
+	template<typename T>
+	void eraseall(T& table) {
+	  auto itr = table.begin();
+	  while(itr != table.end()) {
+	    itr = table.erase(itr);
+	  }
+	}
+
+	ACTION deleteall() {
+		require_auth(get_self());
+
+		address_index addresses(get_self(), get_first_receiver().value);
+		// auto it = addresses.begin();
+		// while(it != addresses.end()) {
+		//     addresses.erase(it);
+		// }
+		eraseall(addresses);
+	}
+```
+
+		+ __NOTE:__ 
+			- As mentioned by others, this will only work as long as the table contains a limited number of items as often during development. [Source](https://eosio.stackexchange.com/a/4995/167)
+			- The fear is, that if the index is too large, the valid processing time will overrun and the action will get cancelled.
+			- Problems: [Source](https://eosio.stackexchange.com/a/3857/167)
+
+	- __M-2:__ Robust for any no. of rows. [Source](https://eosio.stackexchange.com/a/1432/167)
+
 * Applications:
 	- [ ] Zomato App multi-index table
 		+ a restaurant can have orders:
@@ -216,12 +247,18 @@ $ cleost push action cabeos1test2 create '["cabeos1user1", "Abhijit"]' -p cabeos
 > - With a valet name, many rows can be found in RAM table
 
 
-## Permission
+## Account Permission
 * Multisig
 
 ## Notification
 * “A notification is a function to deliver success action to designated user once the action is successfully completed.” [Source](https://link.medium.com/flTeJNKdw7)
 * When using inline action, you need to add permission ‘contract@eosio.code’, to user’s account. However, it’s not easy to apply to service because most of users are reluctant to add it to their own account. So notification function is used mainly in service instead of adding permission. [Source](https://link.medium.com/flTeJNKdw7)
+	- Here, setting `eosio.code` permission to the contract account's active permission, so that the inline actions are sent from contract `addressbook` : [Source](https://developers.eos.io/welcome/latest/getting-started/smart-contract-development/adding-inline-actions/#step-1-adding-eosiocode-to-permissions)
+```console
+$ cleost set account permission cabeos1test2 active --add-code
+executed transaction: 244cca344fc48d88fbed39b6a297e15e4c06ff5cacedbff15a36eb9325b9ef97  184 bytes  215 us
+#         eosio <= eosio::updateauth            {"account":"cabeos1test2","permission":"active","parent":"owner","auth":{"threshold":1,"keys":[{"key...
+warn  2020-07-01T22:07:41.973 cleos     main.cpp:506                  print_result   warning: transaction executed locally, but may not be confirmed by the network yet```
 * A notification is a function to deliver success action to designated user once the action is successfully completed.
 	- E.g. - When actions are made within contracts or using external contracts, there is very helpful way of checking if its properly done or not is by getting notification. `eosio.token` is a good instance to understand how a transfer actions are made and how the notification is made.
 
@@ -235,6 +272,10 @@ $ cleost push action cabeos1test2 create '["cabeos1user1", "Abhijit"]' -p cabeos
 ```cpp
 print("Name, ", nm);
 ```
+	- The eosio.code authority is a pseudo authority implemented to:	[Source](https://developers.eos.io/welcome/latest/getting-started/smart-contract-development/adding-inline-actions/#step-1-adding-eosiocode-to-permissions)
+		+ enhance security, and 
+		+ enable contracts to execute inline actions.
+
 
 * `print_f`:
 ```cpp
@@ -242,10 +283,10 @@ print_f("Name : %\n", nm);
 ```
 
 ### Contracts
+* The "code" AKA "account where contract is deployed"
 * `get_self()` - gives the contract account name
 * `get_first_receiver()`
-* code vs receiver [Source]()
-	-
+* code vs receiver [Source](https://chainsecurity.com/the-dispatcher-first-line-of-defense-in-any-eos-smart-contract/)
 
 ### Permission
 * `require_auth( account name )`
@@ -273,7 +314,7 @@ warning: transaction executed locally, but may not be confirmed by the network y
 
 
 ## Troubleshoot
-* If this error found during pushing action
+* code assertion failure
 ```console
 $ cleost push action cabeos1test2 upsert '["cabeos1user1", "abhijit", "roy", "r79, (top floor) \n Sec-74", "Mohali", "Punjab"]' -p cabeos1user1@active
 Error 3050004: eosio_assert_code assertion failure
@@ -296,7 +337,80 @@ executed transaction: ceca02d079c4bb6709658ecf91f5a277f7e1019a464456a4093f150ae7
 >> get_self(): cabeos1test2 | get_first_receiver(): cabeos1test2 | get_first_receiver() value: 4723900389413761568 |
 warning: transaction executed locally, but may not be confirmed by the network yet         ]
 ```
+* message assertion failure
+```console
+$ cleost push action cabeos1test2 upsert '["cabeos1user1", "abhijit", "roy", 27, "r79, (top floor) \n Sec-74", "Mohali", "Punjab"]' -p cabeos1user1@active
+Error 3050003: eosio_assert_message assertion failure
+Error Details:
+assertion failure with message: read
+pending console output: get_self(): cabeos1test2 | get_first_receiver(): cabeos1test2 | get_first_receiver() value: 4723900389413761568 |
+```
+	- Please check for your table (if corrupted)
+```console
+$ cleost get table cabeos1test2 cabeos1test2 people
+Error 3015013: Unpack data exception
+Error Details:
+Unable to unpack built-in type 'string' while processing 'person.street'
+read datastream of length 56 over by -26
+```
+	- It looks like that the table is corrupted
+	- So, try to go to the old struct (as defined previously) & erase all the data & confirm. [Source](https://medium.com/@cc32d9/modifying-data-structure-in-eos-contract-is-not-an-easy-thing-594f596c9995)
+	- You can also add this C++ code as an action to delete all at once
+```cpp
+	template<typename T>
+	void eraseall(T& table) {
+	  auto itr = table.begin();
+	  while(itr != table.end()) {
+	    itr = table.erase(itr);
+	  }
+	}
 
+	ACTION deleteall() {
+		require_auth(get_self());
+
+		address_index addresses(get_self(), get_first_receiver().value);
+		// auto it = addresses.begin();
+		// while(it != addresses.end()) {
+		//     addresses.erase(it);
+		// }
+		eraseall(addresses);
+	}
+```
+	- Now, maintaining the old struct code, get the table:
+```console
+$ cleost get table cabeos1test2 cabeos1test2 people
+{
+  "rows": [{
+      "key": "cabeos1user1",
+      "first_name": "abhijit",
+      "last_name": "roy",
+      "street": "27",
+      "city": "r79, (top floor) \n Sec-74",
+      "state": "Mohali"
+    }
+  ],
+  "more": false,
+  "next_key": ""
+}
+```
+	- Here, you are getting the data which was hindering the new data to get parsed as per the new data structure.
+	- Now, delete all the data at once
+```console
+$ cleost push action cabeos1test2 deleteall '[]' -p cabeos1test2@active
+executed transaction: ce243867894cc652a0f1dcaf412e7a7074f47481f04eca98da0004e2ca95ae62  96 bytes  278 us
+#  cabeos1test2 <= cabeos1test2::deleteall      ""
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+	- verify table, if any other data exists:
+```console
+$ cleost get table cabeos1test2 cabeos1test2 people
+{
+  "rows": [],
+  "more": false,
+  "next_key": ""
+}
+```
+	- DONE!
 
 ## References
 * [EOSIO Developer Portal](https://developers.eos.io/)
@@ -304,3 +418,5 @@ warning: transaction executed locally, but may not be confirmed by the network y
 * [The Dispatcher – First Line Of Defense In Any EOS Smart Contract](https://chainsecurity.com/the-dispatcher-first-line-of-defense-in-any-eos-smart-contract/)
 * [[CODEOS] Essential knowledge in EOS contract development](https://medium.com/eoseoul/codeos-essential-knowledge-in-eos-contact-development-9c9b1bf26d0c)
 * [How to estimate RAM/CPU/NET cost for your EOS DApp](https://medium.com/leclevietnam/eos-resource-allocation-98bb6cb84497)
+* [Modifying data structure in EOS contract is not an easy thing](https://medium.com/@cc32d9/modifying-data-structure-in-eos-contract-is-not-an-easy-thing-594f596c9995)
+	- [delete all the data at once](#create-an-action-to-delete-all-the-table-data-at-once)

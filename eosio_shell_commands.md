@@ -1,3 +1,40 @@
+## Account
+* Buy RAM for self account
+```console
+$ cleost system buyram cabeos1test2 cabeos1test2 "1 EOS"
+executed transaction: 90c50348098c9155d57364acbfac2ce117efaba8717104e51f6b34f88629c138  128 bytes  1571 us
+#         eosio <= eosio::buyram                {"payer":"cabeos1test2","receiver":"cabeos1test2","quant":"1.0000 EOS"}
+#   eosio.token <= eosio.token::transfer        {"from":"cabeos1test2","to":"eosio.ram","quantity":"0.9950 EOS","memo":"buy ram"}
+#   eosio.token <= eosio.token::transfer        {"from":"cabeos1test2","to":"eosio.ramfee","quantity":"0.0050 EOS","memo":"ram fee"}
+#   eosio.token <= eosio.token::transfer        {"from":"eosio.ramfee","to":"eosio.rex","quantity":"0.0050 EOS","memo":"transfer from eosio.ramfee t...
+#  cabeos1test2 <= eosio.token::transfer        {"from":"cabeos1test2","to":"eosio.ram","quantity":"0.9950 EOS","memo":"buy ram"}
+#     eosio.ram <= eosio.token::transfer        {"from":"cabeos1test2","to":"eosio.ram","quantity":"0.9950 EOS","memo":"buy ram"}
+#  cabeos1test2 <= eosio.token::transfer        {"from":"cabeos1test2","to":"eosio.ramfee","quantity":"0.0050 EOS","memo":"ram fee"}
+#  eosio.ramfee <= eosio.token::transfer        {"from":"cabeos1test2","to":"eosio.ramfee","quantity":"0.0050 EOS","memo":"ram fee"}
+#  eosio.ramfee <= eosio.token::transfer        {"from":"eosio.ramfee","to":"eosio.rex","quantity":"0.0050 EOS","memo":"transfer from eosio.ramfee t...
+#     eosio.rex <= eosio.token::transfer        {"from":"eosio.ramfee","to":"eosio.rex","quantity":"0.0050 EOS","memo":"transfer from eosio.ramfee t...
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+* Delegate NET for self account
+```console
+$ cleost system delegatebw cabeos1test2 cabeos1test2 "1 EOS" "0 EOS"
+executed transaction: e175d740d35f7955245c9c9e7afd6b7c3f6ee187b8bf53597d4a7381c67d4074  144 bytes  380 us
+#         eosio <= eosio::delegatebw            {"from":"cabeos1test2","receiver":"cabeos1test2","stake_net_quantity":"1.0000 EOS","stake_cpu_quanti...
+#   eosio.token <= eosio.token::transfer        {"from":"cabeos1test2","to":"eosio.stake","quantity":"1.0000 EOS","memo":"stake bandwidth"}
+#  cabeos1test2 <= eosio.token::transfer        {"from":"cabeos1test2","to":"eosio.stake","quantity":"1.0000 EOS","memo":"stake bandwidth"}
+#   eosio.stake <= eosio.token::transfer        {"from":"cabeos1test2","to":"eosio.stake","quantity":"1.0000 EOS","memo":"stake bandwidth"}
+```
+* Delegate CPU for self account
+```console
+$ cleost system delegatebw cabeos1test2 cabeos1test2 "0 EOS" "2 EOS"
+executed transaction: 2d0cd04f91acd118883244d35d41ba44cf11042ab53c859edbd88040b8f951bf  144 bytes  966 us
+#         eosio <= eosio::delegatebw            {"from":"cabeos1test2","receiver":"cabeos1test2","stake_net_quantity":"0.0000 EOS","stake_cpu_quanti...
+#   eosio.token <= eosio.token::transfer        {"from":"cabeos1test2","to":"eosio.stake","quantity":"2.0000 EOS","memo":"stake bandwidth"}
+#  cabeos1test2 <= eosio.token::transfer        {"from":"cabeos1test2","to":"eosio.stake","quantity":"2.0000 EOS","memo":"stake bandwidth"}
+#   eosio.stake <= eosio.token::transfer        {"from":"cabeos1test2","to":"eosio.stake","quantity":"2.0000 EOS","memo":"stake bandwidth"}
+```
+
+
 ## Compile
 ## Deploy
 ## Push
@@ -112,6 +149,67 @@ $ cleost push action cabeos1test2 upsert '["cabeos1user1", "abhijit", "roy", "r7
 		"except": null,
 		"error_code": null
 	}
+}
+```
+
+## History API
+* [History API Endpoints list](https://hyperion.docs.eosrio.io/endpoint/)
+* Get actions via
+	- eg-1: `https://junglehistory.cryptolions.io/v2/history/get_actions?account=cabeos1user3`
+```json
+{
+	"query_time_ms":15.779,
+	"cached":false,"lib":0,
+	"total":{"value":7,"relation":"eq"},
+	"actions":[
+		{
+			"@timestamp":"2020-07-01T23:27:18.000",
+			"timestamp":"2020-07-01T23:27:18.000",
+			"block_num":99626648,
+			"trx_id":"442eea8e8528695df51af5ac9300a1509737cc5de0387c8f1be4c57e22ec37b8",
+			"act":{
+				"account":"cabeos1test2",
+				"name":"notify",
+				"authorization":[{"actor":"cabeos1test2","permission":"active"}],
+				"data":{
+					"user":"cabeos1user3",
+					"msg":"cabeos1user3 successfully emplaced record to addressbook"}
+			},
+			"notified":["cabeos1test2","cabeos1user3"],
+			"global_sequence":606820038,
+			"producer":"junglemorpho",
+			"action_ordinal":2,
+			"creator_action_ordinal":1
+		},
+		{
+			"@timestamp":"2020-07-01T23:27:18.000",
+			"timestamp":"2020-07-01T23:27:18.000",
+			"block_num":99626648,
+			"trx_id":"442eea8e8528695df51af5ac9300a1509737cc5de0387c8f1be4c57e22ec37b8",
+			"act":{
+				"account":"cabeos1test2",
+				"name":"upsert",
+				"authorization":[{"actor":"cabeos1user3","permission":"active"}],
+				"data":{
+					"user":"cabeos1user3",
+					"first_name":"Gurvinder",
+					"last_name":"Dhillon",
+					"age":"54",
+					"street":"Dwarka, Sec-12",
+					"city":"Delhi",
+					"state":"Delhi"
+				}
+			},
+			"notified":["cabeos1test2"],
+			"cpu_usage_us":936,
+			"net_usage_words":20,
+			"account_ram_deltas":[{"account":"cabeos1user3","delta":301}],
+			"global_sequence":606820037,
+			"producer":"junglemorpho",
+			"action_ordinal":1,
+			"creator_action_ordinal":0
+		}
+	]
 }
 ```
 
