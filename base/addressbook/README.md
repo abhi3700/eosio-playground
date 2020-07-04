@@ -964,4 +964,40 @@ $ cleost get table bhub1counter bhub1counter counts --show-payer
   "next_key": ""
 }
 ```
+* Erase the user (`cabeos1user2`) data:
+```console
+$ cleost push action cabeos1test2 erase '["cabeos1user2"]' -p cabeos1user2@active
+executed transaction: d19b2b6518bf72f6ad897780504078458ba79ac2d3aaa77e61b70fcacbf8221a  104 bytes  279 us
+#  cabeos1test2 <= cabeos1test2::erase          {"user":"cabeos1user2"}
+#  cabeos1test2 <= cabeos1test2::notify         {"user":"cabeos1user2","msg":"cabeos1user2 successfully erased record to addressbook"}
+#  bhub1counter <= bhub1counter::count          {"user":"cabeos1user2","type":"erase"}
+#  cabeos1user2 <= cabeos1test2::notify         {"user":"cabeos1user2","msg":"cabeos1user2 successfully erased record to addressbook"}
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+* Now, view the `counts` table after erasing the user (`cabeos1user2`) data:
+```console
+$ cleost get table bhub1counter bhub1counter counts --show-payer
+{
+  "rows": [{
+      "data": {
+        "key": "cabeos1user1",
+        "emplaced": 1,
+        "modified": 0,
+        "erased": 0
+      },
+      "payer": "cabeos1test2"
+    },{
+      "data": {
+        "key": "cabeos1user2",
+        "emplaced": 1,
+        "modified": 1,
+        "erased": 1
+      },
+      "payer": "cabeos1test2"
+    }
+  ],
+  "more": false,
+  "next_key": ""
+}
+```
 * You can also view the actions forwarded as receipt to the respective users who pushes the action `cabeos1user1`, `cabeos1user2`, `cabeos1user3`
