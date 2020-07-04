@@ -875,6 +875,9 @@ warning: transaction executed locally, but may not be confirmed by the network y
 	+ Also, the transaction id is same.  
 
 ## Inline actions to action in different contract
+* Compile & deploy the `abcounter` contract to `bhub1counter` account.
+* Recompile & redeploy the `addressbook` contract to `cabeos1test2` account
+	- `$ eosio-cpp addressbook.cpp -o addressbook.wasm -I ../abcounter/`
 * View the `counts` table before pushing any data
 ```console
 $ cleost get table bhub1counter bhub1counter counts
@@ -927,7 +930,7 @@ $ cleost get table bhub1counter bhub1counter counts --show-payer
   "next_key": ""
 }
 ```
-* Push 1 data to just modify the `cabeos1user2` 's age from 34 -> 35
+* Push 1 data to just modify the `cabeos1user2` 's age from __"34 -> 35"__
 ```console
 $ cleost push action cabeos1test2 upsert '["cabeos1user2", "ramesh", "bhattacharya", 35, "2-lane park street", "Kolkata", "West Bengal
 "]' -p cabeos1user2@active
@@ -1000,4 +1003,15 @@ $ cleost get table bhub1counter bhub1counter counts --show-payer
   "next_key": ""
 }
 ```
+* Now, let's try to push the `count` action otherwise. You will find that it would give error saying `"missing authority of cabeos1test2"`
+```console
+$ cleost push action bhub1counter count '["cabeos1user1", "modify"]' -p cabeos1user1@active
+Error 3090004: Missing required authority
+Ensure that you have the related authority inside your transaction!;
+If you are currently using 'cleos push action' command, try to add the relevant authority using -p option.
+Error Details:
+missing authority of cabeos1test2
+pending console output:
+```
+	- Wonderful! Since we require_auth for name("cabeos1test2"), only the addressbook contract can successfully execute this action, the call by `cabeos1user1` to fudge the numbers had no affect on the table.
 * You can also view the actions forwarded as receipt to the respective users who pushes the action `cabeos1user1`, `cabeos1user2`, `cabeos1user3`
