@@ -262,6 +262,7 @@ warn  2020-07-01T22:07:41.973 cleos     main.cpp:506                  print_resu
 ```
 * A notification is a function to deliver success action to designated user once the action is successfully completed.
 	- E.g. - When actions are made within contracts or using external contracts, there is very helpful way of checking if its properly done or not is by getting notification. `eosio.token` is a good instance to understand how a transfer actions are made and how the notification is made.
+* In `addressbook` example, adding the helper function `send_summary()` in private ensures safety, if the action (`notify()` here) is defined in the same contract.
 
 ## Coding syntax
 ### Data types
@@ -314,7 +315,8 @@ warning: transaction executed locally, but may not be confirmed by the network y
 ```
 
 
-## Troubleshoot
+## Troubleshooting
+* See [these](https://developers.eos.io/manuals/eosio.cdt/v1.7/troubleshooting) on EOSIO developer portal.
 * code assertion failure
 ```console
 $ cleost push action cabeos1test2 upsert '["cabeos1user1", "abhijit", "roy", "r79, (top floor) \n Sec-74", "Mohali", "Punjab"]' -p cabeos1user1@active
