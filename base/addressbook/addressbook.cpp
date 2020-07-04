@@ -1,5 +1,6 @@
 #include <eosio/eosio.hpp>
 #include <string>
+#include "abcounter.cpp"
 
 using eosio::contract;
 using eosio::print;
@@ -30,7 +31,7 @@ public:
 		// print("get_first_receiver(): ", get_first_receiver(), " | ");	// for debugging
 		// print("get_first_receiver() value: ", get_first_receiver().value, " |");	// for debugging
 
-		address_index addresses(get_self(), get_first_receiver().value);
+		address_index addresses(get_first_receiver(), get_first_receiver().value);
 		auto it = addresses.find(user.value);
 
 		if(it == addresses.end()) {
@@ -45,10 +46,11 @@ public:
 			});
 
 			send_summary(user, " successfully emplaced record to addressbook");
+			increment_counter(user, "emplace");
 		}
 		else {
 			// check whether either of the new data is different
-			check((it->first_name != first_name) || (it->last_name != last_name) || (it->age != age) || (it->street != street) || (it->city != city) || (it->state != state), "All data is same as stored");
+			check((it->first_name != first_name) || (it->last_name != last_name) || (it->age != age) || (it->street != street) || (it->city != city) || (it->state != state), "At least one of all data must be different.");
 			// print((it->first_name != first_name), " |");	// for debugging
 			// print((it->last_name != last_name), " |");	// for debugging
 			// print((it->age != age), " |");	// for debugging
@@ -68,6 +70,7 @@ public:
 			});
 
 			send_summary(user, " successfully modified record to addressbook");
+			increment_counter(user, "modify");
 		}
 	}
 
@@ -76,12 +79,13 @@ public:
 	void erase(name user) {
 		require_auth(user);
 
-		address_index addresses(get_self(), get_first_receiver().value);
+		address_index addresses(get_first_receiver(), get_first_receiver().value);
 		auto it = addresses.find(user.value);
 		check(it != addresses.end(), "Record doesn't exist!");
 		addresses.erase(it);
 		
 		send_summary(user, " successfully erased record to addressbook");
+		increment_counter(user, "erase");
 	}
 
 	template<typename T>
@@ -190,5 +194,11 @@ private:
 			"notify"_n,
 			std::make_tuple(user, name{user}.to_string() + msg)
 			).send();
+	}
+
+	// Adding inline action to an action - "count" in the another contract - "abcounter"
+	void increment_counter(name user, string type) {
+		abcounter::count_action count("bhub1counter"_n, {get_self(), "active"_n});
+		count.send(user, type);
 	}
 };

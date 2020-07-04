@@ -799,7 +799,7 @@ $ cleost get table cabeos1test2 cabeos1test2 people --upper 37 --key-type i64 --
 }
 ```
 
-## Inline actions
+## Inline actions to action in same contract
 * Added an inline action `send_summary` to the user as a transaction receipt
 	- define `ACTION notify()` & `send_summary()` with the same params
 ```console
@@ -873,3 +873,95 @@ warning: transaction executed locally, but may not be confirmed by the network y
 	+ The timestamp is same in both the case.
 	+ Also, the Block no. is same.
 	+ Also, the transaction id is same.  
+
+## Inline actions to action in different contract
+* View the `counts` table before pushing any data
+```console
+$ cleost get table bhub1counter bhub1counter counts
+{
+  "rows": [],
+  "more": false,
+  "next_key": ""
+}
+```
+* Push these 2 data by `cabeos1user1` & `cabeos1user2`
+```console
+$ cleost push action cabeos1test2 upsert '["cabeos1user2", "ramesh", "bhattacharya", 34, "2-lane park street", "Kolkata", "West Bengal"]' -p cabeos1user2@active
+executed transaction: 3a429f36d44aae767150aca466d7e7daaa04512f3dd7478baf65ffef7f323297  168 bytes  434 us
+#  cabeos1test2 <= cabeos1test2::upsert         {"user":"cabeos1user2","first_name":"ramesh","last_name":"bhattacharya","age":34,"street":"2-lane pa...
+#  cabeos1test2 <= cabeos1test2::notify         {"user":"cabeos1user2","msg":"cabeos1user2 successfully emplaced record to addressbook"}
+#  bhub1counter <= bhub1counter::count          {"user":"cabeos1user2","type":"emplace"}
+#  cabeos1user2 <= cabeos1test2::notify         {"user":"cabeos1user2","msg":"cabeos1user2 successfully emplaced record to addressbook"}
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+abhi3700@Abhijit:/mnt/f/Coding/github_repos/eosio-playground/base/addressbook$ cleost push action cabeos1test2 upsert '["cabeos1user1", "abhijit", "roy", 27, "r79, (top floor) \n Sec-74", "Mohali", "Punjab"]' -p cabeos1user1@active
+executed transaction: 75872f7d2a2da209def540f1c382ff7c2597ef7311188d6c0272633ef7cbb515  160 bytes  1104 us
+#  cabeos1test2 <= cabeos1test2::upsert         {"user":"cabeos1user1","first_name":"abhijit","last_name":"roy","age":27,"street":"r79, (top floor) ...
+#  cabeos1test2 <= cabeos1test2::notify         {"user":"cabeos1user1","msg":"cabeos1user1 successfully emplaced record to addressbook"}
+#  bhub1counter <= bhub1counter::count          {"user":"cabeos1user1","type":"emplace"}
+#  cabeos1user1 <= cabeos1test2::notify         {"user":"cabeos1user1","msg":"cabeos1user1 successfully emplaced record to addressbook"}
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+* View the `counts` table after pushing the data
+```console
+$ cleost get table bhub1counter bhub1counter counts --show-payer
+{
+  "rows": [{
+      "data": {
+        "key": "cabeos1user1",
+        "emplaced": 1,
+        "modified": 0,
+        "erased": 0
+      },
+      "payer": "cabeos1test2"
+    },{
+      "data": {
+        "key": "cabeos1user2",
+        "emplaced": 1,
+        "modified": 0,
+        "erased": 0
+      },
+      "payer": "cabeos1test2"
+    }
+  ],
+  "more": false,
+  "next_key": ""
+}
+```
+* Push 1 data to just modify the `cabeos1user2` 's age from 34 -> 35
+```console
+$ cleost push action cabeos1test2 upsert '["cabeos1user2", "ramesh", "bhattacharya", 35, "2-lane park street", "Kolkata", "West Bengal
+"]' -p cabeos1user2@active
+executed transaction: 82620d9dbb054a691dd7978f773003f784e1af80d0608b7dbfc2aeb32d006654  168 bytes  784 us
+#  cabeos1test2 <= cabeos1test2::upsert         {"user":"cabeos1user2","first_name":"ramesh","last_name":"bhattacharya","age":35,"street":"2-lane pa...
+#  cabeos1test2 <= cabeos1test2::notify         {"user":"cabeos1user2","msg":"cabeos1user2 successfully modified record to addressbook"}
+#  bhub1counter <= bhub1counter::count          {"user":"cabeos1user2","type":"modify"}
+#  cabeos1user2 <= cabeos1test2::notify         {"user":"cabeos1user2","msg":"cabeos1user2 successfully modified record to addressbook"}
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+* Now, view the `counts` table after modiying the age of the user
+```console
+$ cleost get table bhub1counter bhub1counter counts --show-payer
+{
+  "rows": [{
+      "data": {
+        "key": "cabeos1user1",
+        "emplaced": 1,
+        "modified": 0,
+        "erased": 0
+      },
+      "payer": "cabeos1test2"
+    },{
+      "data": {
+        "key": "cabeos1user2",
+        "emplaced": 1,
+        "modified": 1,
+        "erased": 0
+      },
+      "payer": "cabeos1test2"
+    }
+  ],
+  "more": false,
+  "next_key": ""
+}
+```
+* You can also view the actions forwarded as receipt to the respective users who pushes the action `cabeos1user1`, `cabeos1user2`, `cabeos1user3`
