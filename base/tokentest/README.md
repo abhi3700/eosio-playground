@@ -21,6 +21,37 @@ $ cleost get table eosio.token EOS stat --show-payer
   "next_key": ""
 }
 ```
+  - stat of "SYS" token in Jungle testnet.
+```console
+$ cleost get table eosio.token SYS stat --show-payer
+{
+  "rows": [],
+  "more": false,
+  "next_key": ""
+}
+```
+
+> NOTE: this token doesn't exist. Basically, it doesn't give Error. Please, note that the symbol is a part of `asset` which is the actual data in the cells. 
+
+  - stat of "JUNGLE" token in Jungle testnet
+```console
+$ cleost get table eosio.token JUNGLE stat --show-payer
+{
+  "rows": [{
+      "data": {
+        "supply": "10000020000.0000 JUNGLE",
+        "max_supply": "100000000000.0000 JUNGLE",
+        "issuer": "eosio"
+      },
+      "payer": "eosio.token"
+    }
+  ],
+  "more": false,
+  "next_key": ""
+}
+```
+
+
 * Table-2 ("accounts"_n): This stores `balance`
 	- balance of "cabeos1test1" account in Jungle testnet
 ```console
