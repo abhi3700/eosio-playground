@@ -59,18 +59,44 @@ public:
 			// print((it->state != state), " |");	// for debugging
 
 			// Now, modify the new data
+			string changes = "";
 			addresses.modify(it, user, [&]( auto& row ) {
-				row.key = user;
-				row.first_name = first_name;
-				row.last_name = last_name;
-				row.age = age;
-				row.street = street;
-				row.city = city;
-				row.state = state;
-			});
 
-			send_summary(user, " successfully modified record to addressbook");
-			increment_counter(user, "modify");
+				if (row.first_name != first_name){				
+					row.first_name = first_name;
+					changes += "first name ";
+				}				
+				if(row.last_name != last_name) {
+					row.last_name = last_name;
+					changes += "last name ";
+				}
+				if(row.age != age) {
+					row.age = age;
+					changes += "age ";
+				}
+				if(row.street != street) {
+					row.street = street;
+					changes += "street ";
+				}
+				if(row.city != city) {
+					row.city = city;
+					changes += "city ";
+				};
+				if(row.state != state) {
+					row.state = state;
+					changes += "state ";
+				}
+			});
+			if(!changes.empty()) {
+				send_summary(user, " successfully modified record to addressbook. Fields changed: " + changes);
+				increment_counter(user, "modify");
+			} else {
+				/*
+					check((it->first_name != first_name) || (it->last_name != last_name) || (it->age != age) || (it->street != street) || (it->city != city) || (it->state != state), "At least one of all data must be different.");
+				*/
+				// NOTE: although this code line is not required, because there is already a check in the beginning of the modify like above:
+				send_summary(user, " called upsert, but request resulted in no changes.");
+			}
 		}
 	}
 

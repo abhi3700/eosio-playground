@@ -1,3 +1,29 @@
+# `addressbook` contract
+## Account details:
+* Network: "Jungle Testnet"
+* Contract account: "cabeos1test2"
+* Contract name: "addressbook"
+* [addressbook.cpp](./addressbook.cpp)
+* [addressbook.wasm](./addressbook.wasm)
+* [addressbook.abi](./addressbook.abi)
+
+## Layers
+* A. Write an `addressbook` contract:
+	- __primary_key__ in __multi_index table__.
+* B. Modify the `addressbook` contract:
+	- __primary_key__ in __multi_index table__.
+	- __secondary_key__ in __multi_index table__.
+* C. Modify the `addressbook` contract:
+	- __primary_key__ in __multi_index table__.
+	- __secondary_key__ in __multi_index table__.
+	- add inline action - `send_summary()` to action - `notify()`
+* D. Modify the `addressbook` contract:
+	- __primary_key__ in __multi_index table__.
+	- __secondary_key__ in __multi_index table__.
+	- add inline action - `send_summary()` [in `addressbook` contract] to action - `notify()` [in `addressbook` contract]
+	- add inline action - `increment_counter()` [in `addressbook` contract] to external action - `count()` [in `abcounter` contract]
+
+
 ## RAM table
 * Here, the table is found in the contract (obviously as it is deployed there)
 * Who pays for each row?
@@ -147,7 +173,7 @@ pending console output: get_self(): cabeos1test2 | get_first_receiver(): cabeos1
 ```
 
 ## Compile
-* Compile the contract
+* [Part A, B, C] Compile the contract
 ```console
 ....../base/addressbook
 $ eosio-cpp addressbook.cpp -o addressbook.wasm
@@ -155,6 +181,25 @@ Warning, empty ricardian clause file
 Warning, empty ricardian clause file
 Warning, action <upsert> does not have a ricardian contract
 Warning, action <erase> does not have a ricardian contract
+```
+
+* [Part D] Compile the contract
+	- `abcounter`
+```console
+$ eosio-cpp abcounter.cpp -o abcounter.wasm
+Warning, empty ricardian clause file
+Warning, empty ricardian clause file
+Warning, action <count> does not have a ricardian contract
+```
+	- `addressbook`
+```console
+$ eosio-cpp addressbook.cpp -o addressbook.wasm -I ../abcounter
+Warning, empty ricardian clause file
+Warning, empty ricardian clause file
+Warning, action <upsert> does not have a ricardian contract
+Warning, action <erase> does not have a ricardian contract
+Warning, action <deleteall> does not have a ricardian contract
+Warning, action <notify> does not have a ricardian contract
 ```
 
 ## Deploy
@@ -1015,3 +1060,107 @@ pending console output:
 ```
 	- Wonderful! Since we require_auth for name("cabeos1test2"), only the addressbook contract can successfully execute this action, the call by `cabeos1user1` to fudge the numbers had no affect on the table.
 * You can also view the actions forwarded as receipt to the respective users who pushes the action `cabeos1user1`, `cabeos1user2`, `cabeos1user3`
+* Now, add a feature to see the field changes in the actions memo. E.g if `street`, `city` are changed, then in the action of the user, these field changes should be visible in the message.
+	- add this code snippet
+```cpp
+			string changes = "";
+			addresses.modify(it, user, [&]( auto& row ) {
+
+				if (row.first_name != first_name){				
+					row.first_name = first_name;
+					changes += "first name ";
+				}				
+				if(row.last_name != last_name) {
+					row.last_name = last_name;
+					changes += "last name ";
+				}
+				if(row.age != age) {
+					row.age = age;
+					changes += "age ";
+				}
+				if(row.street != street) {
+					row.street = street;
+					changes += "street ";
+				}
+				if(row.city != city) {
+					row.city = city;
+					changes += "city ";
+				};
+				if(row.state != state) {
+					row.state = state;
+					changes += "state ";
+				}
+			});
+			if(!changes.empty()) {
+				send_summary(user, " successfully modified record to addressbook. Fields changed: " + changes);
+				increment_counter(user, "modify");
+			} else {
+				/*
+					check((it->first_name != first_name) || (it->last_name != last_name) || (it->age != age) || (it->street != street) || (it->city != city) || (it->state != state), "At least one of all data must be different.");
+				*/
+				// NOTE: although this code line is not required, because there is already a check in the beginning of the modify like above:
+				send_summary(user, " called upsert, but request resulted in no changes.");
+			}
+```
+	- push changes in `street`, `city` of user - `cabeos1user1`
+```console
+$ cleost push action cabeos1test2 upsert '["cabeos1user1", "abhijit", "roy", 27, "Khandwala road", "Ludhiana", "Punjab"]' -p cabeos1user1@active
+executed transaction: a96b4c0d53f0e3f060862175475ba22c1b198057e969bd3e2f49f25fce3564da  152 bytes  264 us
+#  cabeos1test2 <= cabeos1test2::upsert         {"user":"cabeos1user1","first_name":"abhijit","last_name":"roy","age":27,"street":"Khandwala road","...
+#  cabeos1test2 <= cabeos1test2::notify         {"user":"cabeos1user1","msg":"cabeos1user1 successfully modified record to addressbook. Fields chang...
+#  bhub1counter <= bhub1counter::count          {"user":"cabeos1user1","type":"modify"}
+#  cabeos1user1 <= cabeos1test2::notify         {"user":"cabeos1user1","msg":"cabeos1user1 successfully modified record to addressbook. Fields chang...
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+	- View the `people` table to see modified data
+```console
+$ cleost get table cabeos1test2 cabeos1test2 people --show-payer
+{
+  "rows": [{
+      "data": {
+        "key": "cabeos1user1",
+        "first_name": "abhijit",
+        "last_name": "roy",
+        "age": 27,
+        "street": "Khandwala road",
+        "city": "Ludhiana",
+        "state": "Punjab"
+      },
+      "payer": "cabeos1user1"
+    }
+  ],
+  "more": false,
+  "next_key": ""
+}
+```
+	- View the `counts` table to see modify no.
+```console
+$ cleost get table bhub1counter bhub1counter counts --show-payer
+{
+  "rows": [{
+      "data": {
+        "key": "cabeos1user1",
+        "emplaced": 1,
+        "modified": 1,
+        "erased": 0
+      },
+      "payer": "cabeos1test2"
+    },{
+      "data": {
+        "key": "cabeos1user2",
+        "emplaced": 1,
+        "modified": 1,
+        "erased": 1
+      },
+      "payer": "cabeos1test2"
+    }
+  ],
+  "more": false,
+  "next_key": ""
+}
+```
+## References
+* [Part A](https://developers.eos.io/welcome/latest/getting-started/smart-contract-development/data-persistence/)
+* [Part B](https://developers.eos.io/welcome/latest/getting-started/smart-contract-development/secondary-indices)
+* [Part C](https://developers.eos.io/welcome/latest/getting-started/smart-contract-development/adding-inline-actions)
+* [Part D](https://developers.eos.io/welcome/latest/getting-started/smart-contract-development/inline-action-to-external-contract)
