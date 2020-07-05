@@ -19,8 +19,9 @@ This contract needs to set up a few constraints:
 
 ## RAM Table
 * The contract table is definitely stored in the contract account.
-* `ram_payer`: "bhub1111hodl"
+* `ram_payer`: the contract i.e. `"bhub1111hodl"`
 * `scope`: hodler i.e. whoever the holds the money.
+* `primary_key`: find the symbol e.g. `"EOS"` which is a part of `asset`
 
 ## Compile
 

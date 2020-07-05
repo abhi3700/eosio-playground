@@ -18,7 +18,8 @@ public:
 
 	hodl(name receiver, name code, datastream<const char*> ds) : contract(code, receiver, ds), hodl_symbol("SYS", 4) {}
 
-	ACTION hodl(const name& hodler, const name& to, const asset& quantity, const string& memo) {
+	[[eosio::on_notify("eosio.token::transfer")]]
+	void deposit(const name& hodler, const name& to, const asset& quantity, const string& memo) {
 		if(hodler == get_self() || to != get_self()) {
 			print("These are not the droids you are looking for.");
 			return;
@@ -29,8 +30,8 @@ public:
 		check(quantity.amount > 0, "when pigs fly!");
 		check(quantity.symbol() == hodl_symbol, "These are not the droids you are looking for.");
 
-		hodl_index hodl_table(get_self(), hodler.value);
-		auto hodl_it = hodl_table.find(hodler.value);
+		hodl_index hodl_table(get_self(), hodler.value);	// scope: person holding money
+		auto hodl_it = hodl_table.find(hodl_symbol.raw());
 
 		if(hodl_it == hodl_table.end()) {
 			hodl_table.emplace(hodler, [&](auto& row) {
