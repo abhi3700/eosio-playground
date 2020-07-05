@@ -5,3 +5,4 @@ test*
 
 # ignore folders
 .svn/
+.vscode/
