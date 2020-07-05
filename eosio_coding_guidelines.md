@@ -267,7 +267,12 @@ warn  2020-07-01T22:07:41.973 cleos     main.cpp:506                  print_resu
 ## Coding syntax
 ### Data types
 * `name` - [Source](https://developers.eos.io/manuals/eosio.cdt/latest/structeosio_1_1name)
-	- e.g `name.value`
+	- `name.value` - `uint64_t` part of `name`
+* `asset` - [Source](https://developers.eos.io/manuals/eosio.cdt/latest/structeosio_1_1asset)
+	- e.g. "1000.0000 EOS"
+	- `asset.symbol.raw()` - uint64_t part of `asset`
+	- `asset.symbol` - `symbol` class type 
+
 
 ### print [All](https://developers.eos.io/manuals/eosio.cdt/v1.7/best-practices/debugging_a_smart_contract/#print)
 * `print`
