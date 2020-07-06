@@ -846,6 +846,16 @@ $ cleost get table cabeos1test2 cabeos1test2 people --upper 37 --key-type i64 --
 
 ## Inline actions to action in same contract
 * Added an inline action `send_summary` to the user as a transaction receipt
+```cpp
+	void send_summary(name user, string msg) {
+		action(
+			permission_level(get_self(), "active"_n), 
+			get_self(),
+			"notify"_n,
+			std::make_tuple(user, name{user}.to_string() + msg)
+			).send();
+	}
+```
 	- define `ACTION notify()` & `send_summary()` with the same params
 ```console
 $ cleost push action cabeos1test2 upsert '["cabeos1user3", "Gurvinder", "Dhillon", 54, "Dwarka, Sec-12", "Delhi", "Delhi"]' -p cabeos1user3@active
@@ -920,6 +930,32 @@ warning: transaction executed locally, but may not be confirmed by the network y
 	+ Also, the transaction id is same.  
 
 ## Inline actions to action in different contract
+* The action_wrapper is written like. This is defined in `abcounter.cpp`
+```cpp
+...
+...
+using count_action = action_wrapper<"count"_n, &abcounter::count>;
+...
+...
+```
+* The action constructor is like this:
+```cpp
+void increment_counter(name user, string type) {
+	abcounter::count_action count("bhub1counter"_n, {get_self(), "active"_n});
+	count.send();
+}
+```
+* Instead this can also be written like this w/o action_wrapper:
+```cpp
+void increment_counter(name user, string type) {
+	action(
+			permission_level{get_self(), "active"_n},
+			"bhub1counter"_n,
+			"count"_n,
+			std::make_tuple(user, type)
+		).send();
+}
+```
 * Compile & deploy the `abcounter` contract to `bhub1counter` account.
 * Recompile & redeploy the `addressbook` contract to `cabeos1test2` account
 	- `$ eosio-cpp addressbook.cpp -o addressbook.wasm -I ../abcounter/`
