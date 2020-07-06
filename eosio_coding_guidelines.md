@@ -431,7 +431,7 @@ pending console output:
 ```
 	- Error details & reason: This error means you are trying to charge someone RAM through an action that isn't specific to your contract.
 
-	The user wants to just send money, and they wouldn't expect that they would be charged RAM for a transfer. So somewhere in your code you use multi_index::emplace, and you set the payer argument to the user's account. This is fine if the code is called by an action in the contract, but not from an external action that involves the contract such as transfer. If you must do an emplace in a transfer, then you will have to pay for it yourself
+	The user wants to just send money, and they wouldn't expect that they would be charged RAM for a transfer. So somewhere in your code you use multi_index::emplace, and you set the payer argument to the user's account. This is fine if the code is called by an action in the contract, but not from an external action that involves the contract such as transfer. If you must do an emplace in a transfer, then you will have to pay for it yourself. [Source](https://eosio.stackexchange.com/questions/3429/how-to-solve-error-details-cannot-charge-ram-to-other-accounts-during-notify-on)
 
 	- Solution: modify the ram_payer as the contract (being called) e.g. `eosio.token::transfer` calling `bhub1111hodl` using `deposit` helper function, where the table is defined. Modify like this (Before & After):
 	- Before:
@@ -486,7 +486,7 @@ pending console output:
 			});
 		}
 ```
-	
+
 
 
 ## References

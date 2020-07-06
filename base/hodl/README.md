@@ -22,7 +22,7 @@ This contract needs to set up a few constraints:
 * `ram_payer`: the contract i.e. `"bhub1111hodl"`.
 
 > NOTE: Making `hodler` as ram_payer, means you are trying to charge someone RAM through an action that isn't specific to your contract.
-> The user wants to just send money, and they wouldn't expect that they would be charged RAM for a transfer. So somewhere in your code you use multi_index::emplace, and you set the payer argument to the user's account. This is fine if the code is called by an action in the contract, but not from an external action that involves the contract such as transfer. If you must do an emplace in a transfer, then you will have to pay for it yourself
+> The user wants to just send money, and they wouldn't expect that they would be charged RAM for a transfer. So somewhere in your code you use multi_index::emplace, and you set the payer argument to the user's account. This is fine if the code is called by an action in the contract, but not from an external action that involves the contract such as transfer. If you must do an emplace in a transfer, then you will have to pay for it yourself [Source](https://eosio.stackexchange.com/questions/3429/how-to-solve-error-details-cannot-charge-ram-to-other-accounts-during-notify-on)
 
 * `scope`: hodler i.e. whoever the holds the money.
 * `primary_key`: find the symbol e.g. `"EOS"` which is a part of `asset`
@@ -192,3 +192,6 @@ $ cleost get table bhub1111hodl cabeos1user1 balance --show-payer
   "next_key": ""
 }
 ```
+
+## References
+* [Payable actions](https://developers.eos.io/welcome/latest/getting-started/smart-contract-development/payable_actions)
