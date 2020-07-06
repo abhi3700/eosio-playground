@@ -420,6 +420,75 @@ $ cleost get table cabeos1test2 cabeos1test2 people
 ```
 	- DONE!
 
+* Error during transfer of money & consuming extra RAM from user
+```console
+$ cleost push action eosio.token transfer '["cabeos1user1", "bhub1111hodl", "0.0010 EOS", "hodl!"]' -p
+ cabeos1user1@active
+Error 3050010: Action attempts to increase RAM usage of account without authorization
+Error Details:
+unprivileged contract cannot increase RAM usage of another account within a notify context: cabeos1user1
+pending console output:
+```
+	- Error details & reason: This error means you are trying to charge someone RAM through an action that isn't specific to your contract.
+
+	The user wants to just send money, and they wouldn't expect that they would be charged RAM for a transfer. So somewhere in your code you use multi_index::emplace, and you set the payer argument to the user's account. This is fine if the code is called by an action in the contract, but not from an external action that involves the contract such as transfer. If you must do an emplace in a transfer, then you will have to pay for it yourself
+
+	- Solution: modify the ram_payer as the contract (being called) e.g. `eosio.token::transfer` calling `bhub1111hodl` using `deposit` helper function, where the table is defined. Modify like this (Before & After):
+	- Before:
+```cpp
+		if(hodl_it == balance_table.end()) {
+			balance_table.emplace(hodler, [&](auto& row) {
+				row.funds = quantity;
+			});
+		} else {
+			balance_table.modify(hodl_it, hodler, [&](auto& row) {
+				row.funds += quantity;
+			});
+		}
+```
+	- After:
+```cpp
+		if(hodl_it == balance_table.end()) {
+			balance_table.emplace(get_self(), [&](auto& row) {
+				row.funds = quantity;
+			});
+		} else {
+			balance_table.modify(hodl_it, get_self(), [&](auto& row) {
+				row.funds += quantity;
+			});
+		}
+```
+	- Issue resolved!!!
+
+* Keep this mind that, what could be the problems in using `same_payer`
+```cpp
+		if(hodl_it == balance_table.end()) {
+			balance_table.emplace(hodler, [&](auto& row) {
+				row.funds = quantity;
+			});
+		} else {
+			balance_table.modify(hodl_it, same_payer, [&](auto& row) {
+				row.funds += quantity;
+			});
+		}
+```
+	- Let's say you upgrade the contract & replace the `user` as ram_payer to `contract` itself. Then during each modification, the user's RAM would be charged still then.
+	- This is because, the last `ram_payer` was the `user` itself.
+	- Solution: It's always better to use the same param in both the functions - `emplace` & `modify` like this:
+```cpp
+		if(hodl_it == balance_table.end()) {
+			balance_table.emplace(hodler, [&](auto& row) {
+				row.funds = quantity;
+			});
+		} else {
+			balance_table.modify(hodl_it, hodler, [&](auto& row) {
+				row.funds += quantity;
+			});
+		}
+```
+	
+
+
 ## References
 * [EOSIO Developer Portal](https://developers.eos.io/)
 * [Understanding The eosio.token Contract](https://medium.com/eoseoul/codeos-essential-knowledge-in-eos-contact-development-9c9b1bf26d0c)
