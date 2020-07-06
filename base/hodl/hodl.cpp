@@ -22,19 +22,19 @@ using std::string;
 class [[eosio::contract]] hodl : public contract
 {
 private:
-	// static const uint32_t the_party = 1645568542;	// UTC timestamp for "Tuesday, February 22, 2022 10:22:22 PM"
-	static const uint32_t the_party = 1592829600;	// for withdrawal testing purpose. UTC timestamp for "06/22/2020 @ 12:40pm (UTC)"
+	static const uint32_t the_party = 1645568542;	// UTC timestamp for "Tuesday, February 22, 2022 10:22:22 PM"
+	// static const uint32_t the_party = 1592829600;	// for withdrawal testing purpose. UTC timestamp for "06/22/2020 @ 12:40pm (UTC)"
 
 	const symbol hodl_symbol;
 
 public:
 	using contract::contract;
 
-	hodl(name receiver, name code, datastream<const char*> ds) : contract(code, receiver, ds), hodl_symbol("EOS", 4) {}
+	hodl(name receiver, name code, datastream<const char*> ds) : contract(receiver, code, ds), hodl_symbol("EOS", 4) {}
 
 	[[eosio::on_notify("eosio.token::transfer")]]
 	void deposit(const name& hodler, const name& to, const asset& quantity, const string& memo) {
-		if(hodler == get_self() || to != get_self()) {
+		if(to != get_self() || hodler == get_self()) {
 			print("These are not the droids you are looking for.");
 			return;
 		}
@@ -48,11 +48,11 @@ public:
 		auto hodl_it = balance_table.find(hodl_symbol.raw());
 
 		if(hodl_it == balance_table.end()) {
-			balance_table.emplace(hodler, [&](auto& row) {
+			balance_table.emplace(get_self(), [&](auto& row) {
 				row.funds = quantity;
 			});
 		} else {
-			balance_table.modify(hodl_it, same_payer, [&](auto& row) {
+			balance_table.modify(hodl_it, get_self(), [&](auto& row) {
 				row.funds += quantity;
 			});
 		}
@@ -85,10 +85,6 @@ public:
 
 	}
 
-	inline uint32_t now() const {
-		return current_time_point().sec_since_epoch();
-	}
-
 private:
 	TABLE balance
 	{
@@ -98,4 +94,9 @@ private:
 	};
 
 	using balance_index = multi_index<"balance"_n, balance>;
+
+	inline uint32_t now() const {
+		return current_time_point().sec_since_epoch();
+	}
+
 };

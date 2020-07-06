@@ -19,7 +19,11 @@ This contract needs to set up a few constraints:
 
 ## RAM Table
 * The contract table is definitely stored in the contract account.
-* `ram_payer`: the contract i.e. `"bhub1111hodl"`
+* `ram_payer`: the contract i.e. `"bhub1111hodl"`.
+
+> NOTE: Making `hodler` as ram_payer, means you are trying to charge someone RAM through an action that isn't specific to your contract.
+> The user wants to just send money, and they wouldn't expect that they would be charged RAM for a transfer. So somewhere in your code you use multi_index::emplace, and you set the payer argument to the user's account. This is fine if the code is called by an action in the contract, but not from an external action that involves the contract such as transfer. If you must do an emplace in a transfer, then you will have to pay for it yourself
+
 * `scope`: hodler i.e. whoever the holds the money.
 * `primary_key`: find the symbol e.g. `"EOS"` which is a part of `asset`
 
@@ -27,9 +31,10 @@ This contract needs to set up a few constraints:
 > NOTE: Annotating an action with an on_notify attribute ensures any incoming notification is forwarded to the annotated action if and only if the notification is dispatched from a specified contract and from a specified action.
 
 * `deposit`:
+	- It is not an action, rather utility/helper function like `send_summary()`, `increment_counter()` in the EOSIO developer Getting started Series. 
 	- In this case, the `on_notify` attribute ensures the incoming notification is forward to the deposit action only if the notification comes from the `eosio.token` contract and is from the `eosio.token`'s `transfer` action.
-	- This is also why we don't need to check if the hodler actually has the appropriate amount of tokens he or she claimed, as the `eosio.token` contract would have done this check prior to the transfer notification reaching the `hodl` `deposit` action.
-	- Here, `hodler` is using `eosio.token`'s `transfer` action on `deposit` action to deposit money by transferring the money from user account to the contract account after checking necessary conditions.
+	- This is also why we don't need to check if the hodler actually has the appropriate amount of tokens he or she claimed, as the `eosio.token` contract would have done this check prior to the transfer notification reaching the `hodl` `deposit` helper function.
+	- Here, `hodler` is using `eosio.token`'s `transfer` action on `deposit` helper function to deposit money by transferring the money from user account to the contract account after checking necessary conditions.
 	- Note that most of the conditions like (below) are checked in the `eosio.token::transfer` action.
 		+ subtraction of amount from balance,
 		+ addition of amount to balance
@@ -75,15 +80,49 @@ warning: transaction executed locally, but may not be confirmed by the network y
 ```
 
 ## Push
-* Use `eosio.token::transfer` action to store into `hodl`'s `balance` table
+### Test Deposit
+* Use `eosio.token::transfer` action to deposit fund money & store info. into `hodl`'s `balance` table
 ```console
-$ cleost push action eosio.token transfer '["cabeos1user1", "bhub1111hodl", "1.0000 EOS", "deposit fund"]' -p cabeos1user1@acti
-ve
-executed transaction: 9a4b97dc37ecdaa33993e1f1a44246296fa1489de517e74f2a9967caca8507dc  144 bytes  746 us
-#   eosio.token <= eosio.token::transfer        {"from":"cabeos1user1","to":"bhub1111hodl","quantity":"1.0000 EOS","memo":"deposit fund"}
-#  cabeos1user1 <= eosio.token::transfer        {"from":"cabeos1user1","to":"bhub1111hodl","quantity":"1.0000 EOS","memo":"deposit fund"}
-#  bhub1111hodl <= eosio.token::transfer        {"from":"cabeos1user1","to":"bhub1111hodl","quantity":"1.0000 EOS","memo":"deposit fund"}
+$ cleost push action eosio.token transfer '["cabeos1user1", "bhub1111hodl", "0.0010 EOS", "hodl!"]' -p cabeos1user1@active
+executed transaction: 28618352c2923b2040803182753e02e4d40fb0133a4e0b145391886c434fa80a  136 bytes  1071 us
+#   eosio.token <= eosio.token::transfer        {"from":"cabeos1user1","to":"bhub1111hodl","quantity":"0.0010 EOS","memo":"hodl!"}
+#  cabeos1user1 <= eosio.token::transfer        {"from":"cabeos1user1","to":"bhub1111hodl","quantity":"0.0010 EOS","memo":"hodl!"}
+#  bhub1111hodl <= eosio.token::transfer        {"from":"cabeos1user1","to":"bhub1111hodl","quantity":"0.0010 EOS","memo":"hodl!"}
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+* Add more fund money
+```console
+$ cleost push action eosio.token transfer '["cabeos1user1", "bhub1111hodl", "0.0010 EOS", "hodl!"]' -p cabeos1user1@active
+executed transaction: f74ae910d38a2574adeee7d4b7a516deb9dc628c2e0e4cbbd26104ac85c51792  136 bytes  769 us
+#   eosio.token <= eosio.token::transfer        {"from":"cabeos1user1","to":"bhub1111hodl","quantity":"0.0010 EOS","memo":"hodl!"}
+#  cabeos1user1 <= eosio.token::transfer        {"from":"cabeos1user1","to":"bhub1111hodl","quantity":"0.0010 EOS","memo":"hodl!"}
+#  bhub1111hodl <= eosio.token::transfer        {"from":"cabeos1user1","to":"bhub1111hodl","quantity":"0.0010 EOS","memo":"hodl!"}
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+
+### Test Withdraw
+* trying to withdraw money before the maturity period has arrived
+```
+$ cleost push action bhub1111hodl party '["cabeos1user1"]' -p cabeos1user1@active
+Error 3050003: eosio_assert_message assertion failure
+Error Details:
+assertion failure with message: Hold your horses.
+pending console output:
+```
+* In order to execute the withdrawal make the date as already passed, so that the maturity period is over.
+```cpp
+	// static const uint32_t the_party = 1645568542;	// UTC timestamp for "Tuesday, February 22, 2022 10:22:22 PM"
+	static const uint32_t the_party = 1592829600;	// for withdrawal testing purpose. UTC timestamp for "06/22/2020 @ 12:40pm (UTC)"
+```
+* Now, withdraw the money successfully
+```console
+$ cleost push action bhub1111hodl party '["cabeos1user1"]' -p cabeos1user1@active
+executed transaction: 46f37e80e9bcf825ba5eeaf42a38801b9e381ef7ec3abba5b662e9eaac54fd62  104 bytes  334 us
+#  bhub1111hodl <= bhub1111hodl::party          {"hodler":"cabeos1user1"}
+#   eosio.token <= eosio.token::transfer        {"from":"bhub1111hodl","to":"cabeos1user1","quantity":"0.0020 EOS","memo":"Party! Your hodl is free....
+#  bhub1111hodl <= eosio.token::transfer        {"from":"bhub1111hodl","to":"cabeos1user1","quantity":"0.0020 EOS","memo":"Party! Your hodl is free....
 >> These are not the droids you are looking for.
+#  cabeos1user1 <= eosio.token::transfer        {"from":"bhub1111hodl","to":"cabeos1user1","quantity":"0.0020 EOS","memo":"Party! Your hodl is free....
 warning: transaction executed locally, but may not be confirmed by the network yet         ]
 ```
 
@@ -129,49 +168,27 @@ rethrow
 ```
 
 ## Table
-* check `cabeos1user1`'s balance via `get account` method:
+* Show the table after 2 times depositing money ("0.0010 EOS" twice)
 ```console
-$ cleost get account cabeos1user1
-created: 2020-06-18T21:21:46.500
-permissions:
-     owner     1:    1 EOS7L5cABCRbkk9XSPY9qiTzUV5jMoPWWmehe29fW23qK5j3M6Se9
-        active     1:    1 EOS7L5cABCRbkk9XSPY9qiTzUV5jMoPWWmehe29fW23qK5j3M6Se9
-memory:
-     quota:     5.365 KiB    used:     4.027 KiB
-
-net bandwidth:
-     staked:          1.0000 EOS           (total stake delegated from account to self)
-     delegated:       0.0000 EOS           (total staked delegated to account from others)
-     used:               304 bytes
-     available:        62.45 KiB
-     limit:            62.74 KiB
-
-cpu bandwidth:
-     staked:          1.0000 EOS           (total stake delegated from account to self)
-     delegated:       0.0000 EOS           (total staked delegated to account from others)
-     used:               398 us
-     available:        58.59 ms
-     limit:            58.99 ms
-
-EOS balances:
-     liquid:           18.0000 EOS
-     staked:            2.0000 EOS
-     unstaking:         0.0000 EOS
-     total:            20.0000 EOS
-
-producers:     <not voted>
-```
-
-* check `cabeos1user1`'s balance via table of `eosio.token`:
-```console
-$ cleost get table eosio.token cabeos1user1 accounts
+$ cleost get table bhub1111hodl cabeos1user1 balance --show-payer
 {
   "rows": [{
-      "balance": "18.0000 EOS"
+      "data": {
+        "funds": "0.0020 EOS"
+      },
+      "payer": "bhub1111hodl"
     }
   ],
   "more": false,
   "next_key": ""
 }
 ```
-
+* Show the table after successful withdrawal
+```console
+$ cleost get table bhub1111hodl cabeos1user1 balance --show-payer
+{
+  "rows": [],
+  "more": false,
+  "next_key": ""
+}
+```
