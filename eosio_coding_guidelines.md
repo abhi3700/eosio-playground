@@ -31,7 +31,10 @@
 	- Inline actions
 		+ Type-1: action calls to another action within same contract
 		+ Type-2: action of one contract calls to action of another contract.
-
+* Actions can only be pushed if it's added in ABI. e.g. with [[eosio::on_notify]] attribute, doesn't add that function as action. Rather, that's a payable action mostly.
+* Inline actions are the caller actions, but `on_notify` attributed functions are actually callee functions (utility) to update the table of contract called.
+* `on_notify` function
+	- `eosio.token::transfer` action is calling a helper function deposit to add the info (i.e. transferred money) to the contract (`hodl`)'s table. 
 
 ## Table
 * `TABLE` is equal to `struct [[eosio::table]]`
@@ -497,3 +500,6 @@ pending console output:
 * [How to estimate RAM/CPU/NET cost for your EOS DApp](https://medium.com/leclevietnam/eos-resource-allocation-98bb6cb84497)
 * [Modifying data structure in EOS contract is not an easy thing](https://medium.com/@cc32d9/modifying-data-structure-in-eos-contract-is-not-an-easy-thing-594f596c9995)
 	- [delete all the data at once](#create-an-action-to-delete-all-the-table-data-at-once)
+* Glossary:
+	- EOSIO Developer portal: https://developers.eos.io/welcome/latest/glossary/index
+	- dfuse: https://www.eoscanada.com/en/abc-eos
