@@ -94,7 +94,7 @@ $ cleost get table cabeos1test2 cabeos1test2 people --show-payer
 
 > NOTE: If you want to index on a `string` you will need to convert this to an `integer` type and store the results in a field that you then index. 
 
-* [ ] the table can't be updated, unless all the data is removed
+* [ ] the table can't be updated, unless all the data is removed.
 * Each row is a struct which has different fields. So, __row__ --> `struct`
 	- this can be found using `get` method like this:
 ```cpp
@@ -119,13 +119,20 @@ return ac.balance;							// now, return member i.e. 'supply' of struct 'st'
 		+ Use C++ `typedef`/`using` to define a type based on Multi Index Table Index, such as: tablename, the struct, additional indexes
 	- Create Local Variables inside actions or functions
 * Multi-index methods
-	- `find`: for querying an entry
+	- `find`: for querying an entry via primary_index
 ```cpp
 ...
 address_index addresses(get_self(), get_first_receiver().value);
 auto it = addresses.find(user.value);
 ...
 ...
+```
+		+ for querying an entry via secondary index
+```cpp
+address_index addresses(get_self(), get_first_receiver().value);
+age_idx = addresses.get_index<"byage"_n>;
+auto it = age_idx.find(user.value);
+
 ```
 		+ retrieving items, For retrieving a record by its primary key we simply run:
 ```cpp
