@@ -127,7 +127,7 @@ auto it = addresses.find(user.value);
 ...
 ...
 ```
-		+ for querying an entry via secondary index
+		+ for querying an entry via secondary index. Do same like primary key index:
 ```cpp
 address_index addresses(get_self(), get_first_receiver().value);
 age_idx = addresses.get_index<"byage"_n>;
