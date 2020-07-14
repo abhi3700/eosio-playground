@@ -19,6 +19,20 @@
             ]
         },
         {
+            "name": "modifybyage",
+            "base": "",
+            "fields": [
+                {
+                    "name": "age",
+                    "type": "uint64"
+                },
+                {
+                    "name": "city",
+                    "type": "string"
+                }
+            ]
+        },
+        {
             "name": "notify",
             "base": "",
             "fields": [
@@ -110,6 +124,11 @@
         {
             "name": "erase",
             "type": "erase",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "modifybyage",
+            "type": "modifybyage",
             "ricardian_contract": ""
         },
         {

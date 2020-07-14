@@ -843,6 +843,64 @@ $ cleost get table cabeos1test2 cabeos1test2 people --upper 37 --key-type i64 --
   "next_key": ""
 }
 ```
+* Push action `modifybyage` to modify the record by age:
+	- Show the table before any modification
+```console
+$ cleost get table cabeos1test2 cabeos1test2 people
+{
+  "rows": [{
+      "key": "cabeos1user1",
+      "first_name": "abhijit",
+      "last_name": "roy",
+      "age": 27,
+      "street": "Khandwala road",
+      "city": "Ludhiana",
+      "state": "Punjab"
+    }
+  ],
+  "more": false,
+  "next_key": ""
+}
+```
+	- Error-1: w/o permission.
+```console
+$ cleost push action cabeos1test2 modifybyage '[27, "Jalandhar"]'
+Error 3040003: Transaction should have at least one required authority
+Error Details:
+transaction must have at least one authorization
+```
+
+	> NOTE: Even if `require_auth()` not added in the code, still the user's permission has to be provided during modification
+
+	- Modify the table
+```console
+$ cleost push action cabeos1test2 modifybyage '[27, "Bhatinda"]' -p cabeos1user1@active
+executed transaction: 74ecea86cddb240d387a86fa4fac010cc28378e71beb8d05ff1aa80114a660e4  112 bytes  867 us
+#  cabeos1test2 <= cabeos1test2::modifybyage    {"age":27,"city":"Bhatinda"}
+#  cabeos1test2 <= cabeos1test2::notify         {"user":"cabeos1user1","msg":"cabeos1user1 successfully modified record to addressbook. Fields chang...
+#  bhub1counter <= bhub1counter::count          {"user":"cabeos1user1","type":"modify"}
+#  cabeos1user1 <= cabeos1test2::notify         {"user":"cabeos1user1","msg":"cabeos1user1 successfully modified record to addressbook. Fields chang...
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+	- Show the table after modification
+```console
+$ cleost get table cabeos1test2 cabeos1test2 people
+{
+  "rows": [{
+      "key": "cabeos1user1",
+      "first_name": "abhijit",
+      "last_name": "roy",
+      "age": 27,
+      "street": "Khandwala road",
+      "city": "Bhatinda",
+      "state": "Punjab"
+    }
+  ],
+  "more": false,
+  "next_key": ""
+}
+```
+
 
 ## Inline actions to action in same contract
 * Added an inline action `send_summary` to the user as a transaction receipt

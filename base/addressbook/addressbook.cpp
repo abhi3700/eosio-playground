@@ -15,6 +15,7 @@ using eosio::checksum256;
 // using eosio::time_point_sec::operator;
 using eosio::permission_level;
 using eosio::action;
+using eosio::same_payer;
 
 class [[eosio::contract]] addressbook : public contract
 {
@@ -98,6 +99,24 @@ public:
 				send_summary(user, " called upsert, but request resulted in no changes.");
 			}
 		}
+	}
+
+	ACTION modifybyage(uint64_t age, const string& city) {
+		address_index addresses(get_first_receiver(), get_first_receiver().value);
+		auto age_idx = addresses.get_index<"byage"_n>();
+		auto it = age_idx.find(age);
+
+		check(it != age_idx.end(), "row with this age not found.");
+
+		require_auth(it->key);			// Not needed necessarily, because anyway during modification, there has to be permission taken from the user.
+
+		// modify
+		age_idx.modify(it, same_payer, [&](auto& row){
+			row.city = city;
+		});
+
+		send_summary(it->key, " successfully modified record to addressbook. Fields changed: " + city);
+		increment_counter(it->key, "modify");
 	}
 
 
