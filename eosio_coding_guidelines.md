@@ -184,6 +184,26 @@ addresses.modify(iterator, user, [&]( auto& row ) {
       row.state = state;
     });
 ```
+		+ modify the table by secondary index. Basically, get the index via `get_index` & then add `find`, `modify` to it
+```cpp
+ACTION modifybyage(uint64_t age, const string& city) {
+	address_index addresses(get_first_receiver(), get_first_receiver().value);
+	auto age_idx = addresses.get_index<"byage"_n>();
+	auto it = age_idx.find(age);
+
+	check(it != age_idx.end(), "row with this age not found.");
+
+	require_auth(it->key);			// Not needed necessarily, because anyway during modification, there has to be permission taken from the user.
+
+	// modify
+	age_idx.modify(it, same_payer, [&](auto& row){
+		row.city = city;
+	});
+
+	send_summary(it->key, " successfully modified record to addressbook. Fields changed: " + city);
+	increment_counter(it->key, "modify");
+}
+```
 	- Case-1: [tabletest1](./base/tabletest1)
 		+ action permission: user
 ```cpp
@@ -304,6 +324,9 @@ print_f("Name : %\n", nm);
 * `get_self()` - gives the contract account name
 * `get_first_receiver()`
 * code vs receiver [Source](https://chainsecurity.com/the-dispatcher-first-line-of-defense-in-any-eos-smart-contract/)
+	- Self is where the action is executed, and first receiver is where the notification is originated [Source](https://t.me/c/1139062279/229432)
+	- They are different in a notification context i.e. `[[eosio::on_notify("")]]` attributed function [Source](https://t.me/c/1139062279/229439)
+	- it doesn't need to be a transfer. Contract A executes require_recipient(B), then B receives a notification that it can process somehow. Then in B's context, B will be self, and A will be the first receiver [Source](https://t.me/c/1139062279/229441)
 
 ### Permission
 * `require_auth( account name )`
