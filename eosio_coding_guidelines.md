@@ -90,6 +90,12 @@ $ cleost get table cabeos1test2 cabeos1test2 people --show-payer
 * primary index: mandatory to define. & must be `uint64_t` & must be unique.
 	- if `name` data type is defined as primary_index, then the get_func will return `n.value`
 * secondary index type: optional (max 16) & can have duplicates like a valet in Zomato linked linked to multiple orders i.e. rows in table.
+* Don't user `auto` as deduction-type for the get_function inside the struct table. But, one can use `auto` as deduction type in primary_key function.
+```cpp
+		auto primary_key() const { return commuter_ac.value; }
+		uint64_t get_secondary_1() const { return driver_ac.value; }
+		uint64_t get_secondary_2() const { return ride_status.value; }
+```
 * secondary index data_types: `uint64_t`, `uint128_t`, `uint256_t`, `double` or `long double`.
 
 > NOTE: If you want to index on a `string` you will need to convert this to an `integer` type and store the results in a field that you then index. 
@@ -519,7 +525,19 @@ pending console output:
 			});
 		}
 ```
+* Multi-index table secondary_index auto-deduction error
+```console
+...
+./../include/toetaxiride.hpp:242:80: error: function 'get_secondary_1' with deduced return type cannot be used before it is defined
+                                                                        indexed_by<"bydriver"_n, const_mem_fun<ridetaxi, uint64_t, &ridetaxi::get_secondary_1>>,
 
+...
+...                                                                                                                                              ^
+```
+	- Solution: remove the `auto` from the function defined inside struct table
+```cpp
+		uint64_t get_secondary_1() const { return driver_ac.value; }
+```
 
 
 ## References
