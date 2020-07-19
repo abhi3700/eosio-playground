@@ -542,7 +542,43 @@ pending console output:
 ```cpp
 		uint64_t get_secondary_1() const { return driver_ac.value; }
 ```
-
+* Sometimes during compile using `eosio-cpp`, actions might get repeated like this:
+```console
+cabeos_contracts/toeridetaxi$ eosio-cpp src/toeridetaxi.cpp -o toeridetaxi.wasm
+Warning, empty ricardian clause file
+Warning, empty ricardian clause file
+Warning, action <addpay> does not have a ricardian contract
+Warning, action <create> does not have a ricardian contract
+Warning, action <assign> does not have a ricardian contract
+Warning, action <cancelbycom> does not have a ricardian contract
+Warning, action <cancelbydri> does not have a ricardian contract
+Warning, action <changedes> does not have a ricardian contract
+Warning, action <reachsrc> does not have a ricardian contract
+Warning, action <start> does not have a ricardian contract
+Warning, action <finish> does not have a ricardian contract
+Warning, action <addfareact> does not have a ricardian contract
+Warning, action <recvfare> does not have a ricardian contract
+Warning, action <sendalert> does not have a ricardian contract
+Warning, action <sendreceipt> does not have a ricardian contract
+Warning, action <eraseride> does not have a ricardian contract
+Warning, action <addpay> does not have a ricardian contract
+Warning, action <create> does not have a ricardian contract
+Warning, action <assign> does not have a ricardian contract
+Warning, action <cancelbycom> does not have a ricardian contract
+Warning, action <cancelbydri> does not have a ricardian contract
+Warning, action <changedes> does not have a ricardian contract
+Warning, action <reachsrc> does not have a ricardian contract
+Warning, action <start> does not have a ricardian contract
+Warning, action <finish> does not have a ricardian contract
+Warning, action <addfareact> does not have a ricardian contract
+Warning, action <recvfare> does not have a ricardian contract
+Warning, action <sendalert> does not have a ricardian contract
+Warning, action <sendreceipt> does not have a ricardian contract
+Warning, action <eraseride> does not have a ricardian contract
+```
+	- Solution: 
+		+ Don’t worry about actions being repeated [Source](https://t.me/c/1139062279/229890)
+		+ Its likely using multiple jobs, so it prints multiple time [Source](https://t.me/c/1139062279/229892)
 
 ## References
 * [EOSIO Developer Portal](https://developers.eos.io/)
