@@ -81,6 +81,16 @@
             ]
         },
         {
+            "name": "readtable",
+            "base": "",
+            "fields": [
+                {
+                    "name": "user",
+                    "type": "name"
+                }
+            ]
+        },
+        {
             "name": "upsert",
             "base": "",
             "fields": [
@@ -134,6 +144,11 @@
         {
             "name": "notify",
             "type": "notify",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "readtable",
+            "type": "readtable",
             "ricardian_contract": ""
         },
         {

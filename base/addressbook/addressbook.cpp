@@ -1,6 +1,6 @@
 #include <eosio/eosio.hpp>
 #include <string>
-#include "abcounter.cpp"
+#include "../abcounter/abcounter.cpp"
 
 using eosio::contract;
 using eosio::print;
@@ -212,6 +212,20 @@ public:
 		require_recipient(user);
 	}
 
+	ACTION readtable(name user) {
+		require_auth(user);
+		
+		counter_index countstable("bhub1counter"_n, "bhub1counter"_n.value);
+		auto it = countstable.find(user.value);
+
+		check(it != countstable.end(), "the user doesn't exist");
+
+		print("The emplace for " + user.to_string() + ": " + std::to_string(it->emplaced));
+		print("The modify for " + user.to_string() + ": " + std::to_string(it->modified));
+		print("The erased for " + user.to_string() + ": " + std::to_string(it->erased));
+
+	}
+
 private:
 	struct [[eosio::table("people")]] person
 	{
@@ -230,6 +244,17 @@ private:
 	using address_index = eosio::multi_index<"people"_n, person,
 							indexed_by<"byage"_n, const_mem_fun<person, uint64_t, &person::get_secondary_1>>
 							>;
+
+	struct counter {
+		name key;
+		uint64_t emplaced;
+		uint64_t modified;
+		uint64_t erased;
+
+		auto primary_key() const { return key.value; }
+	};
+
+	using counter_index = multi_index<"counts"_n, counter>;
 
 	// Adding inline action to an action - "notify" in the same contract
 	void send_summary(name user, string msg) {

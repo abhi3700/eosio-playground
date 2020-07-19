@@ -1253,6 +1253,45 @@ $ cleost get table bhub1counter bhub1counter counts --show-payer
   "next_key": ""
 }
 ```
+
+## Read table of other contract (`abcounter`)
+* action - `readtable`
+```console
+$ cleost push action cabeos1test2 readtable '["cabeos1user1"]' -p cabeos1user1@active
+executed transaction: 31d2204868b847ae53e77b6e84c7f5e2c4dd06e802ff98deb2a3856649a869ec  104 bytes  230 us
+#  cabeos1test2 <= cabeos1test2::readtable      {"user":"cabeos1user1"}
+>> The emplace for cabeos1user1: 1The modify for cabeos1user1: 6The erased for cabeos1user1: 0
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+* verify result with the table:
+```console
+$ cleost get table bhub1counter bhub1counter counts
+{
+  "rows": [{
+      "key": "cabeos1user1",
+      "emplaced": 1,
+      "modified": 6,
+      "erased": 0
+    },{
+      "key": "cabeos1user2",
+      "emplaced": 1,
+      "modified": 1,
+      "erased": 1
+    }
+  ],
+  "more": false,
+  "next_key": ""
+}
+```
+* Also, check for an user, whose data doesn't exist in the `counts` table
+```console
+$ cleost push action cabeos1test2 readtable '["cabeos1user3"]' -p cabeos1user3@active
+Error 3050003: eosio_assert_message assertion failure
+Error Details:
+assertion failure with message: the user doesn't exist
+pending console output:
+```
+
 ## References
 * [Part A](https://developers.eos.io/welcome/latest/getting-started/smart-contract-development/data-persistence/)
 * [Part B](https://developers.eos.io/welcome/latest/getting-started/smart-contract-development/secondary-indices)
