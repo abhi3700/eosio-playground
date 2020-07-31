@@ -9,6 +9,10 @@
 * `CONTRACT` is equal to `class [[eosio::contract]]`
 * “Pushing an action to a contract requires the authorization of at least one account. Further accounts and permissions can be required depending on contract complexity. An account can be made of a single, or many, individuals set up in a permission based configuration. Smart contracts can only be run by a single account, and a single account can only have a single smart contract. It is best practice to give both the account and contract the same (lowercase) name.” [Source](https://link.medium.com/1G4zitL6t7)
 * Every EOSIO smart contract is set to a single EOSIO account. A contract is basically an object that other accounts can interact with. An account cannot have more than 1 contract. [Source](https://medium.com/eoseoul/codeos-essential-knowledge-in-eos-contact-development-9c9b1bf26d0c)
+* __Code v/s Receiver__
+	- code is always the first receiver of the action, while receiver is the account currently executing the action. [Source](https://chainsecurity.com/the-dispatcher-first-line-of-defense-in-any-eos-smart-contract/)
+	- By using code == receiver the dispatcher knows that this contract has been called by the action directly, while in the case of code != receiver the action was originally destined for another account, but this account has been notified about it. [Source](https://chainsecurity.com/the-dispatcher-first-line-of-defense-in-any-eos-smart-contract/)
+
 
 ### Understanding Token contract
 * unique `issuer` [Source](https://medium.com/coinmonks/understanding-the-eosio-token-contract-87466b9fdca9)
@@ -78,7 +82,6 @@ $ cleost get table cabeos1test2 cabeos1test2 people --show-payer
   "next_key": ""
 }
 ```
-* To ensure table, one param should e
 * In EOSIO, we have multi-index table insprired from Boost Multi-index library. For more, look at the next section below.
 
 ### Multi-index
