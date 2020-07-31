@@ -316,6 +316,12 @@ warn  2020-07-01T22:07:41.973 cleos     main.cpp:506                  print_resu
 int64_t fareamount_in_toe = (ride_it->fare_act)/375.00;		// convert 'INR' to 'TOE'
 auto fare_toe = asset(fareamount_in_toe, symbol("TOE", 4));		// create a asset variable for converted fare (in TOE)
 ```
+	- initialize symbol like this:
+```
+symbol sym{"TOE", 4};		// Ok or
+symbol sym = symbol("TOE", 4);		// Ok
+```
+
 
 ### print [All](https://developers.eos.io/manuals/eosio.cdt/v1.7/best-practices/debugging_a_smart_contract/#print)
 * `print`
