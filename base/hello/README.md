@@ -61,9 +61,9 @@ warn  2020-06-19T13:15:53.356 cleos     main.cpp:506                  print_resu
 * `getsymbol`
 ```
 $ cleost push action cabeos1test1 getsymbol '[]' -p cabeos1test1@active
-executed transaction: 7179e662bb09c2a03afdb7018dcad54fb15bf25002f3a87fa8a55de663765ef8  96 bytes  176 us
+executed transaction: 3c32b1073972de6dad2582e40bfd35fbcfa3e4ab1202bca9fd6209ff0ca064de  96 bytes  617 us
 #  cabeos1test1 <= cabeos1test1::getsymbol      ""
->> 4542292 | 1162826756
+>> 4542292 | 1162826756 | TOE
 warning: transaction executed locally, but may not be confirmed by the network yet         ]
 ```
 

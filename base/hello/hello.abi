@@ -9,7 +9,7 @@
             "fields": []
         },
         {
-            "name": "hi_any",
+            "name": "hiany",
             "base": "",
             "fields": [
                 {
@@ -19,7 +19,7 @@
             ]
         },
         {
-            "name": "hi_name",
+            "name": "hiname",
             "base": "",
             "fields": [
                 {
@@ -37,12 +37,12 @@
         },
         {
             "name": "hiany",
-            "type": "hi_any",
+            "type": "hiany",
             "ricardian_contract": ""
         },
         {
             "name": "hiname",
-            "type": "hi_name",
+            "type": "hiname",
             "ricardian_contract": ""
         }
     ],

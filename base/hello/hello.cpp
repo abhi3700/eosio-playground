@@ -7,28 +7,33 @@ using eosio::print;
 using eosio::name;
 using std::string;
 using eosio::symbol;
+using eosio::datastream;
 
 
-class [[eosio::contract]] hello : public contract {
+
+CONTRACT hello : public contract {
 private:
-	static constexpr symbol token_symbol = symbol("TOE", 4);
+	const symbol token_symbol;
 public:
 	using contract::contract;
 
-	[[eosio::action("hiany")]]
-	void hi_any(string a) {
+	hello(name receiver, name code, datastream<const char*> ds) : 
+								contract(receiver, code, ds), 
+								token_symbol("TOE", 4) {}
+
+	ACTION hiany(string a) {
 		print("Hello, ", a);
 	}
 
-	[[eosio::action("hiname")]]
-	void hi_name(name user) {
+	ACTION hiname(name user) {
 		require_auth(user);
 		print("Hello, your EOS name is, ", user);
 	}
 
 	ACTION getsymbol() {
-		print(token_symbol.code().raw(), " | ");
-		print(token_symbol.raw());
+		print(token_symbol.code().raw(), " | ");	// only symbol part 'TOE' encoded as integer.
+		print(token_symbol.raw(), " | ");					// entire - symbol & precision, encoded as integer.
+		print(token_symbol.code().to_string());		// TOE
 	}
 };
 
