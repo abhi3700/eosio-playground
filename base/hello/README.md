@@ -58,4 +58,12 @@ executed transaction: 34bd98ff1b4f052dd01dfa5cd019633e48d190351660804c572057e3ee
 warn  2020-06-19T13:15:53.356 cleos     main.cpp:506                  print_result   warning: transaction executed locally, but may not be confirmed by the network yet
 ```
 
+* `getsymbol`
+```
+$ cleost push action cabeos1test1 getsymbol '[]' -p cabeos1test1@active
+executed transaction: 7179e662bb09c2a03afdb7018dcad54fb15bf25002f3a87fa8a55de663765ef8  96 bytes  176 us
+#  cabeos1test1 <= cabeos1test1::getsymbol      ""
+>> 4542292 | 1162826756
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
 
