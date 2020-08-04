@@ -316,12 +316,25 @@ warn  2020-07-01T22:07:41.973 cleos     main.cpp:506                  print_resu
 int64_t fareamount_in_toe = (ride_it->fare_act)/375.00;		// convert 'INR' to 'TOE'
 auto fare_toe = asset(fareamount_in_toe, symbol("TOE", 4));		// create a asset variable for converted fare (in TOE)
 ```
+* `symbol`
 	- initialize symbol like this:
-```
+```cpp
 symbol sym{"TOE", 4};		// Ok or
 symbol sym = symbol("TOE", 4);		// Ok
 ```
+	- symbol encoded as integer. So, choose wisely during contracts.
+```cpp
+symbol sym = symbol("TOE", 4);
 
+// only symbol part 'TOE'
+sym.code()				// TOE
+
+// only symbol part 'TOE' encoded as integer
+sym.code().raw()	// 4542292
+
+// both components - symbol & precision, encoded as integer
+sym.raw() 				// 1162826756
+```
 
 ### print [All](https://developers.eos.io/manuals/eosio.cdt/v1.7/best-practices/debugging_a_smart_contract/#print)
 * `print`
@@ -589,6 +602,54 @@ Warning, action <eraseride> does not have a ricardian contract
 		+ Don’t worry about actions being repeated [Source](https://t.me/c/1139062279/229890)
 		+ Its likely using multiple jobs, so it prints multiple time [Source](https://t.me/c/1139062279/229892)
 
+* Error during pushing data onto the table
+```console
+$ cleost push action toe1111token transfer '["toecom111111", "toe11rwallet" "0.0001 TOE", "transfer 0.0001 TOE to ride wallet"]' -p toecom111111@active
+error 2020-08-04T21:27:10.040 cleos     main.cpp:4013                 main                 ] Failed with error: could not insert object, most likely a uniqueness constraint was violated (13)
+could not insert object, most likely a uniqueness constraint was violated: pending console output:
+```
+	- The table looks like below, in this case: 
+```console
+$ cleost get table toe13rwallet toecom111111 ridewallet
+{
+  "rows": [{
+      "balance": "0.0001 TOE"
+    },{
+      "balance": "15.8000 TOE"
+    }
+  ],
+  "more": false,
+  "next_key": ""
+}
+```
+	- There is clear problem in the data structure in the table.
+	- So, target the primary_key. Code before:
+```cpp
+	TABLE ridewallet
+	{
+		asset balance;
+
+		auto primary_key() const { return balance.amount; }
+	};
+
+	using ridewallet_index = multi_index<"ridewallet"_n, ridewallet>;
+
+
+```
+	- <u>Solution:</u> Code after
+```cpp
+	TABLE ridewallet
+	{
+		asset balance;
+
+		auto primary_key() const { return balance.symbol.raw(); }
+	};
+
+	using ridewallet_index = multi_index<"ridewallet"_n, ridewallet>;
+
+
+```
+
 ## References
 * [EOSIO Developer Portal](https://developers.eos.io/)
 * [Understanding The eosio.token Contract](https://medium.com/eoseoul/codeos-essential-knowledge-in-eos-contact-development-9c9b1bf26d0c)
@@ -600,3 +661,4 @@ Warning, action <eraseride> does not have a ricardian contract
 * Glossary:
 	- EOSIO Developer portal: https://developers.eos.io/welcome/latest/glossary/index
 	- dfuse: https://www.eoscanada.com/en/abc-eos
+* [Multiplication and division of assets with different symbols and precision on EOSIO](https://medium.com/@genesix/exchange-on-eosio-36e43a360398)
