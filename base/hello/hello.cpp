@@ -8,6 +8,7 @@ using eosio::name;
 using std::string;
 using eosio::symbol;
 using eosio::datastream;
+using eosio::asset;
 
 
 
@@ -34,6 +35,17 @@ public:
 		print(token_symbol.code().raw(), " | ");	// only symbol part 'TOE' encoded as integer.
 		print(token_symbol.raw(), " | ");					// entire - symbol & precision, encoded as integer.
 		print(token_symbol.code().to_string());		// TOE
+	}
+
+	ACTION compareasset(const asset& a1, const asset& a2) {
+		if(a1 < a2) {
+			print("a1 is less than a2");
+		}
+		else if (a1 > a2){
+			print("a1 is more than a2");
+		} else {
+			print("a1 is equal to a2");
+		}
 	}
 };
 

@@ -4,6 +4,20 @@
     "types": [],
     "structs": [
         {
+            "name": "compareasset",
+            "base": "",
+            "fields": [
+                {
+                    "name": "a1",
+                    "type": "asset"
+                },
+                {
+                    "name": "a2",
+                    "type": "asset"
+                }
+            ]
+        },
+        {
             "name": "getsymbol",
             "base": "",
             "fields": []
@@ -30,6 +44,11 @@
         }
     ],
     "actions": [
+        {
+            "name": "compareasset",
+            "type": "compareasset",
+            "ricardian_contract": ""
+        },
         {
             "name": "getsymbol",
             "type": "getsymbol",

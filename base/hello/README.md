@@ -66,4 +66,30 @@ executed transaction: 3c32b1073972de6dad2582e40bfd35fbcfa3e4ab1202bca9fd6209ff0c
 >> 4542292 | 1162826756 | TOE
 warning: transaction executed locally, but may not be confirmed by the network yet         ]
 ```
-
+* `compareasset`
+	- test-1
+```console
+$ cleost push action cabeos1test1 compareasset '["15.8000 TOE", "15.8000 TOE"]' -p cabeos1test1@active
+executed transaction: 44b74d13ede37c9c50ac1a3b3db24d34456a30b9daaca628a9d5a408e7723fb3  128 bytes  211 us
+#  cabeos1test1 <= cabeos1test1::compareasset   {"a1":"15.8000 TOE","a2":"15.8000 TOE"}
+>> a1 is equal to a2
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+	- test-2
+```console
+$ cleost push action cabeos1test1 compareasset '["15.8000 TOE", "16.8000 TOE"]' -p cabeos1test1@activ
+e
+executed transaction: 2762ac1bf432df9281a97ca01aff0a7486e0d25a144bed793dc1d3e9f2350bcb  128 bytes  655 us
+#  cabeos1test1 <= cabeos1test1::compareasset   {"a1":"15.8000 TOE","a2":"16.8000 TOE"}
+>> a1 is less than a2
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+	- test-3
+```console
+$ cleost push action cabeos1test1 compareasset '["16.8000 TOE", "15.8000 TOE"]' -p cabeos1test1@activ
+e
+executed transaction: ca0308dda55db4474e51ffc1687a0846e8ba47b2428bd6e278b67dab03f6f592  128 bytes  574 us
+#  cabeos1test1 <= cabeos1test1::compareasset   {"a1":"16.8000 TOE","a2":"15.8000 TOE"}
+>> a1 is more than a2
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
