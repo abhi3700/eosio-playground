@@ -315,6 +315,8 @@ warn  2020-07-01T22:07:41.973 cleos     main.cpp:506                  print_resu
 ```cpp
 int64_t fareamount_in_toe = (ride_it->fare_act)/375.00;		// convert 'INR' to 'TOE'
 auto fare_toe = asset(fareamount_in_toe, symbol("TOE", 4));		// create a asset variable for converted fare (in TOE)
+
+asset token_balance = asset(158000, symbol("TOE", 4));		// represents "15.8000 TOE"
 ```
 * `symbol`
 	- initialize symbol like this:
