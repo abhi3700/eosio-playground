@@ -263,6 +263,7 @@ $ cleost push action cabeos1test2 create '["cabeos1user1", "Abhijit"]' -p cabeos
 
 	- __M-2:__ Robust for any no. of rows. [Source](https://eosio.stackexchange.com/a/1432/167)
 
+* Whenever, creating a table with having more than 1 party as users, then try not to use `same_payer` (or else, there will be confusion in finding, which party is the ram_payer) param inside `modify()` method of multi_index table.
 * Applications:
 	- [ ] Zomato App multi-index table
 		+ a restaurant can have orders:
@@ -284,7 +285,6 @@ $ cleost push action cabeos1test2 create '["cabeos1user1", "Abhijit"]' -p cabeos
 > - With a customer name, many rows can be found in RAM table
 
 > - With a valet name, many rows can be found in RAM table
-
 
 ## Account Permission
 * Multisig
