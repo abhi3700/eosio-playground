@@ -93,3 +93,19 @@ executed transaction: ca0308dda55db4474e51ffc1687a0846e8ba47b2428bd6e278b67dab03
 >> a1 is more than a2
 warning: transaction executed locally, but may not be confirmed by the network yet         ]
 ```
+* `checklowbal`
+	- test-1
+```console
+$ cleost push action cabeos1test1 checklowbal '["14.8000 TOE"]' -p cabeos1test1@active
+executed transaction: a3d2029e705d3c49aa2c46ef1841486cc4a5bf23843b239f60beead9cc9c0e3d  112 bytes  528 us
+#  cabeos1test1 <= cabeos1test1::checklowbal    {"a1":"14.8000 TOE"}
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+	- test-2
+```console
+$ cleost push action cabeos1test1 checklowbal '["16.8000 TOE"]' -p cabeos1test1@active
+Error 3050003: eosio_assert_message assertion failure
+Error Details:
+assertion failure with message: amount is greater than token_balance
+pending console output:
+```

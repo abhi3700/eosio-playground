@@ -9,12 +9,14 @@ using std::string;
 using eosio::symbol;
 using eosio::datastream;
 using eosio::asset;
+using eosio::check;
 
 
 
 CONTRACT hello : public contract {
 private:
 	const symbol token_symbol;
+	const asset token_balance = asset(158000, symbol("TOE", 4));
 public:
 	using contract::contract;
 
@@ -47,6 +49,12 @@ public:
 			print("a1 is equal to a2");
 		}
 	}
+
+	ACTION checklowbal( const asset& a1 ) {
+		check(a1 < token_balance, "amount is greater than token_balance");
+	}
+
+
 };
 
 
