@@ -651,6 +651,18 @@ $ cleost get table toe13rwallet toecom111111 ridewallet
 
 
 ```
+* Error during action_wrapper for inline action to external contracts
+```console
+/mnt/f/Coding/github_repos/toe_contracts/toeridetaxi/src/toeridetaxi.cpp:648:2: error: type 'toeridewallet::disburse_action' (aka 'action_wrapper<operator""_n<char, 'd',
+      'i', 's', 'b', 'u', 'r', 's', 'e'>(), &toeridewallet::disburse>') does not provide a call operator
+        disburse(receiver_ac, wallet_holder, quantity, memo);
+```
+	- missing `send()`. So, the modified code is:
+```cpp
+	toeridewallet::disburse_action disburse(wallet_contract_ac, {get_self(), "active"_n});
+	disburse.send(receiver_ac, wallet_holder, quantity, memo);
+```
+
 
 ## References
 * [EOSIO Developer Portal](https://developers.eos.io/)
