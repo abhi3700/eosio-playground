@@ -33,7 +33,20 @@ executed transaction: 2d0cd04f91acd118883244d35d41ba44cf11042ab53c859edbd88040b8
 #  cabeos1test2 <= eosio.token::transfer        {"from":"cabeos1test2","to":"eosio.stake","quantity":"2.0000 EOS","memo":"stake bandwidth"}
 #   eosio.stake <= eosio.token::transfer        {"from":"cabeos1test2","to":"eosio.stake","quantity":"2.0000 EOS","memo":"stake bandwidth"}
 ```
-
+* Add code permission to the contract account
+```console
+$ cleost set account permission toe1111ridex active --add-code
+executed transaction: e518946f5afdef0a6c8943fa3ddb231f102a5dd1d9ed328b4292d6cff9ceb634  184 bytes  434 us
+#         eosio <= eosio::updateauth            {"account":"toe1111ridex","permission":"active","parent":"owner","auth":{"threshold":1,"keys":[{"key...
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+* Remove code permission to the contract account
+```console
+$ cleost set account permission bhubtoeindia active --remove-code
+executed transaction: 3e366d4ee020335a4c5730a154ef1376293973eb2bf1728a175b6d03e3985c0c  160 bytes  471 us
+#         eosio <= eosio::updateauth            {"account":"bhubtoeindia","permission":"active","parent":"owner","auth":{"threshold":1,"keys":[{"key...
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
 
 ## Compile
 ## Deploy
