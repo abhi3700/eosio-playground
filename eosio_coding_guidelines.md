@@ -662,7 +662,47 @@ $ cleost get table toe13rwallet toecom111111 ridewallet
 	toeridewallet::disburse_action disburse(wallet_contract_ac, {get_self(), "active"_n});
 	disburse.send(receiver_ac, wallet_holder, quantity, memo);
 ```
+* `read` Error related to token transfer action
+```console
+$ cleost push action toe1111ridex initridex '["bhubtoeindia", "commuter", "1000000.0000 TOE", "1000000"]'
+-p bhubtoeindia@active
+Error 3050003: eosio_assert_message assertion failure
+Error Details:
+assertion failure with message: read
+pending console output:
+```
+	- __Before:__ the piece of code inside the `initridex` action was:
 
+```cpp
+...
+...
+
+	action(
+		permission_level{get_self(), "active"_n},
+		token_contract_ac,
+		"transfer"_n,
+		std::make_tuple(token_issuer, ridex_supply_ac, toe_qty, "transfer initial toe quantity")
+	).send();
+
+...
+...
+```
+	- So, the problem was __The memo text in transfer looks suspicious. It's a char*, while the action expects "string" object__ [Source](https://t.me/c/1139062279/232669)
+	- __After:__ the correct code is by adding `std::string()`
+```cpp
+...
+...
+
+	action(
+		permission_level{get_self(), "active"_n},
+		token_contract_ac,
+		"transfer"_n,
+		std::make_tuple(token_issuer, ridex_supply_ac, toe_qty, std::string("transfer initial toe quantity"))
+	).send();
+
+...
+...
+```
 
 ## References
 * [EOSIO Developer Portal](https://developers.eos.io/)
