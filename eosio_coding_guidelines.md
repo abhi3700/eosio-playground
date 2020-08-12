@@ -704,6 +704,69 @@ pending console output:
 ...
 ```
 
+* Error related to transferring tokens via inline action inside a contract action
+	- The error:
+```console
+$ cleost push action toe1111ridex initridex '["driver", "1000000.0000 TOE", "1000000"]' -p bhubtoeindia@active
+Error 3090003: Provided keys, permissions, and delays do not satisfy declared authorizations
+Ensure that you have the related private keys inside your wallet and your wallet is unlocked.
+Error Details:
+transaction declares authority '{"actor":"bhubtoeindia","permission":"active"}', but does not have signatures for it under a provided delay of 0 ms, provided permissions [{"actor":"toe1111ridex","permission":"eosio.code"}], provided keys [], and a delay max limit of 3888000000 ms
+pending console output:
+```
+
+	- __Before:__ The source code used:
+```cpp
+void toeridex::initridex(
+                     
+                        const name& ride_type,
+                        const asset& toe_qty,
+                        uint64_t ride_qty ) 
+{
+    // require the authority of toe_owner ac - "bhubtoeindia"
+    require_auth(token_issuer);
+    // require_auth(get_self());
+...
+...
+...
+    action(
+        permission_level{token_issuer, "active"_n},
+        token_contract_ac,
+        "transfer"_n,
+        std::make_tuple(token_issuer, ridex_supply_ac, toe_qty, std::string("transfer initial toe quantity"))
+    ).send();
+...
+...
+...
+}
+``` 
+
+	- The reason for the error is at code line: `action().send()`.
+	- Key points:
+		+ you cannot pass authorisation from the top level action to the inline action [Source](https://t.me/c/1139062279/232735)
+		+ token_issuer would need to be satisfied by the contract@eosio.code [Source](https://t.me/c/1139062279/232736)
+		+ M-1: `cleos set account permission --add-code token_issuer active contract owner` [Source](https://t.me/c/1139062279/232739)
+		+ M-2: the tokens transferred should really be owned by the contract. So token_issuer sends them to contract_ac and then contract_ac sends to ridex_supply_ac [Source](https://t.me/c/1139062279/232743). This is achieved by:
+```
+action-1: via on_notify("token::transfer") token_issuer transfers to contract_ac
+
+action-2: inside contract's action `initridex`
+		action(
+		    permission_level{get_self(), "active"_n},
+		    token_contract_ac,
+		    "transfer"_n,
+		    std::make_tuple(get_self(), ridex_supply_ac, toe_qty, std::string("transfer initial toe quantity"))
+		).send();
+```
+
+		+ Q. how come then `buyram` happens...bcoz there the token is transferred from `buyer` to `eosio.ram`? And there the contract is uploaded into eosio.system contract
+			- A. eosio is priviledged [Source](https://t.me/c/1139062279/232746). Buyram is executed by eosio account, which has supervisor powers. It can initiate the payment from the user's account [Source](https://t.me/c/1139062279/232747)
+		+ Q. So, basically, in order to make my account `bhubtoeindia` as supervisor for my set of contracts. I shall have to use give contract@eosio.code permission to `bhubtoeindia`. Right?
+			- yes [Source](https://t.me/c/1139062279/232751)
+
+
+* For more errors log, Click [here](https://www.dfuse.io/en/blog/common-errors-on-eosio-and-how-to-get-past-them)
+
 ## References
 * [EOSIO Developer Portal](https://developers.eos.io/)
 * [Understanding The eosio.token Contract](https://medium.com/eoseoul/codeos-essential-knowledge-in-eos-contact-development-9c9b1bf26d0c)
@@ -716,3 +779,4 @@ pending console output:
 	- EOSIO Developer portal: https://developers.eos.io/welcome/latest/glossary/index
 	- dfuse: https://www.eoscanada.com/en/abc-eos
 * [Multiplication and division of assets with different symbols and precision on EOSIO](https://medium.com/@genesix/exchange-on-eosio-36e43a360398)
+* [Common Errors on EOSIO and How to Get Past Them](https://www.dfuse.io/en/blog/common-errors-on-eosio-and-how-to-get-past-them)
