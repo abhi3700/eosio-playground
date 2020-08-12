@@ -41,10 +41,10 @@ public:
 
 	ACTION compareasset(const asset& a1, const asset& a2) {
 		if(a1 < a2) {
-			print("a1 is less than a2");
+			print("a1 is less than a2 by ", (a1 - a2).to_string());
 		}
 		else if (a1 > a2){
-			print("a1 is more than a2");
+			print("a1 is more than a2 by ", (a1 - a2).to_string());
 		} else {
 			print("a1 is equal to a2");
 		}
