@@ -109,3 +109,11 @@ Error Details:
 assertion failure with message: amount is greater than token_balance
 pending console output:
 ```
+* `getsha25six`
+```console
+$ cleost push action cabeos1test1 getsha25six '["toecom111111"]' -p cabeos1test1@active
+executed transaction: 16c3e8de65cb2aa176ac528addbefb6dd604b8ea5e3e17e3977ba932f1a89b7f  104 bytes  188 us
+#  cabeos1test1 <= cabeos1test1::getsha25six    {"commuter_ac":"toecom111111"}
+>> The C string, timestamp: toecom1111111597434665 , 1597434665 | The hash digest is: f478ec901f2231819ce7e489f9cab04aee0a92e551dd9990081c0ab2bae0b8b4
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```

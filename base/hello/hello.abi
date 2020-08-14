@@ -28,6 +28,16 @@
             ]
         },
         {
+            "name": "getsha25six",
+            "base": "",
+            "fields": [
+                {
+                    "name": "commuter_ac",
+                    "type": "name"
+                }
+            ]
+        },
+        {
             "name": "getsymbol",
             "base": "",
             "fields": []
@@ -62,6 +72,11 @@
         {
             "name": "compareasset",
             "type": "compareasset",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "getsha25six",
+            "type": "getsha25six",
             "ricardian_contract": ""
         },
         {
