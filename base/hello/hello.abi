@@ -43,6 +43,16 @@
             "fields": []
         },
         {
+            "name": "hexstr",
+            "base": "",
+            "fields": [
+                {
+                    "name": "s",
+                    "type": "string"
+                }
+            ]
+        },
+        {
             "name": "hiany",
             "base": "",
             "fields": [
@@ -82,6 +92,11 @@
         {
             "name": "getsymbol",
             "type": "getsymbol",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "hexstr",
+            "type": "hexstr",
             "ricardian_contract": ""
         },
         {

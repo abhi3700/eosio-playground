@@ -69,10 +69,29 @@ public:
 		print("The hash digest is: ", hash_digest);
 	}
 
+	ACTION hexstr(const string& s) {
+		const char * data_str_c = s.c_str(); 
+
+		auto hash_digest = sha256(data_str_c, strlen(data_str_c));
+
+		print("checksum256 to string: ", s, " whose checksum is: ", to_hex(&hash_digest, sizeof(hash_digest)));
+	}
+
 private:
 	// get the current timestamp
 	inline uint32_t now() const {
 		return current_time_point().sec_since_epoch();
+	}
+
+	template<typename CharT>
+	static std::string to_hex(const CharT* d, uint32_t s) {
+	  std::string r;
+	  const char* to_hex="0123456789abcdef";
+	  uint8_t* c = (uint8_t*)d;
+	  for( uint32_t i = 0; i < s; ++i ) {
+	    (r += to_hex[(c[i] >> 4)]) += to_hex[(c[i] & 0x0f)];
+	  }
+	  return r;
 	}
 };
 

@@ -5,7 +5,13 @@
 $ eosio-cpp hello.cpp -o hello.wasm
 Warning, empty ricardian clause file
 Warning, empty ricardian clause file
-Warning, action <putval> does not have a ricardian contract
+Warning, action <hiany> does not have a ricardian contract
+Warning, action <hiname> does not have a ricardian contract
+Warning, action <getsymbol> does not have a ricardian contract
+Warning, action <compareasset> does not have a ricardian contract
+Warning, action <checklowbal> does not have a ricardian contract
+Warning, action <getsha25six> does not have a ricardian contract
+Warning, action <hexstr> does not have a ricardian contract
 ```
 
 ## Deploy
@@ -117,3 +123,16 @@ executed transaction: 16c3e8de65cb2aa176ac528addbefb6dd604b8ea5e3e17e3977ba932f1
 >> The C string, timestamp: toecom1111111597434665 , 1597434665 | The hash digest is: f478ec901f2231819ce7e489f9cab04aee0a92e551dd9990081c0ab2bae0b8b4
 warning: transaction executed locally, but may not be confirmed by the network yet         ]
 ```
+* `hexstr`
+```console
+$ cleost push action cabeos1test1 hexstr '["abhijit"]' -p cabeos1test1@active
+executed transaction: cf815e352e9b32ea93ef8b8b1b0e19b8434aef04618f9fa86b00209295dcf383  104 bytes  223 us
+#  cabeos1test1 <= cabeos1test1::hexstr         {"s":"abhijit"}
+>> checksum256 to string: abhijit whose checksum is: 654c62962bdf81fd478d259e82e6349e66dfcbfb47573c3f02155588ecc472b8
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+
+## TODO
+* [ ] multi-index table with data having same primary_key e.g. driver having more than 1 ride in case of following cases:
+	- pool ride
+	- commuter didn't rate & the ride will be erased after 'x' hrs. So, driver should not wait for 'x' hrs for the ride to get erased.
