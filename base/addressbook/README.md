@@ -1,11 +1,30 @@
 # `addressbook` contract
 ## Account details:
 * Network: "Jungle Testnet"
-* Contract account: "cabeos1test2"
+* Contract account: "bhubadrbook1"
 * Contract name: "addressbook"
 * [addressbook.cpp](./addressbook.cpp)
 * [addressbook.wasm](./addressbook.wasm)
 * [addressbook.abi](./addressbook.abi)
+
+## Deploy
+* deploy contract (ABI & WASM)
+```console
+$ cleost set contract bhubadrbook1 ./
+Reading WASM from /mnt/f/Coding/github_repos/eosio-playground/base/addressbook/addressbook.wasm...
+Publishing contract...
+executed transaction: f2caed50909e2f84e7f336133382675945649c6286d969ae264139e431f5d97b  12304 bytes  1049 us
+#         eosio <= eosio::setcode               {"account":"bhubadrbook1","vmtype":0,"vmversion":0,"code":"0061736d0100000001ed012260000060047f7f7f7...
+#         eosio <= eosio::setabi                {"account":"bhubadrbook1","abi":"0e656f73696f3a3a6162692f312e3100070964656c657465616c6c0000056572617...
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+* Adding eosio.code to permissions (for inline actions)
+```
+$ cleost set account permission bhubadrbook1 active --add-code
+executed transaction: 6b1b5e87de2f8d1d8ef9ba8a6e30beef776bdf64d0db1ca2ac07c92b1e75f631  184 bytes  215 us
+#         eosio <= eosio::updateauth            {"account":"toe1userauth","permission":"active","parent":"owner","auth":{"threshold":1,"keys":[{"key...
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
 
 ## Layers
 * A. Write an `addressbook` contract:
