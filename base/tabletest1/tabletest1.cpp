@@ -58,16 +58,20 @@ public:
 	}
 
 
+	ACTION readbysec()
+
+
 private:
 
 	struct [[eosio::table]] person {
 		name person_ac;
-		string first_name;
+		name first_name;
 		string last_name;
+		string profession;
 		string state;
 
 		auto primary_key() const { return person_ac.value; }
-		// auto secondary_key() const {}
+		auto get_secondary_key_1() const { return first_name.value; }
 	};
 
 	// eosio name of the multi_index is "people". Link it with the struct data row structure
