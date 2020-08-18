@@ -213,6 +213,16 @@ ACTION modifybyage(uint64_t age, const string& city) {
 	increment_counter(it->key, "modify");
 }
 ```
+	- size of table
+```cpp
+people_index people_table(get_self(), get_self().value);
+auto it = people_table.find(user.value);
+
+check(it != people_table.end(), "Record doesn't exist!");
+
+auto size = std::distance(people_table.cbegin(), people_table.cend());
+print(size);
+```
 	- Case-1: [tabletest1](./base/tabletest1)
 		+ action permission: user
 ```cpp
