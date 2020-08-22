@@ -60,6 +60,14 @@ public:
 		check(a1 < token_balance, "amount is greater than token_balance");
 	}
 
+	ACTION assetcalc(const asset& a1) {
+		auto new_asset = asset(0, symbol("DUMMY", 4));
+		new_asset.amount = a1.amount *30;
+
+		print("New asset: ", new_asset.to_string(), " | ");
+		print("New asset amount: ", new_asset.amount);
+	}
+
 	ACTION getsha25six(const name& commuter_ac ) {
 		string data_str_cpp = commuter_ac.to_string() + std::to_string(now());
 		const char * data_str_c = data_str_cpp.c_str(); 
@@ -77,9 +85,9 @@ public:
 		print("checksum256 to string: ", s, " whose checksum is: ", to_hex(&hash_digest, sizeof(hash_digest)));
 	}
 
-	ACTION extintfrmstr(const string& s) {
-		print(ext_int_string(s));
-	}
+	// ACTION extintfrmstr(const string& s) {
+	// 	print(ext_int_string(s));
+	// }
 
 private:
 	// get the current timestamp
@@ -98,7 +106,7 @@ private:
 	  return r;
 	}
 
-	// extract integers from string
+/*	// extract integers from string
 	inline uint256_t ext_int_string(const string& s ) const {
 	    // string input = "1ee5ad0d074cfffbaa1598f0d236c09537d9c28b3b85aff206e20398f5e032dd";//I added some more extra characters to prove my point.
 	    string numbers = "0123456789";
@@ -117,7 +125,7 @@ private:
 
 	    return output_int;
 	}
-};
+*/};
 
 
 

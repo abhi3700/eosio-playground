@@ -4,6 +4,16 @@
     "types": [],
     "structs": [
         {
+            "name": "assetcalc",
+            "base": "",
+            "fields": [
+                {
+                    "name": "a1",
+                    "type": "asset"
+                }
+            ]
+        },
+        {
             "name": "checklowbal",
             "base": "",
             "fields": [
@@ -74,6 +84,11 @@
         }
     ],
     "actions": [
+        {
+            "name": "assetcalc",
+            "type": "assetcalc",
+            "ricardian_contract": ""
+        },
         {
             "name": "checklowbal",
             "type": "checklowbal",
