@@ -6,7 +6,7 @@
 #include <eosio/transaction.hpp>
 #include <vector>
 #include <algorithm>
-#include <iterator>
+// #include <iterator>
 
 using eosio::contract;
 using eosio::name;
