@@ -1,12 +1,7 @@
 {
     "____comment": "This file was generated with eosio-abigen. DO NOT EDIT ",
     "version": "eosio::abi/1.1",
-    "types": [
-        {
-            "new_type_name": "pair_t",
-            "type": "pair_string_string[]"
-        }
-    ],
+    "types": [],
     "structs": [
         {
             "name": "creatify",
@@ -19,6 +14,30 @@
                 {
                     "name": "ride_action",
                     "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "del",
+            "base": "",
+            "fields": [
+                {
+                    "name": "commuter",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "pair_string_checksum256",
+            "base": "",
+            "fields": [
+                {
+                    "name": "first",
+                    "type": "string"
+                },
+                {
+                    "name": "second",
+                    "type": "checksum256"
                 }
             ]
         },
@@ -36,7 +55,7 @@
                 },
                 {
                     "name": "txn_vector",
-                    "type": "pair_t[]"
+                    "type": "pair_string_checksum256[]"
                 }
             ]
         }
@@ -45,6 +64,11 @@
         {
             "name": "creatify",
             "type": "creatify",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "del",
+            "type": "del",
             "ricardian_contract": ""
         }
     ],
