@@ -371,7 +371,9 @@ print_f("Name : %\n", nm);
 	- Self is where the action is executed, and first receiver is where the notification is originated [Source](https://t.me/c/1139062279/229432)
 	- They are different in a notification context i.e. `[[eosio::on_notify("")]]` attributed function [Source](https://t.me/c/1139062279/229439)
 	- it doesn't need to be a transfer. Contract A executes require_recipient(B), then B receives a notification that it can process somehow. Then in B's context, B will be self, and A will be the first receiver [Source](https://t.me/c/1139062279/229441)
-
+	- "receiver" is the account that is currently processing the action. "code" is the account that authorized the contract.
+		+ E.g. - to get the account of the caller within an action
+		
 ### Permission
 * `require_auth( account name )`
 This action explains that the transfer function requires the authorization of the account holder from where the tokens are transferred.
