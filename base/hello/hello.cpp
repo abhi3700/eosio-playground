@@ -3,6 +3,7 @@
 #include <eosio/asset.hpp>
 #include <eosio/crypto.hpp>
 #include <eosio/system.hpp>
+#include <eosio/transaction.hpp>
 
 using eosio::contract;
 using eosio::print;
@@ -15,6 +16,8 @@ using eosio::check;
 using eosio::checksum256;
 using eosio::sha256;
 using eosio::current_time_point;
+using eosio::transaction_size;
+using eosio::read_transaction;
 
 
 
@@ -89,6 +92,10 @@ public:
 	// 	print(ext_int_string(s));
 	// }
 
+	ACTION gettxnid() {
+		print("txn id is: ", get_trxid());
+	}
+
 private:
 	// get the current timestamp
 	inline uint32_t now() const {
@@ -125,7 +132,17 @@ private:
 
 	    return output_int;
 	}
-*/};
+*/
+
+	inline checksum256 get_trxid()
+	{
+	  auto trxsize = transaction_size();
+	  char trxbuf[trxsize];
+	  uint32_t trxread = read_transaction( trxbuf, trxsize );
+	  check( trxsize == trxread, "read_transaction failed");
+	  return sha256(trxbuf, trxsize);
+	}
+};
 
 
 

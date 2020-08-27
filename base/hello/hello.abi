@@ -53,6 +53,11 @@
             "fields": []
         },
         {
+            "name": "gettxnid",
+            "base": "",
+            "fields": []
+        },
+        {
             "name": "hexstr",
             "base": "",
             "fields": [
@@ -107,6 +112,11 @@
         {
             "name": "getsymbol",
             "type": "getsymbol",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "gettxnid",
+            "type": "gettxnid",
             "ricardian_contract": ""
         },
         {
