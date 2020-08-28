@@ -69,7 +69,6 @@ public:
 	}
 
 
-	// NOTE: vector arg can't be const as emplace_back is non-const method
 	inline void read_vector_pair( const vector<pair<string, checksum256>>& v, const string& s ) {
 		auto s_it = std::find_if(v.begin(), v.end(), [&](auto& vs){ return vs.first == s; });
 
