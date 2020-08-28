@@ -1,0 +1,105 @@
+{
+    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT ",
+    "version": "eosio::abi/1.1",
+    "types": [],
+    "structs": [
+        {
+            "name": "creatify",
+            "base": "",
+            "fields": [
+                {
+                    "name": "commuter",
+                    "type": "name"
+                },
+                {
+                    "name": "ride_action",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "del",
+            "base": "",
+            "fields": [
+                {
+                    "name": "commuter",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "pair_string_checksum256",
+            "base": "",
+            "fields": [
+                {
+                    "name": "first",
+                    "type": "string"
+                },
+                {
+                    "name": "second",
+                    "type": "checksum256"
+                }
+            ]
+        },
+        {
+            "name": "readtable",
+            "base": "",
+            "fields": [
+                {
+                    "name": "commuter",
+                    "type": "name"
+                },
+                {
+                    "name": "search_key",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "ridetable",
+            "base": "",
+            "fields": [
+                {
+                    "name": "commuter",
+                    "type": "name"
+                },
+                {
+                    "name": "ride_action",
+                    "type": "name"
+                },
+                {
+                    "name": "txn_vector",
+                    "type": "pair_string_checksum256[]"
+                }
+            ]
+        }
+    ],
+    "actions": [
+        {
+            "name": "creatify",
+            "type": "creatify",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "del",
+            "type": "del",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "readtable",
+            "type": "readtable",
+            "ricardian_contract": ""
+        }
+    ],
+    "tables": [
+        {
+            "name": "ridetable",
+            "type": "ridetable",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        }
+    ],
+    "ricardian_clauses": [],
+    "variants": []
+}
