@@ -4,6 +4,7 @@
 #include <eosio/crypto.hpp>
 #include <eosio/system.hpp>
 #include <eosio/transaction.hpp>
+#include <cmath>
 
 using eosio::contract;
 using eosio::print;
@@ -18,6 +19,7 @@ using eosio::sha256;
 using eosio::current_time_point;
 using eosio::transaction_size;
 using eosio::read_transaction;
+using std::pow;
 
 
 
@@ -43,10 +45,10 @@ public:
 	}
 
 	ACTION getsymbol() {
-		print(token_symbol.code().raw(), " | ");	// only symbol part 'TOE' encoded as integer.
+		print(token_symbol.code().raw(), " | ");			// only symbol part 'TOE' encoded as integer.
 		print(token_symbol.raw(), " | ");					// entire - symbol & precision, encoded as integer.
-		print(token_symbol.code().to_string());		// TOE
-		print(token_symbol.precision());
+		print(token_symbol.code().to_string(), " | ");		// TOE
+		print(token_symbol.precision());					// 4
 	}
 
 	ACTION compareasset(const asset& a1, const asset& a2) {
@@ -74,10 +76,12 @@ public:
 
 	ACTION assetmul(const asset& a1, const asset& rate) {
 		auto new_asset = asset(0, symbol("DUMMY", 4));
-		new_asset.amount = a1.amount * rate.amount;
+		// new_asset.amount = a1.amount * rate.amount/10^(rate.symbol.precision());
+		new_asset.amount = a1.amount * rate.amount/pow(10, rate.symbol.precision());
 
 		print("New asset: ", new_asset.to_string(), " | ");
-		print("New asset amount: ", new_asset.amount);
+		print("New asset amount: ", new_asset.amount, " | ");
+		print("rate precision: ", rate.symbol.precision());
 	}
 
 	ACTION getsha25six(const name& commuter_ac ) {

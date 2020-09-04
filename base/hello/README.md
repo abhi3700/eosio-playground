@@ -67,9 +67,9 @@ warn  2020-06-19T13:15:53.356 cleos     main.cpp:506                  print_resu
 * `getsymbol`
 ```
 $ cleost push action cabeos1test1 getsymbol '[]' -p cabeos1test1@active
-executed transaction: 3c32b1073972de6dad2582e40bfd35fbcfa3e4ab1202bca9fd6209ff0ca064de  96 bytes  617 us
+executed transaction: 0e1e7f2048261a90904390cac74a5ccbc86eb9d01421de30a6b400faaf92b900  96 bytes  111 us
 #  cabeos1test1 <= cabeos1test1::getsymbol      ""
->> 4542292 | 1162826756 | TOE
+>> 4542292 | 1162826756 | TOE | 4
 warning: transaction executed locally, but may not be confirmed by the network yet         ]
 ```
 * `compareasset`
@@ -97,6 +97,22 @@ e
 executed transaction: ca0308dda55db4474e51ffc1687a0846e8ba47b2428bd6e278b67dab03f6f592  128 bytes  574 us
 #  cabeos1test1 <= cabeos1test1::compareasset   {"a1":"16.8000 TOE","a2":"15.8000 TOE"}
 >> a1 is more than a2
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+* `assetcalc`
+```console
+$ cleost push action cabeos1test1 assetcalc '["40.0000 EOS"]' -p cabeos1test1@active
+executed transaction: d1acba87b1ad2f138d84108b20a1e3a9b18c73df315eec4e27c55c15e437ecbd  112 bytes  209 us
+#  cabeos1test1 <= cabeos1test1::assetcalc      {"a1":"40.0000 EOS"}
+>> New asset: 1200.0000 DUMMY
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+* `assetmul`
+```console
+$ cleost push action cabeos1test1 assetmul '["3.0000 EOS", "40.0000 TRPM"]' -p cabeos1test1@active
+executed transaction: 58ddf7e461692699c119fee0071d3fb348f1ef44f68af932bdbed12093b1a611  128 bytes  183 us
+#  cabeos1test1 <= cabeos1test1::assetmul       {"a1":"3.0000 EOS","rate":"40.0000 TRPM"}
+>> New asset: 120.0000 DUMMY | New asset amount: 1200000 | rate precision: 4
 warning: transaction executed locally, but may not be confirmed by the network yet         ]
 ```
 * `checklowbal`
@@ -129,14 +145,6 @@ $ cleost push action cabeos1test1 hexstr '["abhijit"]' -p cabeos1test1@active
 executed transaction: cf815e352e9b32ea93ef8b8b1b0e19b8434aef04618f9fa86b00209295dcf383  104 bytes  223 us
 #  cabeos1test1 <= cabeos1test1::hexstr         {"s":"abhijit"}
 >> checksum256 to string: abhijit whose checksum is: 654c62962bdf81fd478d259e82e6349e66dfcbfb47573c3f02155588ecc472b8
-warning: transaction executed locally, but may not be confirmed by the network yet         ]
-```
-* `assetcalc`
-```console
-$ cleost push action cabeos1test1 assetcalc '["40.0000 EOS"]' -p cabeos1test1@active
-executed transaction: d1acba87b1ad2f138d84108b20a1e3a9b18c73df315eec4e27c55c15e437ecbd  112 bytes  209 us
-#  cabeos1test1 <= cabeos1test1::assetcalc      {"a1":"40.0000 EOS"}
->> New asset: 1200.0000 DUMMY
 warning: transaction executed locally, but may not be confirmed by the network yet         ]
 ```
 
