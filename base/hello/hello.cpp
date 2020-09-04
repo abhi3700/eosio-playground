@@ -43,6 +43,7 @@ public:
 		print(token_symbol.code().raw(), " | ");	// only symbol part 'TOE' encoded as integer.
 		print(token_symbol.raw(), " | ");					// entire - symbol & precision, encoded as integer.
 		print(token_symbol.code().to_string());		// TOE
+		print(token_symbol.precision());
 	}
 
 	ACTION compareasset(const asset& a1, const asset& a2) {
@@ -63,6 +64,14 @@ public:
 	ACTION assetcalc(const asset& a1) {
 		auto new_asset = asset(0, symbol("DUMMY", 4));
 		new_asset.amount = a1.amount *30;
+
+		print("New asset: ", new_asset.to_string(), " | ");
+		print("New asset amount: ", new_asset.amount);
+	}
+
+	ACTION assetmul(const asset& a1, const asset& rate) {
+		auto new_asset = asset(0, symbol("DUMMY", 4));
+		new_asset.amount = a1.amount * rate.amount;
 
 		print("New asset: ", new_asset.to_string(), " | ");
 		print("New asset amount: ", new_asset.amount);
