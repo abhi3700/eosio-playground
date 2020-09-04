@@ -942,7 +942,7 @@ executed transaction: 442eea8e8528695df51af5ac9300a1509737cc5de0387c8f1be4c57e22
 #  cabeos1user3 <= cabeos1test2::notify         {"user":"cabeos1user3","msg":"cabeos1user3 successfully emplaced record to addressbook"}
 warning: transaction executed locally, but may not be confirmed by the network yet         ]
 ```
-* You can check the action by entering in the browser `https://junglehistory.cryptolions.io/v2/history/get_actions?account=cabeos1user3`
+* You can check the action by entering in the browser `https://jungle3history.cryptolions.io/v2/history/get_actions?account=cabeos1user3`
 ```json
 {
 	"query_time_ms":15.779,

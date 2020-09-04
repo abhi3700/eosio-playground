@@ -42,6 +42,20 @@
             ]
         },
         {
+            "name": "readtable",
+            "base": "",
+            "fields": [
+                {
+                    "name": "commuter",
+                    "type": "name"
+                },
+                {
+                    "name": "search_key",
+                    "type": "string"
+                }
+            ]
+        },
+        {
             "name": "ridetable",
             "base": "",
             "fields": [
@@ -69,6 +83,11 @@
         {
             "name": "del",
             "type": "del",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "readtable",
+            "type": "readtable",
             "ricardian_contract": ""
         }
     ],

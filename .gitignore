@@ -6,3 +6,4 @@ test*
 # ignore folders
 .svn/
 .vscode/
+base/hello/hello.wasm

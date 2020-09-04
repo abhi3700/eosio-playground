@@ -371,7 +371,9 @@ print_f("Name : %\n", nm);
 	- Self is where the action is executed, and first receiver is where the notification is originated [Source](https://t.me/c/1139062279/229432)
 	- They are different in a notification context i.e. `[[eosio::on_notify("")]]` attributed function [Source](https://t.me/c/1139062279/229439)
 	- it doesn't need to be a transfer. Contract A executes require_recipient(B), then B receives a notification that it can process somehow. Then in B's context, B will be self, and A will be the first receiver [Source](https://t.me/c/1139062279/229441)
-
+	- "receiver" is the account that is currently processing the action. "code" is the account that authorized the contract.
+		+ E.g. - to get the account of the caller within an action
+		
 ### Permission
 * `require_auth( account name )`
 This action explains that the transfer function requires the authorization of the account holder from where the tokens are transferred.
@@ -774,6 +776,47 @@ action-2: inside contract's action `initridex`
 		+ Q. So, basically, in order to make my account `bhubtoeindia` as supervisor for my set of contracts. I shall have to use give contract@eosio.code permission to `bhubtoeindia`. Right?
 			- yes [Source](https://t.me/c/1139062279/232751)
 
+* Error related to `get`:
+```console
+Error 3050003: eosio_assert_message assertion failure
+Error Details:
+assertion failure with message: get
+pending console output:
+```
+	- the error is due to some incorrect/missing parameter parsing
+	- Here, the previous code:
+```cpp
+void vigorico::disburse_inline(const name& receiver_ac,
+						const name& buyorsell_type,
+						const name& phase_type,
+						const asset& disburse_qty,
+						const string& memo )
+{
+	action(
+		permission_level{get_self(), "active"_n},
+		get_self(),
+		"disburse"_n,
+		std::make_tuple(receiver_ac, phase_type, disburse_qty, memo)
+	).send();
+}
+```
+	- the correct code:
+```cpp
+void vigorico::disburse_inline(const name& receiver_ac,
+						const name& buyorsell_type,
+						const name& phase_type,
+						const asset& disburse_qty,
+						const string& memo )
+{
+	action(
+		permission_level{get_self(), "active"_n},
+		get_self(),
+		"disburse"_n,
+		std::make_tuple(receiver_ac, buyorsell_type, phase_type, disburse_qty, memo)
+	).send();
+}
+```
+	- here, `buyorsell_type` was missing as a param
 
 * For more errors log, Click [here](https://www.dfuse.io/en/blog/common-errors-on-eosio-and-how-to-get-past-them)
 
