@@ -817,7 +817,29 @@ void vigorico::disburse_inline(const name& receiver_ac,
 }
 ```
 	- here, `buyorsell_type` was missing as a param
-
+* Unable to find key
+```console
+$ cleost push action eosio.token transfer '["trpmuser1111", "tropium11ico", "0.0001 EOS", "phase A"]' -p trpmuser1111@active
+Error 3050003: eosio_assert_message assertion failure
+Error Details:
+assertion failure with message: unable to find key
+pending console output:
+```
+	- Here, the reason is that token needs to be created
+	- step 1
+```console
+$ cleost push action trpm111token create '["trpiumissuer", "10000000.0000 TRPM"]' -p trpm111token@active
+executed transaction: 36f0c0e1965e0b65d393fd59fd1a4200549049acbd1f2c7afa492a7454e27b5c  120 bytes  229 us
+#  trpm111token <= trpm111token::create         {"issuer":"trpiumissuer","maximum_supply":"10000000.0000 TRPM"}
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+	- if not resolved, then follow this step 2
+```console
+$ cleost push action trpm111token issue '["trpiumissuer", "1000000.0000 TRPM", "issue 1M tokens"]' -p trpiumissuer@active
+executed transaction: c79ae107a26e4593bad0a97f2d6d273ff56aad17c04f5ff195f77a49a6cd9fae  136 bytes  192 us
+#  trpm111token <= trpm111token::issue          {"to":"trpiumissuer","quantity":"1000000.0000 TRPM","memo":"issue 1M tokens"}
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
 * For more errors log, Click [here](https://www.dfuse.io/en/blog/common-errors-on-eosio-and-how-to-get-past-them)
 
 ## References
