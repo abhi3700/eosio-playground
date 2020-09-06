@@ -840,6 +840,61 @@ executed transaction: c79ae107a26e4593bad0a97f2d6d273ff56aad17c04f5ff195f77a49a6
 #  trpm111token <= trpm111token::issue          {"to":"trpiumissuer","quantity":"1000000.0000 TRPM","memo":"issue 1M tokens"}
 warning: transaction executed locally, but may not be confirmed by the network yet         ]
 ```
+* Runtime Error Processing WASM
+```console
+Error 3070002: Runtime Error Processing WASM
+Error Details:
+access violation
+pending console output:
+```
+	- [Github issue link](https://github.com/EOSIO/eosio.cdt/issues/967)
+	- Here, the list is going out of bound
+	- I guess this is not a bug. U find in vector copy and got iterator to vector copy element after  u trying to erase from base vector but provide iterator to copy vector. This iterator point to different memory. [Source](https://t.me/c/1139062279/235682)
+	- previous code of action:
+```cpp
+void tropiumstake::remadmin(const name& type, 
+                    const name& admin) {
+    require_auth(get_self());
+
+    admin_index admin_table(get_self(), get_self().value);
+    auto admin_it = admin_table.find(type.value);
+
+    check(admin_it != admin_table.end(), "set admins list using action - \'setadmins\'.");
+    check(admin_it->vector_admin.size() != 0, "empty admin list");
+    
+    auto vec = admin_it->vector_admin;
+    auto vec_it = std::find(vec.begin(), vec.end(), admin);
+
+    check(vec_it != vec.end(), "the parsed admin is not in the list."); 
+
+    admin_table.modify(admin_it, get_self(), [&](auto& row){    // found & erase it
+        row.vector_admin.erase(vec_it);
+    });
+
+}
+```
+	- So, a copy (`vec`) of the original vector is created & then trying to erase element of original vector (`admin_it->vector_admin`).
+	- Rectify that by removing that copy. So, the modified code is:
+```cpp
+void tropiumstake::remadmin(const name& type, 
+                    const name& admin) {
+    require_auth(get_self());
+
+    admin_index admin_table(get_self(), get_self().value);
+    auto admin_it = admin_table.find(type.value);
+
+    check(admin_it != admin_table.end(), "set admins list using action - \'setadmins\'.");
+    check(admin_it->vector_admin.size() != 0, "empty admin list");
+    
+    auto vec_it = std::find(admin_it->vector_admin.begin(), admin_it->vector_admin.end(), admin);
+    check(vec_it != admin_it->vector_admin.end(), "the parsed admin is not in the list."); 
+
+    admin_table.modify(admin_it, get_self(), [&](auto& row){    // found & erase it
+        row.vector_admin.erase(vec_it);
+    });
+
+}
+```
 * For more errors log, Click [here](https://www.dfuse.io/en/blog/common-errors-on-eosio-and-how-to-get-past-them)
 
 ## References
