@@ -1,3 +1,24 @@
+## Contract
+* Set the contract
+```console
+$ cleosw set contract gpkbatescrow ./
+Reading WASM from /mnt/f/Coding/github_repos/eosio_gpkbattles_contracts/gpkbatescrow/gpkbatescrow.wasm...
+Publishing contract...
+executed transaction: 7410d224760874729dc7c3edb04b552c379edeae07d286a8372c6593f160ce87  47592 bytes  6237 us
+#         eosio <= eosio::setcode               {"account":"gpkbatescrow","vmtype":0,"vmversion":0,"code":"0061736d0100000001af022c60000060037f7f7f0...
+#         eosio <= eosio::setabi                {"account":"gpkbatescrow","abi":"0e656f73696f3a3a6162692f312e3100050a6361726477616c6c657400030763617...
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+* Clear the contract
+```console
+$ cleosw set contract gpkbattlesco --clear
+Publishing contract...
+executed transaction: 093828df3da647e066cbc9e4c89326a06a410fec5d2702d93c2d33ad10f56d33  112 bytes  510 us
+#         eosio <= eosio::setcode               {"account":"gpkbattlesco","vmtype":0,"vmversion":0,"code":""}
+#         eosio <= eosio::setabi                {"account":"gpkbattlesco","abi":""}
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+
 ## Account
 * Buy RAM for self account
 ```console
