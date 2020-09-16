@@ -147,6 +147,14 @@ executed transaction: cf815e352e9b32ea93ef8b8b1b0e19b8434aef04618f9fa86b00209295
 >> checksum256 to string: abhijit whose checksum is: 654c62962bdf81fd478d259e82e6349e66dfcbfb47573c3f02155588ecc472b8
 warning: transaction executed locally, but may not be confirmed by the network yet         ]
 ```
+* `getgameid`
+```console
+$ cleost push action cabeos1test1 gengameid '[]' -p cabeos1test1@active
+executed transaction: 738712a2d7008489be48056e756082c1a1539f90f3fc9ea49ffd71a04f7c7653  96 bytes  158 us
+#  cabeos1test1 <= cabeos1test1::gengameid      ""
+>> 10001723663692
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
 
 ## TODO
 * [ ] multi-index table with data having same primary_key e.g. driver having more than 1 ride in case of following cases:

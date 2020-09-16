@@ -109,6 +109,11 @@ public:
 		print("txn id is: ", get_trxid());
 	}
 
+	ACTION gengameid() {
+		uint64_t game_id = 10000123456789 + (uint64_t)now();
+		print(game_id);
+	}
+
 private:
 	// get the current timestamp
 	inline uint32_t now() const {

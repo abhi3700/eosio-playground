@@ -52,6 +52,11 @@
             ]
         },
         {
+            "name": "gengameid",
+            "base": "",
+            "fields": []
+        },
+        {
             "name": "getsha25six",
             "base": "",
             "fields": [
@@ -121,6 +126,11 @@
         {
             "name": "compareasset",
             "type": "compareasset",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "gengameid",
+            "type": "gengameid",
             "ricardian_contract": ""
         },
         {
