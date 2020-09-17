@@ -273,6 +273,27 @@ $ cleost push action cabeos1test2 create '["cabeos1user1", "Abhijit"]' -p cabeos
 
 	- __M-2:__ Robust for any no. of rows. [Source](https://eosio.stackexchange.com/a/1432/167)
 
+* ##### Whenever modify table is needed in series (sequentially), then always do it loops like this:
+```cpp
+			players_index players_table(get_self(), get_self().value);
+			auto players_it = players_table.find(ongamestat_it->asset_contract_ac.value);
+
+			check(players_it != players_table.end(), "players_list is not set.");
+
+			// Now, erase p1, p2 from the `players` table's `players_list`
+			std::vector<name> paired_players = {ongamestat_it->player_1, ongamestat_it->player_2};
+
+			for(auto&& p : paired_players) {
+				auto pl_search_it = std::find(players_it->players_list.begin(), players_it->players_list.end(), p);
+				check(pl_search_it != players_it->players_list.end(), p.to_string() + " is not in the players_list.");
+				players_table.modify(players_it, get_self(), [&](auto& row) {
+					row.players_list.emplace_back(p);
+					// send_alert(p, p.to_string() + " is erased from the players list");			// for debug
+				});
+			}
+
+```
+
 * Whenever, creating a table with having more than 1 party as users, then try not to use `same_payer` (or else, there will be confusion in finding, which party is the ram_payer) param inside `modify()` method of multi_index table.
 * Applications:
 	- [ ] Zomato App multi-index table
