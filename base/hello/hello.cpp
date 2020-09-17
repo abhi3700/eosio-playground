@@ -5,6 +5,7 @@
 #include <eosio/system.hpp>
 #include <eosio/transaction.hpp>
 #include <cmath>
+#include <vector>
 
 using eosio::contract;
 using eosio::print;
@@ -20,6 +21,7 @@ using eosio::current_time_point;
 using eosio::transaction_size;
 using eosio::read_transaction;
 using std::pow;
+using std::vector;
 
 
 
@@ -114,6 +116,24 @@ public:
 		print(game_id);
 	}
 
+	ACTION genrandindex(const vector<name> v) {
+		//cast the random_value to a smaller number
+	    uint64_t max_value = v.size()-1;
+	    uint64_t min_value = 1;
+
+	    auto t = hash_digest_256(get_trxid(), now());	
+	    auto byte_array = t.extract_as_byte_array();
+
+	    uint64_t random_int = 0;
+	    for (int i = 0; i < 8; i++) {
+	        random_int <<= 8;
+	        random_int |= (uint64_t)byte_array[i];
+	    }
+	    
+	    uint64_t num1 = min_value + ( random_int % ( max_value - min_value + 1 ) );
+	    print(num1);
+	}
+
 private:
 	// get the current timestamp
 	inline uint32_t now() const {
@@ -151,6 +171,16 @@ private:
 	    return output_int;
 	}
 */
+	// get the sha256 hash digest/checksum from (txn_id, timestamp)
+	inline checksum256 hash_digest_256(const checksum256& txn_id,
+										uint32_t timestamp) const {
+		string data_str_cpp = to_hex(&txn_id, sizeof(txn_id)) + std::to_string(timestamp);
+		const char * data_str_c = data_str_cpp.c_str(); 
+
+		auto hash_digest = sha256(data_str_c, strlen(data_str_c));
+
+		return hash_digest;
+	}
 
 	inline checksum256 get_trxid()
 	{

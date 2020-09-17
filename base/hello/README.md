@@ -155,6 +155,75 @@ executed transaction: 738712a2d7008489be48056e756082c1a1539f90f3fc9ea49ffd71a04f
 >> 10001723663692
 warning: transaction executed locally, but may not be confirmed by the network yet         ]
 ```
+* `getrandindex`
+	- test-1
+```console
+$ cleost push action cabeos1test1 genrandindex '{"v": ["gbuser111111", "gbuser111112", "gbuser111113", "gbuser111114", "gbuser111115"]}' -p cabeos1test1@active
+executed transaction: ad588836e016615da0f6bb2cb1032d855ff8264eccfb065e708886bbc96c64d8  136 bytes  142 us
+#  cabeos1test1 <= cabeos1test1::genrandindex   {"v":["gbuser111111","gbuser111112","gbuser111113","gbuser111114","gbuser111115"]}
+>> 3
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+	- test-2
+```console
+$ cleost push action cabeos1test1 genrandindex '{"v": ["gbuser111111", "gbuser111112", "gbuser111113", "gbuser111114", "gbuser111115"]}' -p cabeos1test1@active
+executed transaction: f760e77553a4da487fee501b52741d67564db346c15d416bb5b2b86c65e9dc62  136 bytes  166 us
+#  cabeos1test1 <= cabeos1test1::genrandindex   {"v":["gbuser111111","gbuser111112","gbuser111113","gbuser111114","gbuser111115"]}
+>> 2
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+	- test-1
+```console
+$ cleost push action cabeos1test1 genrandindex '{"v": ["gbuser111111", "gbuser111112", "gbuser111113", "gbuser111114", "gbuser111115"]}' -p cabeos1test1@active
+executed transaction: dec7386d841e3accc602e4f7561cbd25931a74378c763ea62fbc37366ebaee25  136 bytes  142 us
+#  cabeos1test1 <= cabeos1test1::genrandindex   {"v":["gbuser111111","gbuser111112","gbuser111113","gbuser111114","gbuser111115"]}
+>> 2
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+	- test-1
+```console
+$ cleost push action cabeos1test1 genrandindex '{"v": ["gbuser111111", "gbuser111112", "gbuser111113", "gbuser111114", "gbuser111115"]}' -p cabeos1test1@active
+executed transaction: 087c6358866a59cd62f5ea9ba873f4ec4022fd0cf7480e8941f32289ec1d7a22  136 bytes  142 us
+#  cabeos1test1 <= cabeos1test1::genrandindex   {"v":["gbuser111111","gbuser111112","gbuser111113","gbuser111114","gbuser111115"]}
+>> 3
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+	- test-1
+```console
+$ cleost push action cabeos1test1 genrandindex '{"v": ["gbuser111111", "gbuser111112", "gbuser111113", "gbuser111114", "gbuser111115"]}' -p cabeos1test1@active
+executed transaction: 30b34bad44de6c53e6efed6751f14a202a61bd3d0e3ce93fdd5c74b3bf28041c  136 bytes  135 us
+#  cabeos1test1 <= cabeos1test1::genrandindex   {"v":["gbuser111111","gbuser111112","gbuser111113","gbuser111114","gbuser111115"]}
+>> 3
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+	- test-1
+```console
+$ cleost push action cabeos1test1 genrandindex '{"v": ["gbuser111111", "gbuser111112", "gbuser111113", "gbuser111114", "gbuser111115"]}' -p cabeos1test1@active
+executed transaction: 41348095f90ed02c252f4ee42e0bff071e55a917de6e5a5ddb048215ec6877b9  136 bytes  120 us
+#  cabeos1test1 <= cabeos1test1::genrandindex   {"v":["gbuser111111","gbuser111112","gbuser111113","gbuser111114","gbuser111115"]}
+>> 2
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+	- test-1
+```console
+$ cleost push action cabeos1test1 genrandindex '{"v": ["gbuser111111", "gbuser111112", "gbuser111113", "gbuser111114", "gbuser111115"]}' -p cabeos1test1@active
+executed transaction: bf141da53d8e4c0c2074197eed169995d23fd1e3565586434c9154d585c1b891  136 bytes  152 us
+#  cabeos1test1 <= cabeos1test1::genrandindex   {"v":["gbuser111111","gbuser111112","gbuser111113","gbuser111114","gbuser111115"]}
+>> 1
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+	- test-1
+```console
+$ cleost push action cabeos1test1 genrandindex '{"v": ["gbuser111111", "gbuser111112", "gbuser111113", "gbuser111114", "gbuser111115"]}' -p cabeos1test1@active
+executed transaction: edbbb98235b3bd98bd9c8fda346f1359969bee4ac784db8f6cf3bba8fe683fe6  136 bytes  210 us
+#  cabeos1test1 <= cabeos1test1::genrandindex   {"v":["gbuser111111","gbuser111112","gbuser111113","gbuser111114","gbuser111115"]}
+>> 4
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+	- So, it generates random no. in range 1 to 4 (including 1 and 4)
+	- For creating either 0 or 1, use `uint64_t num1 = random_int % 2;`
+	- For more details, refer [here](https://www.bitdegree.org/learn/random-number-generator-cpp)
+
 
 ## TODO
 * [ ] multi-index table with data having same primary_key e.g. driver having more than 1 ride in case of following cases:

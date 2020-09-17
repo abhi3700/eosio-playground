@@ -57,6 +57,16 @@
             "fields": []
         },
         {
+            "name": "genrandindex",
+            "base": "",
+            "fields": [
+                {
+                    "name": "v",
+                    "type": "name[]"
+                }
+            ]
+        },
+        {
             "name": "getsha25six",
             "base": "",
             "fields": [
@@ -131,6 +141,11 @@
         {
             "name": "gengameid",
             "type": "gengameid",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "genrandindex",
+            "type": "genrandindex",
             "ricardian_contract": ""
         },
         {
