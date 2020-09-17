@@ -57,6 +57,11 @@
             "fields": []
         },
         {
+            "name": "genrandbin",
+            "base": "",
+            "fields": []
+        },
+        {
             "name": "genrandindex",
             "base": "",
             "fields": [
@@ -141,6 +146,11 @@
         {
             "name": "gengameid",
             "type": "gengameid",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "genrandbin",
+            "type": "genrandbin",
             "ricardian_contract": ""
         },
         {

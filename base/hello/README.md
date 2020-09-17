@@ -224,6 +224,72 @@ warning: transaction executed locally, but may not be confirmed by the network y
 	- For creating either 0 or 1, use `uint64_t num1 = random_int % 2;`
 	- For more details, refer [here](https://www.bitdegree.org/learn/random-number-generator-cpp)
 
+* `genrandbin`
+	- test-1
+```console
+$ cleost push action cabeos1test1 genrandbin '[]' -p cabeos1test1@active
+executed transaction: 8e4232d353907bb1d5e8e93ec6351ae89e22e42cd142df51c326a9333c46fdda  96 bytes  262 us
+#  cabeos1test1 <= cabeos1test1::genrandbin     ""
+>> 1
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+	- test-2
+```console
+$ cleost push action cabeos1test1 genrandbin '[]' -p cabeos1test1@active
+executed transaction: 0d1e10b30c74f2eb955cfed6597a10d9e76b4e0d20e2f96344acac6893ec1dda  96 bytes  136 us
+#  cabeos1test1 <= cabeos1test1::genrandbin     ""
+>> 1
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+	- test-1
+```console
+$ cleost push action cabeos1test1 genrandbin '[]' -p cabeos1test1@active
+executed transaction: 874fc11a65779ed37f935abe18895cb7a5ca213464654672f398c8508ab47df9  96 bytes  193 us
+#  cabeos1test1 <= cabeos1test1::genrandbin     ""
+>> 1
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+	- test-1
+```console
+$ cleost push action cabeos1test1 genrandbin '[]' -p cabeos1test1@active
+executed transaction: cfa169af762c4bb6f2c540b3bfa9338fd935d0f94fbc88c4331ac00cfe5a0ae6  96 bytes  150 us
+#  cabeos1test1 <= cabeos1test1::genrandbin     ""
+>> 1
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+	- test-1
+```console
+$ cleost push action cabeos1test1 genrandbin '[]' -p cabeos1test1@active
+executed transaction: 7ac4f826bae2dd29c70eebbdf42edc54648b86a5aa9229753a6ba379e1a50443  96 bytes  146 us
+#  cabeos1test1 <= cabeos1test1::genrandbin     ""
+>> 1
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+	- test-1
+```console
+$ cleost push action cabeos1test1 genrandbin '[]' -p cabeos1test1@active
+executed transaction: 9893a8df244c5d1eec694e98f63226cc9860741032495395e48d23743d736e19  96 bytes  142 us
+#  cabeos1test1 <= cabeos1test1::genrandbin     ""
+>> 1
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+	- test-1
+```console
+$ cleost push action cabeos1test1 genrandbin '[]' -p cabeos1test1@active
+executed transaction: 85eaf587466c4067d6faf26ff1e3e1209d2028531528d3a3f066e313eb97b484  96 bytes  130 us
+#  cabeos1test1 <= cabeos1test1::genrandbin     ""
+>> 0
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+	- test-1
+```console
+$ cleost push action cabeos1test1 genrandbin '[]' -p cabeos1test1@active
+executed transaction: 6dd47aef9f51524531bf78d6efe358ccd27fa43f675b61151a1d19c77bb47177  96 bytes  138 us
+#  cabeos1test1 <= cabeos1test1::genrandbin     ""
+>> 0
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+	- So, here, it generates either 0 or 1.
 
 ## TODO
 * [ ] multi-index table with data having same primary_key e.g. driver having more than 1 ride in case of following cases:

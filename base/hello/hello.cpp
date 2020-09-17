@@ -130,7 +130,21 @@ public:
 	        random_int |= (uint64_t)byte_array[i];
 	    }
 	    
-	    uint64_t num1 = min_value + ( random_int % ( max_value - min_value + 1 ) );
+	    uint64_t num1 = min_value + ( random_int % ( max_value - min_value + 1 ) );			// in range from `min` to `max` (including `min` & `max`)
+	    print(num1);
+	}
+
+	ACTION genrandbin() {
+	    auto t = hash_digest_256(get_trxid(), now());	
+	    auto byte_array = t.extract_as_byte_array();
+
+	    uint64_t random_int = 0;
+	    for (int i = 0; i < 8; i++) {
+	        random_int <<= 8;
+	        random_int |= (uint64_t)byte_array[i];
+	    }
+	    
+	    uint64_t num1 = random_int % 2;				// either 0 or 1
 	    print(num1);
 	}
 
