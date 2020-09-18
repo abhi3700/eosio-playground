@@ -918,6 +918,89 @@ void tropiumstake::remadmin(const name& type,
 ```
 * For more errors log, Click [here](https://www.dfuse.io/en/blog/common-errors-on-eosio-and-how-to-get-past-them)
 
+## Miscellaneous
+* Here, while writing eosio contracts, always remember to declare variable as `const`, which takes value from a table. & then the table gets changed & then the variable is re-used like this:
+```cpp
+	// choose the 1st player
+	const auto p1 = players_it->players_list[0];
+	auto remaining_players_list = players_it->players_list;
+	remaining_players_list.erase(remaining_players_list.begin());
+
+	// now choose the second player using randomization if rest_players' size > 2
+	name p2 = ""_n;
+	if (players_it->players_list.size() == 2) {
+		p2 = players_it->players_list[1];
+	} 
+	else if (players_it->players_list.size() > 2) {
+		auto rand_index = get_random_indexfrmlist(random_value, remaining_players_list);
+		p2 = remaining_players_list[rand_index];
+	}
+
+	// send_alert(p1, "You have been paired with player " + p2.to_string());			// for debug
+	// send_alert(p2, "You have been paired with player " + p1.to_string());			// for debug
+
+	// check players paired are not identical
+	check(p1 != p2, "the paired players are identical by name. Please, ensure there is no duplicate players name in the list.");
+
+	// check each p1, p2 contain min. 3 cards
+	check(checkget_3_available_cards(p1, asset_contract_ac).size() == 3, 
+		"player " + p1.to_string() + " has no 3 cards available for selection of asset contract: \'" + asset_contract_ac.to_string() + "\'");
+	check(checkget_3_available_cards(p2, asset_contract_ac).size() == 3, 
+		"player " + p2.to_string() + " has no 3 cards available for selection of asset contract: \'" + asset_contract_ac.to_string() + "\'");
+
+	// check that the players - p1, p2 are not present in the player_1 column & player_2 column of the table
+	ongamestat_index ongamestat_table(get_self(), get_self().value);
+	auto player1_idx = ongamestat_table.get_index<"byplayer1"_n>();
+	auto player2_idx = ongamestat_table.get_index<"byplayer2"_n>();
+
+	auto p11_it = player1_idx.find(p1.value);
+	auto p21_it = player1_idx.find(p2.value);
+
+	check(p11_it == player1_idx.end(), p1.to_string() + " is already present with game_id: \'" + std::to_string(p11_it->game_id) + "\' in player_1 column of \'ongamestat\' table.");
+	check(p21_it == player1_idx.end(), p2.to_string() + " is already present with game_id: \'" + std::to_string(p21_it->game_id) + "\' in player_1 column of \'ongamestat\' table.");
+
+	auto p12_it = player2_idx.find(p1.value);
+	auto p22_it = player2_idx.find(p2.value);
+
+	check(p12_it == player2_idx.end(), p1.to_string() + " is already present with game_id: \'" + std::to_string(p12_it->game_id) + "\' in player_2 column of \'ongamestat\' table.");
+	check(p22_it == player2_idx.end(), p2.to_string() + " is already present with game_id: \'" + std::to_string(p22_it->game_id) + "\' in player_2 column of \'ongamestat\' table.");
+
+	// After these above checks, the players are ok to be added now in the `ongamestat` table.
+
+	// generate game_id
+	uint64_t game_id = 10000123456789 + (uint64_t)now();
+
+	// now, emplace table with details - game_id, player_1, player_2
+	auto ongamestat_it = ongamestat_table.find(game_id);
+	check(ongamestat_it == ongamestat_table.end(), "The game with id: \'" + std::to_string(game_id) + "\' is already present in the table. So, players can't be paired." );
+	check((p1 != ""_n) && (p2 != ""_n), "Either p1 or p2 is empty.");
+
+	// select any iterator out of (p11_it, p21_it, p12_it, p22_it) for adding it into table.
+	ongamestat_table.emplace(get_self(), [&](auto& row){
+		row.game_id = game_id;
+		row.player_1 = p1;
+		row.player_2 = p2;
+	});
+
+	// Now, erase p1, p2 from the `players` table's `players_list`
+	const std::vector<name> paired_players = {p1, p2};
+
+	for(auto&& p : paired_players) {
+		auto pl_search_it = std::find(players_it->players_list.begin(), players_it->players_list.end(), p);
+		check(pl_search_it != players_it->players_list.end(), p.to_string() + " is not in the players_list.");
+		players_table.modify(players_it, get_self(), [&](auto& row) {
+			row.players_list.erase(pl_search_it);
+			// send_alert(p, p.to_string() + " is erased from the players list");			// for debug
+		});
+	}
+	
+
+	// Send the 2 players an alert that they have paired with & ask them to send the game fee if not sent
+	send_alert(paired_players[0], "You have been paired with player " + paired_players[1].to_string() + " & game_id: " + std::to_string(game_id) + ". Please ensure the game fee in the gfeewallet.");
+	send_alert(paired_players[1], "You have been paired with player " + paired_players[0].to_string() + " & game_id: " + std::to_string(game_id) + ". Please ensure the game fee in the gfeewallet.");
+```
+	- Here, `p1`, `p2` is captured in the beginning & we use that later in the end. So, in between we are changing 2 tables. So, try to capture that into a `const` type variable like done here. 
+
 ## References
 * [EOSIO Developer Portal](https://developers.eos.io/)
 * [Understanding The eosio.token Contract](https://medium.com/eoseoul/codeos-essential-knowledge-in-eos-contact-development-9c9b1bf26d0c)
