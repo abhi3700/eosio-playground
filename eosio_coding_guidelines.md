@@ -349,6 +349,8 @@ auto fare_toe = asset(fareamount_in_toe, symbol("TOE", 4));		// create a asset v
 
 asset token_balance = asset(158000, symbol("TOE", 4));		// represents "15.8000 TOE"
 ```
+	- get precision of asset: `current_price.symbol.precision()`
+
 * `symbol`
 	- initialize symbol like this:
 ```cpp
