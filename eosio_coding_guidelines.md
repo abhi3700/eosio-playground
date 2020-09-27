@@ -4,6 +4,7 @@
 	- & `-l` flag is used to link with a library file.
 	- For more, see this: `$ eosio-cpp -help`  
 
+> NOTE: If only the sequence of actions in `*.cpp` contract code is altered, the `*.wasm` binary file changes.  
 
 ## Contract
 * `CONTRACT` is equal to `class [[eosio::contract]]`
