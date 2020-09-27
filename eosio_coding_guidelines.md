@@ -918,6 +918,39 @@ void tropiumstake::remadmin(const name& type,
 
 }
 ```
+* I am calling an external action from another contract.
+using 2 methods:
+	- M-1: like shown in EOSIO documentation
+```cpp
+add_ridequota("driver"_n, 1)`
+```
+	- M-2: like this:
+```cpp
+action(
+    permission_level{get_self(), "active"_n},
+    ridex_contract_ac,
+    "addridequota"_n,
+    std::make_tuple("driver"_n, 1)
+).send();
+```
+
+In M-1, there is no error. But, In M-2,  I am facing this error:
+```console
+Error 3050003: eosio_assert_message assertion failure
+Error Details:
+assertion failure with message: read
+pending console output:
+```
+	- In this type of errors, always doubt the parameters parsed inside `make_tuple`. It could be due to incorrect (in terms of casting) or missing param.
+	- Soln: Cast the `1` like this:
+```cpp
+action(
+    permission_level{get_self(), "active"_n},
+    ridex_contract_ac,
+    "addridequota"_n,
+    std::make_tuple("driver"_n, (uint64_t)1)
+).send();
+```
 * For more errors log, Click [here](https://www.dfuse.io/en/blog/common-errors-on-eosio-and-how-to-get-past-them)
 
 ## Miscellaneous
