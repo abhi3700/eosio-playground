@@ -225,7 +225,7 @@ public:
 		print("The erased for " + user.to_string() + ": " + std::to_string(it->erased));
 
 		auto table_size = std::distance(countstable.cbegin(), countstable.cend());
-		print("The counts table size is: " + table_size);
+		print("The counts table size is: " + std::to_string(table_size));
 	}
 
 private:
