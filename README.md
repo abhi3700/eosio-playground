@@ -13,22 +13,60 @@ Dependency repositories:
 * WSL
 * Mac
 
+#### Follow the steps for EOSIO components - cleos, nodeos, keosd
+* M-1 (from setup file)
+  - download latest (stable) version of `.deb` file from [here](https://github.com/EOSIO/eosio/releases).
+  - Install
+```console
+$ wget https://github.com/eosio/eos/releases/download/v2.0.9/eosio_2.0.9-1-ubuntu-18.04_amd64.deb
+$ sudo apt install ./eosio_2.0.9-1-ubuntu-18.04_amd64.deb
+```
+	- Uninstall
+```console
+$ sudo apt remove eosio
+```
+
+* M-2 (from scratch)
+  - Install
+```console
+$ git clone --recursive https://github.com/eosio/eos
+$ cd eosio
+$ ./scripts/eosio_build.sh
+$ sudo ./scripts/eosio_install.sh
+```
+  - Uninstall
+```console
+$ cd eosio
+$ ./scripts/eosio_build.sh
+$ sudo ./scripts/eosio_install.sh
+```
+
 #### Follow the steps [for Compiler i.e. eosio-cpp, ....]
 * M-1 (from setup file)
   - download latest (stable) version of `.deb` file from [here](https://github.com/EOSIO/eosio.cdt/releases).
   - in the bash terminal
-  ```
-  $ wget https://github.com/eosio/eosio.cdt/releases/download/v1.5.0/eosio.cdt-1.5.0-1_amd64.deb
-  $ sudo apt install ./eosio.cdt-1.5.0-1_amd64.deb
-  ```
+```console
+$ wget https://github.com/eosio/eosio.cdt/releases/download/v1.5.0/eosio.cdt-1.5.0-1_amd64.deb
+$ sudo apt install ./eosio.cdt-1.5.0-1_amd64.deb
+```
+	- Uninstall
+```console
+$ sudo apt remove eosio.cdt
+```
 * M-2 (from scratch)
   - in the bash terminal
-  ```
-  $ git clone --recursive https://github.com/eosio/eosio.cdt
-  $ cd eosio.cdt
-  $ ./build.sh
-  $ sudo ./install.sh
-  ```
+```console
+$ git clone --recursive https://github.com/eosio/eosio.cdt
+$ cd eosio.cdt
+$ ./scripts/eosiocdt_build.sh
+$ sudo ./scripts/eosiocdt_install.sh
+```
+  - Uninstall
+```console
+$ cd eosio.cdt
+$ ./scripts/eosiocdt_build.sh
+$ sudo ./scripts/eosiocdt_install.sh
+```
 
 ## Setup for Dependency Libraries
 Follow the steps:
