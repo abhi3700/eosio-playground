@@ -46,8 +46,8 @@ $ sudo ./scripts/eosio_install.sh
   - download latest (stable) version of `.deb` file from [here](https://github.com/EOSIO/eosio.cdt/releases).
   - in the bash terminal
 ```console
-$ wget https://github.com/eosio/eosio.cdt/releases/download/v1.5.0/eosio.cdt-1.5.0-1_amd64.deb
-$ sudo apt install ./eosio.cdt-1.5.0-1_amd64.deb
+$ wget https://github.com/eosio/eosio.cdt/releases/download/v1.7.0/eosio.cdt_1.7.0-1-ubuntu-18.04_amd64.deb
+$ sudo apt install ./eosio.cdt_1.7.0-1-ubuntu-18.04_amd64.deb
 ```
 	- Uninstall
 ```console
