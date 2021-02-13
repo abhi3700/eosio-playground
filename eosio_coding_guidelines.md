@@ -41,6 +41,17 @@
 * `on_notify` function
 	- `eosio.token::transfer` action is calling a helper function deposit to add the info (i.e. transferred money) to the contract (`hodl`)'s table. 
 
+## Transaction
+* Deferred transaction are scheduled transaction & are deprecated now.
+* [Is there a way for triggering an inline ACTION after sometime (say 180 secs) from within a contract's another ACTION?](https://t.me/c/1139062279/261193)
+	- No, inline actions have to execute within the same transaction, and you only have 30ms for all [source](https://t.me/c/1139062279/261225)
+	- But you can set a condition in a contract so that it allows executing a certain thing within a given period only [source](https://t.me/c/1139062279/261226)
+	- Basically, you can apply a check condition like this:
+```cpp
+...
+check(elapsed_time > 180, "the action is triggered before the exprity time i.e. 180 sec");
+``` 
+
 ## Table
 * `TABLE` is equal to `struct [[eosio::table]]`
 * 2 params
@@ -970,3 +981,5 @@ action(
 	- dfuse: https://www.eoscanada.com/en/abc-eos
 * [Multiplication and division of assets with different symbols and precision on EOSIO](https://medium.com/@genesix/exchange-on-eosio-36e43a360398)
 * [Common Errors on EOSIO and How to Get Past Them](https://www.dfuse.io/en/blog/common-errors-on-eosio-and-how-to-get-past-them)
+* [Deferred transacitons by EOSIO Developer portal](https://developers.eos.io/manuals/eosio.cdt/v1.7/best-practices/deferred_transactions)
+* [Deferred transacitons by CMitchel](https://cmichel.io/deferred-transactions-on-eos/)
