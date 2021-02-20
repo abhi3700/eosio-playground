@@ -54,6 +54,38 @@ check(elapsed_time > 180, "the action is triggered before the exprity time i.e. 
 
 ## Table
 * `TABLE` is equal to `struct [[eosio::table]]`
+* The table data is sorted by default as per the primary key like this:
+```console
+$ cleoswt get table gpkbatescrow gbuser111111 cardwallet --show-payer
+{
+  "rows": [{
+      "data": {
+        "card_id": "100000000007690",
+        "contract_ac": "simpleassets",
+        "usage_status": "available"
+      },
+      "payer": "gpkbatescrow"
+    },{
+      "data": {
+        "card_id": "100000000007693",
+        "contract_ac": "simpleassets",
+        "usage_status": "available"
+      },
+      "payer": "gpkbatescrow"
+    },{
+      "data": {
+        "card_id": "100000000007709",
+        "contract_ac": "simpleassets",
+        "usage_status": "available"
+      },
+      "payer": "gpkbatescrow"
+    }
+  ],
+  "more": false,
+  "next_key": ""
+}
+```
+	- Here, card_id is the primary key. So, the each row is sorted by card_id.
 * 2 params
 	- 1. `code`: specifies the owner of this table. 
 		+ Here we use the `get_self()` function which will pass the name of this contract.
