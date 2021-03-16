@@ -998,6 +998,33 @@ action(
 * For more errors log, Click [here](https://www.dfuse.io/en/blog/common-errors-on-eosio-and-how-to-get-past-them)
 
 ## Miscellaneous
+* let's say we deal with a table. Here, we set a value inside a table & then we want to read that value from inside the same ACTION, then the value is not going to be read becuase it hasn't been set yet until the transaction is made.
+	- E.g. of code snippet inside an ACTION
+```cpp
+void gpkbattlesco::pairwplayer(const name& player_1, 
+								const name& asset_contract_ac)
+{
+	...
+	...
+	ongamestat_table.emplace(get_self(), [&](auto& row){
+		row.game_id = game_id;
+		row.player_1 = p1;
+		row.player_2 = p2;
+		row.asset_contract_ac = asset_contract_ac;
+		row.game_fee = computed_gfee_p1;
+		row.player1_cards = card_ids_p1;
+		row.player1_cards_combo = card_ids_type_p1;
+		row.player2_cards = card_ids_p2;
+		row.player2_cards_combo = card_ids_type_p2;
+		row.status = "paired"_n;
+	});
+
+	...
+	send_alert(player_1, "You have been paired with a player in game_id: " + std::to_string(game_id));
+}
+```
+	- here, `ongamestat_it->player_2` can't be put inside the send_alert msg param, as it is not yet set in the table.
+
  
 
 ## References
