@@ -238,7 +238,31 @@ $ cleost get table tippertipper tipuser11111 fund --show-payer --lower eosio.tok
   "next_key_bytes": ""
 }
 ```
-
+* fetch with (secondary key, show payer)
+```console
+$ cleost get table tippertipper tipuser11111 fund --show-payer --lower eosio.token --key-type name --index 2
+{
+  "rows": [{
+      "data": {
+        "token_id": 1397703940,
+        "token_contract_ac": "eosio.token",
+        "balance": "9.0000 EOS"
+      },
+      "payer": "tippertipper"
+    },{
+      "data": {
+        "token_id": "21479244531320324",
+        "token_contract_ac": "tokenfutbol1",
+        "balance": "9.0000 FUTBOL"
+      },
+      "payer": "tippertipper"
+    }
+  ],
+  "more": false,
+  "next_key": "",
+  "next_key_bytes": ""
+}
+```
 
 ### Multi-index
 * [How to Guide](https://developers.eos.io/manuals/eosio.cdt/v1.7/how-to-guides/multi-index/index/)
