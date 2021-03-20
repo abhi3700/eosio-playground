@@ -128,6 +128,118 @@ $ cleost get table cabeos1test2 cabeos1test2 people --show-payer
 ```
 * In EOSIO, we have multi-index table insprired from Boost Multi-index library. For more, look at the next section below.
 
+### Using cleos
+* fetch with (primary key, 0 limit)
+```console
+$ cleost get table tippertipper tipuser11111 fund --lower 1397703940 --limit 0
+{
+  "rows": [],
+  "more": true,
+  "next_key": "1397703940",
+  "next_key_bytes": ""
+}
+```
+* fetch with (primary key, 1 limit)
+```console
+$ cleost get table tippertipper tipuser11111 fund --lower 1397703940 --limit 1
+{
+  "rows": [{
+      "token_id": 1397703940,
+      "token_contract_ac": "eosio.token",
+      "balance": "9.0000 EOS"
+    }
+  ],
+  "more": false,
+  "next_key": "",
+  "next_key_bytes": ""
+}
+```
+* fetch with (primary key, 1 limit, show payer)
+```console
+$ cleost get table tippertipper tipuser11111 fund --lower 1397703940 --limit 1 --show-payer
+{
+  "rows": [{
+      "data": {
+        "token_id": 1397703940,
+        "token_contract_ac": "eosio.token",
+        "balance": "9.0000 EOS"
+      },
+      "payer": "tippertipper"
+    }
+  ],
+  "more": false,
+  "next_key": "",
+  "next_key_bytes": ""
+}
+```
+* fetch with (secondary key, 1 limit)
+```console
+$ cleost get table tippertipper tipuser11111 fund --lower eosio.token --key-type name --index 2
+{
+  "rows": [{
+      "token_id": 1397703940,
+      "token_contract_ac": "eosio.token",
+      "balance": "9.0000 EOS"
+    }
+  ],
+  "more": false,
+  "next_key": "",
+  "next_key_bytes": ""
+}
+```
+* fetch with (secondary key, 1 limit, show payer)
+```console
+$ cleost get table tippertipper tipuser11111 fund --lower eosio.token --key-type name --index 2 --show-payer
+{
+  "rows": [{
+      "data": {
+        "token_id": 1397703940,
+        "token_contract_ac": "eosio.token",
+        "balance": "9.0000 EOS"
+      },
+      "payer": "tippertipper"
+    }
+  ],
+  "more": false,
+  "next_key": "",
+  "next_key_bytes": ""
+}
+```
+* fetch with (secondary key, 1 limit)
+```console
+$ cleost get table tippertipper tipuser11111 fund --lower eosio.token --key-type name --index 2 --limit 1
+{
+  "rows": [{
+      "token_id": 1397703940,
+      "token_contract_ac": "eosio.token",
+      "balance": "9.0000 EOS"
+    }
+  ],
+  "more": true,
+  "next_key": "14781000547611517456",
+  "next_key_bytes": ""
+}
+```
+* fetch with (secondary key, 1 limit, show payer)
+```console
+$ cleost get table tippertipper tipuser11111 fund --show-payer --lower eosio.token --key-type name --index 2 --limit 1
+{
+  "rows": [{
+      "data": {
+        "token_id": 1397703940,
+        "token_contract_ac": "eosio.token",
+        "balance": "9.0000 EOS"
+      },
+      "payer": "tippertipper"
+    }
+  ],
+  "more": true,
+  "next_key": "14781000547611517456",
+  "next_key_bytes": ""
+}
+```
+
+
 ### Multi-index
 * [How to Guide](https://developers.eos.io/manuals/eosio.cdt/v1.7/how-to-guides/multi-index/index/)
 * Each smart contract using multi index table reserves a partition of the RAM cache, which is controlled using table name, code and scope. [Source](https://medium.com/@moonxfamily/multi-index-table-ram-infrastructure-of-eos-9e78fb5fed13)
@@ -360,6 +472,16 @@ $ cleost push action cabeos1test2 create '["cabeos1user1", "Abhijit"]' -p cabeos
 > - With a customer name, many rows can be found in RAM table
 
 > - With a valet name, many rows can be found in RAM table
+
+* the list of possible key types
+	- i64 (uint64_t)
+	- i128 (uint128_t)
+	- i256 (uint256_t)
+	- float64 (double)
+	- float128 (long double)
+	- name (name)
+	- sha256 (checksum256)
+	- ripemd160 (checksum160)
 
 ## Account Permission
 * Multisig
@@ -1060,3 +1182,4 @@ warning: transaction executed locally, but may not be confirmed by the network y
 * [Common Errors on EOSIO and How to Get Past Them](https://www.dfuse.io/en/blog/common-errors-on-eosio-and-how-to-get-past-them)
 * [Deferred transacitons by EOSIO Developer portal](https://developers.eos.io/manuals/eosio.cdt/v1.7/best-practices/deferred_transactions)
 * [Deferred transacitons by CMitchel](https://cmichel.io/deferred-transactions-on-eos/)
+* [How to fetch any secondary EOSIO table index using eosjs](https://cmichel.io/how-to-fetch-table-indexes-using-eosjs/)
