@@ -1024,8 +1024,26 @@ void gpkbattlesco::pairwplayer(const name& player_1,
 }
 ```
 	- here, `ongamestat_it->player_2` can't be put inside the send_alert msg param, as it is not yet set in the table.
+* giving error: "unable to find key"
+	- parsed command
+```console
+$ cleost push action eosio.token transfer '["tipuser11111", "tippertipper", "1.0000 FUTBOL", "deposit for fund"]' -p tipuser11111@active
+Error 3050003: eosio_assert_message assertion failure
+Error Details:
+assertion failure with message: unable to find key
+pending console output:
+```
+	- wrong token contract account name as `eosio.token` instead of `tokenfutbol1` So, the correct command is as follows:
+```console
+$ cleost push action tokenfutbol1 transfer '["tipuser11111", "tippertipper", "1.0000 FUTBOL", "deposit for fund"]' -p tipuser11111@active
+executed transaction: 0c4c058cf212668b95e725f460160acf06137b3667c1fbc459c0f6b2d92deacc  144 bytes  180 us
+#  tokenfutbol1 <= tokenfutbol1::transfer       {"from":"tipuser11111","to":"tippertipper","quantity":"1.0000 FUTBOL","memo":"deposit for fund"}
+#  tipuser11111 <= tokenfutbol1::transfer       {"from":"tipuser11111","to":"tippertipper","quantity":"1.0000 FUTBOL","memo":"deposit for fund"}
+#  tippertipper <= tokenfutbol1::transfer       {"from":"tipuser11111","to":"tippertipper","quantity":"1.0000 FUTBOL","memo":"deposit for fund"}
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
 
- 
+
 
 ## References
 * [EOSIO Developer Portal](https://developers.eos.io/)
