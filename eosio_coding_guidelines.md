@@ -1236,6 +1236,7 @@ warning: transaction executed locally, but may not be confirmed by the network y
 
 ## References
 * [EOSIO Developer Portal](https://developers.eos.io/)
+* [Best Practices](https://developers.eos.io/manuals/eosio.cdt/v1.8/best-practices/index)
 * [Understanding The eosio.token Contract](https://medium.com/eoseoul/codeos-essential-knowledge-in-eos-contact-development-9c9b1bf26d0c)
 * [The Dispatcher – First Line Of Defense In Any EOS Smart Contract](https://chainsecurity.com/the-dispatcher-first-line-of-defense-in-any-eos-smart-contract/)
 * [[CODEOS] Essential knowledge in EOS contract development](https://medium.com/eoseoul/codeos-essential-knowledge-in-eos-contact-development-9c9b1bf26d0c)
