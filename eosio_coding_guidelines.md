@@ -39,7 +39,50 @@
 * Actions can only be pushed if it's added in ABI. e.g. with [[eosio::on_notify]] attribute, doesn't add that function as action. Rather, that's a payable action mostly.
 * Inline actions are the caller actions, but `on_notify` attributed functions are actually callee functions (utility) to update the table of contract called.
 * `on_notify` function
-	- `eosio.token::transfer` action is calling a helper function deposit to add the info (i.e. transferred money) to the contract (`hodl`)'s table. 
+	- `eosio.token::transfer` action is calling a helper function deposit to add the info (i.e. transferred money) to the contract (`hodl`)'s table.
+  - `*::transfer` annotation means any contract with transfer ACTION can trigger this function of this contract
+  - here, avoid using `eosio::check()`, because the `transfer` ACTION can fail & lead to no transfer of asset (token, card, etc.) to this contract ac. Instead use `if-else` logic like this:
+```cpp
+void tippertipper::deposit( const name& from_ac, 
+                            const name& contract_ac, 
+                            const asset& quantity,
+                            const string& memo ) 
+{
+  ...
+  ...
+  // if there is no alphabets, just the telegram_id in memo.
+  if(count_alpha(memo) == 0) {
+    auto tg_id = memo;    // capture the telegram_id
+
+    // instantiate the `account` table
+    account_index account_table(get_self(), get_self().value);
+    auto account_it = account_table.find(owner_id);
+
+    // update (add/modify) the deposit_qty
+    if(account_it == account_table.end()) {
+      account_table.emplace(get_self(), [&](auto& row) {
+        row.owner = tg_id;
+        row.balances.emplace_back(
+          make_pair("symbol_name", quantity.symbol.code()),
+          make_pair("symbol_precision", quantity.symbol.precision()),
+          make_pair("contract", get_first_receiver()),
+          make_pair("value", quantity.amount)
+        )
+      });
+    } else {
+      account_table.modify(account_it, get_self(), [&](auto& row) {
+        row.balances.emplace_back(
+          make_pair("symbol_name", quantity.symbol.code()),
+          make_pair("symbol_precision", quantity.symbol.precision()),
+          make_pair("contract", get_first_receiver()),
+          make_pair("value", quantity.amount)
+        )
+      });
+    }
+
+  }
+
+```
 
 ## Transaction
 * Deferred transaction are scheduled transaction & are deprecated now.
@@ -1202,6 +1245,7 @@ warning: transaction executed locally, but may not be confirmed by the network y
 
 ## References
 * [EOSIO Developer Portal](https://developers.eos.io/)
+* [Best Practices](https://developers.eos.io/manuals/eosio.cdt/v1.8/best-practices/index)
 * [Understanding The eosio.token Contract](https://medium.com/eoseoul/codeos-essential-knowledge-in-eos-contact-development-9c9b1bf26d0c)
 * [The Dispatcher – First Line Of Defense In Any EOS Smart Contract](https://chainsecurity.com/the-dispatcher-first-line-of-defense-in-any-eos-smart-contract/)
 * [[CODEOS] Essential knowledge in EOS contract development](https://medium.com/eoseoul/codeos-essential-knowledge-in-eos-contact-development-9c9b1bf26d0c)
