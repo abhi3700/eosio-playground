@@ -23,7 +23,7 @@ using eosio::read_transaction;
 using std::string;
 using std::vector;
 using std::pair;
-using pair_t = pair<string, vector<string>>;
+// using pair_t = pair<string, vector<string>>;
 
 CONTRACT tabletest2 : public contract {
 public:

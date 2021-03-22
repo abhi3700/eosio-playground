@@ -507,6 +507,15 @@ $ cleost push action cabeos1test2 create '["cabeos1user1", "Abhijit"]' -p cabeos
 	- sha256 (checksum256)
 	- ripemd160 (checksum160)
 
+* All possible combinations of Table params:
+  - [ ] vector of maps like this: ```vector<map<string, string>> balances;```
+  - [x] Map: 
+    + [`map<extended_symbol, uint64_t> balances;` used in __eosio_tipuser_contracts__](https://github.com/abhi3700/eosio_tipuser_contracts)
+  - [x] Vector
+  - [x] Vector of pairs:
+    + [`vector<pair<string, checksum256>> txn_vector;` used in __tabletest2_](./base/tabletest2)
+
+
 ## Account Permission
 * Multisig
 
