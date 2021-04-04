@@ -24,3 +24,15 @@ source ~/.bashrc
 
 # check wax network
 cleoswt get info
+
+
+# Powerup your eosio account on Jungle
+# M-1:
+#  - visit here: https://monitor3.jungletestnet.io/#powerup
+#  - enter your account & powerup
+
+# M-2:
+#  - visit here: hhttps://jungle.bloks.io/
+#  - login/add account using Anchor wallet (PC- desktop, Mobile)
+#  - Then, visit here: https://jungle3.bloks.io/wallet/powerup
+#  - give the amount of CPU or NET or both & then authorize on Anchor wallet & then the account is powered up.
