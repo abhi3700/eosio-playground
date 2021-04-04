@@ -8,3 +8,4 @@
 ## References
 * Github - https://github.com/ulamlabs/aioeos
 * pip - https://pypi.org/project/aioeos/
+* Documentation - https://aioeos.readthedocs.io/en/latest/index.html
