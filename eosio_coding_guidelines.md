@@ -556,8 +556,7 @@ $ cleost push action cabeos1test2 create '["cabeos1user1", "Abhijit"]' -p cabeos
     + [`map<extended_symbol, uint64_t> balances;` used in __eosio_tipuser_contracts__](https://github.com/abhi3700/eosio_tipuser_contracts)
   - [x] Vector
   - [x] Vector of pairs:
-    + [`vector<pair<string, checksum256>> txn_vector;` used in __tabletest2_](./base/tabletest2)
-
+    + [`vector<pair<string, checksum256>> txn_vector;` used in __tabletest2__](./base/tabletest2)
 
 ## Account Permission
 * Multisig
@@ -1241,7 +1240,10 @@ executed transaction: 0c4c058cf212668b95e725f460160acf06137b3667c1fbc459c0f6b2d9
 warning: transaction executed locally, but may not be confirmed by the network yet         ]
 ```
 
-
+## Error codes
+* Error 3090003: Provided keys, permissions, and delays do not satisfy declared authorizations
+* Error 3080004: Transaction exceeded the current CPU usage limit imposed on the transaction
+* Error 3120002: Nonexistent wallet
 
 ## References
 * [EOSIO Developer Portal](https://developers.eos.io/)
