@@ -109,7 +109,7 @@ while(it != job_idx.end()) {
 }
 ```
 
-* read table by 2 filters: job, country
+* read table by 2 filters: job, country (prints only these rows)
 ```console
 $ cleost push action bhubpeople11 readjobcntry '["engineer", "india"]' -p bhubpeople11@active
 executed transaction: 162f3bb1d0b67bb9e08604428c242aa0bc7f4c8763c7c6de47976fba6289b215  112 bytes  164 us
@@ -124,4 +124,48 @@ while((it != job_idx.end()) && (it->job == "engineer"_n) && (it->country == "ind
 	print("The row is: ", it->user, ",", it->firstname, ",", it->lastname, ",", it->job, ",", it->employee_id, ",", it->country, " | ");
 	++it;
 }
+```
+
+* read table by 2 filters: job, country as lower bound (prints all the rows)
+```console
+$ cleost push action bhubpeople11 readjobcntry '["engineer", "india"]' -p bhubpeople11@active
+executed transaction: b333eb7068b73b07790a12a06d39c25a053be8a62c60164371e1cf9888ec23f6  112 bytes  240 us
+#  bhubpeople11 <= bhubpeople11::readjobcntry   {"job":"engineer","country":"india"}
+>> table's size: 5 | The row is: cabeos1user1,abhijit,roy,engineer,CL0010234,india | The row is: cabeos1user5,somendra,mukherjee,engineer,CL3545,india | The row is: cabeos1user2,abhijit,bhattacharyya,engineer,CL005432,ukraine | The row is: cabeos1user4,sandilya,chatterjee,scientist,CL23545,india | The row is: cabeos1user3,deep,roy,scientist,CL005432,indonesia |
+warning: transaction executed locally, but may not be confirmed by the network yet         ]
+```
+
+  - The code snippet used:
+```cpp
+// M-2: print those rows with "engineer" & "india" values only
+while((it != job_idx.end())/* && (it->job == job) && (it->country == country)*/) {      // prints all 
+  print("The row is: ", it->user, ",", it->firstname, ",", it->lastname, ",", it->job, ",", it->employee_id, ",", it->country, " | ");
+  ++it;
+}
+```
+
+* Throws error after deleting cabeos1user1, cabeos1user5, there is no row with job, country as "engineer", "india", now read table by 2 filters: job, country (prints only these rows)
+```console
+$ cleost push action bhubpeople11 readjobcntry '["engineer", "india"]' -p bhubpeople11@active
+Error 3050003: eosio_assert_message assertion failure
+Error Details:
+assertion failure with message: the table row doesn't exist for the parsed job, country
+pending console output:
+```
+
+  - The code snippet used:
+```cpp
+// M-2: print those rows with "engineer" & "india" values only
+while((it != job_idx.end())/* && (it->job == job) && (it->country == country)*/) {      // prints all 
+  print("The row is: ", it->user, ",", it->firstname, ",", it->lastname, ",", it->job, ",", it->employee_id, ",", it->country, " | ");
+  ++it;
+}
+```
+
+
+
+### Action - `erase`
+* erase cabeos1user2
+```console
+cleost push action bhubpeople11 erase '["cabeos1user1"]' -p cabeos1user1@active
 ```

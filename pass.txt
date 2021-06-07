@@ -1,0 +1,39 @@
+Wallet (locally)
+================
+name: eosioplay
+password: "PW5HtzMF4hbnsyyMqNRs1Wd9jtnZ9eARSvoCkaCR32RJonEZu44dT"
+command: `cleos wallet unlock -n eosioplay --password PW5HtzMF4hbnsyyMqNRs1Wd9jtnZ9eARSvoCkaCR32RJonEZu44dT`
+########################################################################
+Jungle Testnet
+************************************************************************************
+
+Contracts
+====================
+bhubpeople11
+Private key: 5JnCz2hz7ANaNgBaAtQgdD7E7x4BczSWSdB5EVBWLWDGzV4oUBm
+Public key: EOS84sFn8EiFBhNQAscZjWK5LRmNGpL5zMLXQhqx1piydsiWXxfje
+-----------------------------------------------------------------
+
+
+Users
+==================
+cabeos1user1
+Private key: 5JWe3zbNL1JJocbUZ67ta6iwXV7mKs7w5chPENfJzVgfVRiU9nm
+Public key: EOS7L5cABCRbkk9XSPY9qiTzUV5jMoPWWmehe29fW23qK5j3M6Se9
+-----------------------------------------------
+cabeos1user2
+Private key: 5KVbZsEzhhXL5BsVqPjvrWaSYZiEjL7ENfbhuDUhfaQHfmh6Uyc
+Public key: EOS5oU8s1CX9fRBsqM1PHiuf1L4s1H8BdTxP2Vx1WP5bhoUbWXByu
+-----------------------------------------------
+cabeos1user3
+Private key: 5Kjxq6Q7HRqKL1aatFgdK4DVGe5ABSm43xFabsDQWJ2dhJKnf8U
+Public key: EOS4yCYGzJAo5sTGPtL8mGS2TgfLagykrodBWGaDApNRY8KWfHJ75
+-----------------------------------------------
+cabeos1user4
+Private key: 5J31vZbs12MfdDws8LaxTXmSTiwQ5hbiZMtudjMGv26T4ctQfjB
+Public key: EOS6myXcveRhUsvoYLARRc3JYRhT3wfofUMjHwVBgroGMeu2ghB41
+-----------------------------------------------
+cabeos1user5
+Private key: 5JGqNkksS6gQmY4kM71NwRrcegqmKKgJUnkKW5qZS1xm4cSGB61
+Public key: EOS6Syb9qp8LKKEYP9WpGCvxwL6vb5dTkZ7SJDqcBfRUJjXyWaWKR
+-----------------------------------------------

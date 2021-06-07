@@ -91,10 +91,18 @@ public:
 		auto job_country_id = combine_ids(job.value, country.value);
 		auto it = job_idx.find(job_country_id);
 
-		check(it != job_idx.end(), "the table row doesn't exist.");
+		check(it != job_idx.end(), "the table row doesn't exist for the parsed job, country");		// M-1
 
 		auto size = std::distance(job_idx.cbegin(), job_idx.cend());
 		print("table's size: ", size, " | ");
+
+		auto job_country_it = job_idx.lower_bound(combine_ids(job.value, country.value));
+		// auto job_country_it = job_idx.upper_bound(combine_ids(job.value, country.value));
+		check(job_country_it != job_idx.end(), "there is no row found for the parsed job, country");		// M-2
+
+		print("it found person\'s firstname, lastname: ", it->firstname, ", ", it->lastname ," | ");							// M-1
+		print("found person\'s firstname, lastname: ", job_country_it->firstname, ", ", job_country_it->lastname ," | ");		// M-2
+
 
 		// M-1: print all the rows as per priority
 		// while(it != job_idx.end()) {
@@ -103,7 +111,8 @@ public:
 		// }
 
 		// M-2: print those rows with "engineer" & "india" values only
-		while((it != job_idx.end()) && (it->job == "engineer"_n) && (it->country == "india"_n)) {
+		while((it != job_idx.end()) && (it->job == job) && (it->country == country)) {			// prints only those rows
+		// while((it != job_idx.end())/* && (it->job == job) && (it->country == country)*/) {			// prints all 
 			print("The row is: ", it->user, ",", it->firstname, ",", it->lastname, ",", it->job, ",", it->employee_id, ",", it->country, " | ");
 			++it;
 		}
