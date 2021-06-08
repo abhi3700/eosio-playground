@@ -1192,6 +1192,56 @@ action(
     std::make_tuple("driver"_n, (uint64_t)1)
 ).send();
 ```
+* Error like this:
+```console
+error: no member named 'symbol' in 'oyanftmarket::asset'
+                                        make_pair(extended_symbol(qty.symbol, capture_contract_in_map( frm_account_it->balances, qty )), qty.amount)
+                                                                  ~~~ ^
+/mnt/f/Coding/github_repos/eosio_oya_contracts/oyanftmarket/oyanftmarket.hpp:981:107: error: no member named 'amount' in 'oyanftmarket::asset'
+                                        make_pair(extended_symbol(qty.symbol, capture_contract_in_map( frm_account_it->balances, qty )), qty.amount)
+                                                                                                                                         ~~~ ^
+/mnt/f/Coding/github_repos/eosio_oya_contracts/oyanftmarket/oyanftmarket.hpp:1098:59: error: no member named 'symbol' in 'oyanftmarket::asset'
+                                                        [&](auto& ms) {return ms.first.get_symbol() == qty.symbol;});
+```
+  - Problem: the eosio::asset is not getting recognized
+  - there is a table with struct asset defined like this:
+```cpp
+  TABLE asset
+  {
+    uint64_t asset_id;
+    uint64_t creator_id;      // creator telegram_id    
+    string asset_name;        // asset name
+    string asset_desc;        // asset description
+
+    auto primary_key() const { return asset_id; }
+    uint64_t by_creator() const { return creator_id; }
+  };
+
+  using asset_index = multi_index<"assets"_n, asset,
+                indexed_by< "bycreator"_n, const_mem_fun<asset, uint64_t, &asset::by_creator>>
+                >;
+
+```
+  - Solution: just rename asset (in TABLE asset) with some other name like 'oasset'
+```cpp
+  TABLE oasset
+  {
+    uint64_t asset_id;
+    uint64_t creator_id;      // creator telegram_id    
+    string asset_name;        // asset name
+    string asset_desc;        // asset description
+
+    auto primary_key() const { return asset_id; }
+    uint64_t by_creator() const { return creator_id; }
+  };
+
+  using asset_index = multi_index<"assets"_n, oasset,
+                indexed_by< "bycreator"_n, const_mem_fun<oasset, uint64_t, &oasset::by_creator>>
+                >;
+
+```
+
+
 * For more errors log, Click [here](https://www.dfuse.io/en/blog/common-errors-on-eosio-and-how-to-get-past-them)
 
 ## Miscellaneous
