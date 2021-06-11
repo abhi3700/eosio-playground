@@ -62,6 +62,6 @@ print(res.status_code)
 
 if(res.status_code == 202):       # successfully posted for POST method
   print(res_json['transaction_id'])
-else:                             # code: 500, error occured
+else:                             # code: 500, Internal Server Error
   # print(res_json)
   print(res_json['error']['details'][0]['message'])
