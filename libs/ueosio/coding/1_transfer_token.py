@@ -6,15 +6,17 @@ from getpass import getpass
 from datetime import datetime, timedelta
 from ueosio import sign_tx, DataStream, get_expiration, get_tapos_info, build_push_transaction_body
 
+chain_api_url = "https://jungle3.cryptolions.io:443"
+
 ### example tx
-tx = {"delay_sec":0,"max_cpu_usage_ms":0,"actions":[{"account":"eosio.token","name":"transfer","data":{"from":"youraccount1","to":"argentinaeos","quantity":"0.0001 EOS","memo":" This tx was sent using µEOSIO"},"authorization":[{"actor":"youraccount1","permission":"active"}]}]}
+tx = {"delay_sec":0,"max_cpu_usage_ms":0,"actions":[{"account":"eosio.token","name":"transfer","data":{"from":"cabeos1user1","to":"cabeos1uer2","quantity":"0.0001 EOS","memo":" This tx was sent using µEOSIO"},"authorization":[{"actor":"cabeos1user1","permission":"active"}]}]}
 
 # Get chain info from a working api node
-info = r.get('https://api.eosargentina.io/v1/chain/get_info').json()
+info = r.get(f'{chain_api_url}/v1/chain/get_info').json()
 ref_block_num, ref_block_prefix = get_tapos_info(info['last_irreversible_block_id'])
 chain_id = info['chain_id']
 
-# package transation
+# package transaction
 data = tx['actions'][0]['data']
 ds = DataStream()
 ds.pack_name(data['from'])
@@ -37,8 +39,9 @@ tx.update({
 })
 
 # enter private key of the account
-auth = tx['actions'][0]['authorization'][0]
-private_key = getpass("Enter private key for %s@%s: " % (auth['actor'], auth['permission']))
+# auth = tx['actions'][0]['authorization'][0]
+# private_key = getpass("Enter private key for %s@%s: " % (auth['actor'], auth['permission']))
+private_key = "5JWe3zbNL1JJocbUZ67ta6iwXV7mKs7w5chPENfJzVgfVRiU9nm"
 
 # Sign transaction
 tx_id, tx = sign_tx(
@@ -52,5 +55,13 @@ packed_trx = binascii.hexlify(ds.getvalue()).decode('utf-8')
 tx = build_push_transaction_body(tx['signatures'][0], packed_trx)
 
 # Push transaction
-res = r.post('https://api.eosargentina.io/v1/chain/push_transaction', json=tx).json()
-print(res)
+res = r.post(f'{chain_api_url}/v1/chain/push_transaction', json=tx)
+res_json = res.json()
+
+print(res.status_code)
+
+if(res.status_code == 202):       # successfully posted for POST method
+  print(res_json['transaction_id'])
+else:                             # code: 500, error occured
+  # print(res_json)
+  print(res_json['error']['details'][0]['message'])
