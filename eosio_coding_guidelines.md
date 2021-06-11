@@ -1241,8 +1241,69 @@ error: no member named 'symbol' in 'oyanftmarket::asset'
 
 ```
 
+#### getting this error during fetching one of the table:
+* Error
+```console
+$ cleost get table oyanftmarket oyanftmarket accounts
+Error 3015004: The type defined in the ABI is invalid
+Error Details:
+bid_t
+```
 
-* For more errors log, Click [here](https://www.dfuse.io/en/blog/common-errors-on-eosio-and-how-to-get-past-them)
+* Problem: defined the contract table like this:
+```cpp
+typedef struct {
+  bool claimed_by_bidder;
+  asset bid_crypto_price;
+  float bid_fiat_price_usd;
+} bid_t;
+
+// scope: self i.e. oyanftmarket
+TABLE auction
+{
+...
+
+  map<uint64_t, bid_t> map_bidderid_info;
+...
+}
+```
+* ABI generated like this:
+```json
+{
+  "name": "pair_uint64_bid_t",
+  "base": "",
+  "fields": [
+      {
+          "name": "key",
+          "type": "uint64"
+      },
+      {
+          "name": "value",
+          "type": "bid_t"
+      }
+  ]
+},
+```
+* Solution: tried `struct bid_t {…}` [Source](https://t.me/c/1139062279/276517)
+```cpp
+struct bid_t {
+  bool claimed_by_bidder;
+  asset bid_crypto_price;
+  float bid_fiat_price_usd;
+};
+```
+* Output:
+```console
+$ cleost get table oyanftmarket oyanftmarket accounts
+{
+  "rows": [],
+  "more": false,
+  "next_key": "",
+  "next_key_bytes": ""
+}
+```
+
+#### For more errors log, Click [here](https://www.dfuse.io/en/blog/common-errors-on-eosio-and-how-to-get-past-them)
 
 ## Miscellaneous
 * let's say we deal with a table. Here, we set a value inside a table & then we want to read that value from inside the same ACTION, then the value is not going to be read becuase it hasn't been set yet until the transaction is made.
@@ -1291,8 +1352,9 @@ warning: transaction executed locally, but may not be confirmed by the network y
 ```
 
 ## Error codes
-* Error 3090003: Provided keys, permissions, and delays do not satisfy declared authorizations
+* Error 3015004: The type defined in the ABI is invalid
 * Error 3080004: Transaction exceeded the current CPU usage limit imposed on the transaction
+* Error 3090003: Provided keys, permissions, and delays do not satisfy declared authorizations
 * Error 3120002: Nonexistent wallet
 
 ## References
