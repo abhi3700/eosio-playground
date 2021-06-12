@@ -1,3 +1,11 @@
+'''
+    About
+    =====
+    - cabeos1user1 transfer token to cabeos1uer2
+    - show the txn_id of the successful transaction
+  
+'''
+
 import sys
 import json
 import binascii
