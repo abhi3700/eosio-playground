@@ -1351,6 +1351,15 @@ executed transaction: 0c4c058cf212668b95e725f460160acf06137b3667c1fbc459c0f6b2d9
 warning: transaction executed locally, but may not be confirmed by the network yet         ]
 ```
 
+### Hash storage: `checksum256` better than `string`
+* In order to use a hash as storage field in contract, always use `checksum256` instead of `string`.
+* Cons: contract wasm size would be greater if `checksum256` is used.
+* Pros: TABLE size would be relatively smaller as `checksum256` consumes 32 bytes of data, whereas `string` consumes 64+ bytes of data. 
+
+### Table Storage
+* Any data should be stored in the table, only if it's used in between the actions.
+* Otherwise, store the data into the cloud, if not stored into the table.
+
 ## Error codes
 * Error 3015004: The type defined in the ABI is invalid
 * Error 3080004: Transaction exceeded the current CPU usage limit imposed on the transaction
