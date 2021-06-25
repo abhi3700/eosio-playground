@@ -6,7 +6,7 @@
   
 '''
 
-import sys
+# import sys
 import json
 import binascii
 import requests as r
@@ -17,7 +17,7 @@ from ueosio import sign_tx, DataStream, get_expiration, get_tapos_info, build_pu
 chain_api_url = "https://jungle3.cryptolions.io:443"
 
 ### example tx
-tx = {"delay_sec":0,"max_cpu_usage_ms":0,"actions":[{"account":"eosio.token","name":"transfer","data":{"from":"cabeos1user1","to":"cabeos1uer2","quantity":"0.0001 EOS","memo":" This tx was sent using µEOSIO"},"authorization":[{"actor":"cabeos1user1","permission":"active"}]}]}
+tx = {"delay_sec":0,"max_cpu_usage_ms":0,"actions":[{"account":"eosio.token","name":"transfer","data":{"from":"cabeos1user1","to":"cabeos1user2","quantity":"0.0001 EOS","memo":" This tx was sent using µEOSIO"},"authorization":[{"actor":"cabeos1user1","permission":"active"}]}]}
 
 # Get chain info from a working api node
 info = r.get(f'{chain_api_url}/v1/chain/get_info').json()
