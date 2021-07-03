@@ -1303,6 +1303,29 @@ $ cleost get table oyanftmarket oyanftmarket accounts
 }
 ```
 
+#### Error 3070003: Serialization Error Processing WASM
+* During deploy of contract:
+```
+Publishing contract...
+Error 3070003: Serialization Error Processing WASM
+Error Details:
+no mapping for imported function
+pending console output:
+```
+* Problem:
+  - `regex` lib is used hence, string processing has to be performed by the contract.
+  - that's why the contract is to be free from heavy processing in EOSIO VM.
+* Solution:
+  - Do the processing outside of the contract
+* More info:
+  - [Here's how to find out: run the wasm through wasm2wat and grep for import. Look for anything which isn't an eosio intrinsic](https://t.me/c/1139062279/278714)
+  - [It's not recommended to do any heavy string processing inside a contract](https://t.me/c/1139062279/278721)
+  - [No, regex is not a part of C++, it's a lib](https://t.me/c/1139062279/278726)
+  - [You have 30ms for everything, and RAM is quite expensive](https://t.me/c/1139062279/278728)
+  - [The version of eosiolib which comes with the cdt includes a very hacked-up version of the C++ runtime library. It was made compatible with wasm in a rush. A lot of it was sacrificed.](https://t.me/c/1139062279/278732)
+  - [Maybe there's a regexp library for microprocessors, but it's really a wrong place to do](https://t.me/c/1139062279/278732)
+  - [clsdk uses the wasi-sdk,  a much more complete port of the RTL. But string processing is still a pretty heavy task for contracts.](https://t.me/c/1139062279/278734)
+
 #### For more errors log, Click [here](https://www.dfuse.io/en/blog/common-errors-on-eosio-and-how-to-get-past-them)
 
 ## Miscellaneous
