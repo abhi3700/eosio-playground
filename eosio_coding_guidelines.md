@@ -97,6 +97,12 @@ check(elapsed_time > 180, "the action is triggered before the exprity time i.e. 
 
 ## Table
 * `TABLE` is equal to `struct [[eosio::table]]`
+* Get the size/length of multi-index table
+```cpp
+parkinfo_index parkinfo_table(get_self(), park_id);
+auto size = std::distance(parkinfo_table.cbegin(),parkinfo_table.cend());
+check(size > 0, "park id doesn\'t exist");
+```
 * The table data is sorted by default as per the primary key like this:
 ```console
 $ cleoswt get table gpkbatescrow gbuser111111 cardwallet --show-payer
