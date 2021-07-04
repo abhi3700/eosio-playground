@@ -97,7 +97,7 @@ check(elapsed_time > 180, "the action is triggered before the exprity time i.e. 
 
 ## Table
 * `TABLE` is equal to `struct [[eosio::table]]`
-* Get the size/length of multi-index table
+* Get the size/length of multi-index table. NOTE: this method is applicable for few rows of multi-index table or else your action may time out scanning large tables.
 ```cpp
 parkinfo_index parkinfo_table(get_self(), park_id);
 auto size = std::distance(parkinfo_table.cbegin(),parkinfo_table.cend());
