@@ -70,11 +70,19 @@ $ sudo ./scripts/eosiocdt_install.sh
 ```
 
 ### Mac
+#### Follow the steps for EOSIO components - cleos, nodeos, keosd
 * [Source](https://github.com/EOSIO/eos#mac-os-x)
 * Steps:
 	- pre-requisite: Cover [this](https://github.com/abhi3700/my_coding_toolkit/blob/master/mac_for_win.md#3-unable-to-use-software-requiring-x86_64-architecture-on-m1-macbook) first.
 	- `ibrew tap eosio/eosio`
 	- `ibrew install eosio`
+
+#### Follow the steps [for Compiler i.e. eosio-cpp, ....]
+* [Source](https://github.com/EOSIO/eosio.cdt#mac-os-x-brew-install)
+* Steps:
+	- pre-requisite: Cover [this](https://github.com/abhi3700/my_coding_toolkit/blob/master/mac_for_win.md#3-unable-to-use-software-requiring-x86_64-architecture-on-m1-macbook) first.
+	- `ibrew tap eosio/eosio.cdt`
+	- `ibrew install eosio.cdt`
 
 ## Setup for Dependency Libraries
 Follow the steps:
