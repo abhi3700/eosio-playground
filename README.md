@@ -8,12 +8,13 @@ Dependency repositories:
 * [x] [Oraclize EOS API header](https://github.com/oraclize/eos-api)
 
 ## Installation
-### System: 
-* Linux
-* WSL
-* Mac
+* System: 
+	- Linux
+	- WSL
+	- Mac
 
-#### Follow the steps for EOSIO components - cleos, nodeos, keosd
+### Follow the steps for EOSIO components - cleos, nodeos, keosd
+#### Linux
 * M-1 (from setup file)
   - download latest (stable) version of `.deb` file from [here](https://github.com/EOSIO/eosio/releases).
   - Install
@@ -67,6 +68,13 @@ $ cd eosio.cdt
 $ ./scripts/eosiocdt_build.sh
 $ sudo ./scripts/eosiocdt_install.sh
 ```
+
+### Mac
+* [Source](https://github.com/EOSIO/eos#mac-os-x)
+* Steps:
+	- pre-requisite: Cover [this](https://github.com/abhi3700/my_coding_toolkit/blob/master/mac_for_win.md#3-unable-to-use-software-requiring-x86_64-architecture-on-m1-macbook) first.
+	- `ibrew tap eosio/eosio`
+	- `ibrew install eosio`
 
 ## Setup for Dependency Libraries
 Follow the steps:
