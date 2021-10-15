@@ -6,3 +6,5 @@ test*
 # ignore folders
 .svn/
 .vscode/
+node_modules/
+package-lock.json
