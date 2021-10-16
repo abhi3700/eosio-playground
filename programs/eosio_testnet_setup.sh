@@ -2,7 +2,11 @@
 # Setup your local DApp development environment sin CLI
 # =================================================================
 # open bash file
+# For Ubuntu (WSL), Win 10
 nano ~/.bashrc
+
+# For Mac
+nano ~/.zprofile
 
 # -----------------------------------------------------------------
 # Refer RPI API for different networks 
@@ -20,7 +24,11 @@ alias cleoswm='cleos -u https://chain.wax.io/'
 alias cleoswt='cleos -u https://api.waxtest.greeneosio.com/'
 # -----------------------------------------------------------------
 # call source by executing
+# For Ubuntu (WSL), Win 10
 source ~/.bashrc
+
+# For Mac
+source ~/.zprofile
 
 # check wax network
 cleoswt get info
