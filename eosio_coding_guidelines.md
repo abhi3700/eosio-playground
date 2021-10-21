@@ -40,47 +40,47 @@
 * Inline actions are the caller actions, but `on_notify` attributed functions are actually callee functions (utility) to update the table of contract called.
 * `on_notify` function
 	- `eosio.token::transfer` action is calling a helper function deposit to add the info (i.e. transferred money) to the contract (`hodl`)'s table.
-  - `*::transfer` annotation means any contract with transfer ACTION can trigger this function of this contract
-  - here, avoid using `eosio::check()`, because the `transfer` ACTION can fail & lead to no transfer of asset (token, card, etc.) to this contract ac. Instead use `if-else` logic like this:
+	- `*::transfer` annotation means any contract with transfer ACTION can trigger this function of this contract
+	- here, avoid using `eosio::check()`, because the `transfer` ACTION can fail & lead to no transfer of asset (token, card, etc.) to this contract ac. Instead use `if-else` logic like this:
 ```cpp
 void tippertipper::deposit( const name& from_ac, 
-                            const name& contract_ac, 
-                            const asset& quantity,
-                            const string& memo ) 
+														const name& contract_ac, 
+														const asset& quantity,
+														const string& memo ) 
 {
-  ...
-  ...
-  // if there is no alphabets, just the telegram_id in memo.
-  if(count_alpha(memo) == 0) {
-    auto tg_id = memo;    // capture the telegram_id
+	...
+	...
+	// if there is no alphabets, just the telegram_id in memo.
+	if(count_alpha(memo) == 0) {
+		auto tg_id = memo;    // capture the telegram_id
 
-    // instantiate the `account` table
-    account_index account_table(get_self(), get_self().value);
-    auto account_it = account_table.find(owner_id);
+		// instantiate the `account` table
+		account_index account_table(get_self(), get_self().value);
+		auto account_it = account_table.find(owner_id);
 
-    // update (add/modify) the deposit_qty
-    if(account_it == account_table.end()) {
-      account_table.emplace(get_self(), [&](auto& row) {
-        row.owner = tg_id;
-        row.balances.emplace_back(
-          make_pair("symbol_name", quantity.symbol.code()),
-          make_pair("symbol_precision", quantity.symbol.precision()),
-          make_pair("contract", get_first_receiver()),
-          make_pair("value", quantity.amount)
-        )
-      });
-    } else {
-      account_table.modify(account_it, get_self(), [&](auto& row) {
-        row.balances.emplace_back(
-          make_pair("symbol_name", quantity.symbol.code()),
-          make_pair("symbol_precision", quantity.symbol.precision()),
-          make_pair("contract", get_first_receiver()),
-          make_pair("value", quantity.amount)
-        )
-      });
-    }
+		// update (add/modify) the deposit_qty
+		if(account_it == account_table.end()) {
+			account_table.emplace(get_self(), [&](auto& row) {
+				row.owner = tg_id;
+				row.balances.emplace_back(
+					make_pair("symbol_name", quantity.symbol.code()),
+					make_pair("symbol_precision", quantity.symbol.precision()),
+					make_pair("contract", get_first_receiver()),
+					make_pair("value", quantity.amount)
+				)
+			});
+		} else {
+			account_table.modify(account_it, get_self(), [&](auto& row) {
+				row.balances.emplace_back(
+					make_pair("symbol_name", quantity.symbol.code()),
+					make_pair("symbol_precision", quantity.symbol.precision()),
+					make_pair("contract", get_first_receiver()),
+					make_pair("value", quantity.amount)
+				)
+			});
+		}
 
-  }
+	}
 
 ```
 
@@ -107,31 +107,31 @@ check(size > 0, "park id doesn\'t exist");
 ```console
 $ cleoswt get table gpkbatescrow gbuser111111 cardwallet --show-payer
 {
-  "rows": [{
-      "data": {
-        "card_id": "100000000007690",
-        "contract_ac": "simpleassets",
-        "usage_status": "available"
-      },
-      "payer": "gpkbatescrow"
-    },{
-      "data": {
-        "card_id": "100000000007693",
-        "contract_ac": "simpleassets",
-        "usage_status": "available"
-      },
-      "payer": "gpkbatescrow"
-    },{
-      "data": {
-        "card_id": "100000000007709",
-        "contract_ac": "simpleassets",
-        "usage_status": "available"
-      },
-      "payer": "gpkbatescrow"
-    }
-  ],
-  "more": false,
-  "next_key": ""
+	"rows": [{
+			"data": {
+				"card_id": "100000000007690",
+				"contract_ac": "simpleassets",
+				"usage_status": "available"
+			},
+			"payer": "gpkbatescrow"
+		},{
+			"data": {
+				"card_id": "100000000007693",
+				"contract_ac": "simpleassets",
+				"usage_status": "available"
+			},
+			"payer": "gpkbatescrow"
+		},{
+			"data": {
+				"card_id": "100000000007709",
+				"contract_ac": "simpleassets",
+				"usage_status": "available"
+			},
+			"payer": "gpkbatescrow"
+		}
+	],
+	"more": false,
+	"next_key": ""
 }
 ```
 	- Here, card_id is the primary key. So, the each row is sorted by card_id.
@@ -149,30 +149,30 @@ address_index addresses(get_self(), get_first_receiver().value);
 ```console
 $ cleost get table cabeos1test2 cabeos1test2 people --show-payer
 {
-  "rows": [{
-      "data": {
-        "key": "cabeos1user1",
-        "first_name": "abhijit",
-        "last_name": "roy",
-        "street": "r79, (top floor) \n Sec-74",
-        "city": "Mohali",
-        "state": "Punjab"
-      },
-      "payer": "cabeos1user1"
-    },{
-      "data": {
-        "key": "cabeos1user2",
-        "first_name": "ramesh",
-        "last_name": "bhattacharya",
-        "street": "2-lane park street",
-        "city": "Kolkata",
-        "state": "West Bengal"
-      },
-      "payer": "cabeos1user2"
-    }
-  ],
-  "more": false,
-  "next_key": ""
+	"rows": [{
+			"data": {
+				"key": "cabeos1user1",
+				"first_name": "abhijit",
+				"last_name": "roy",
+				"street": "r79, (top floor) \n Sec-74",
+				"city": "Mohali",
+				"state": "Punjab"
+			},
+			"payer": "cabeos1user1"
+		},{
+			"data": {
+				"key": "cabeos1user2",
+				"first_name": "ramesh",
+				"last_name": "bhattacharya",
+				"street": "2-lane park street",
+				"city": "Kolkata",
+				"state": "West Bengal"
+			},
+			"payer": "cabeos1user2"
+		}
+	],
+	"more": false,
+	"next_key": ""
 }
 ```
 * In EOSIO, we have multi-index table insprired from Boost Multi-index library. For more, look at the next section below.
@@ -182,134 +182,134 @@ $ cleost get table cabeos1test2 cabeos1test2 people --show-payer
 ```console
 $ cleost get table tippertipper tipuser11111 fund --lower 1397703940 --limit 0
 {
-  "rows": [],
-  "more": true,
-  "next_key": "1397703940",
-  "next_key_bytes": ""
+	"rows": [],
+	"more": true,
+	"next_key": "1397703940",
+	"next_key_bytes": ""
 }
 ```
 * fetch with (primary key, 1 limit)
 ```console
 $ cleost get table tippertipper tipuser11111 fund --lower 1397703940 --limit 1
 {
-  "rows": [{
-      "token_id": 1397703940,
-      "token_contract_ac": "eosio.token",
-      "balance": "9.0000 EOS"
-    }
-  ],
-  "more": false,
-  "next_key": "",
-  "next_key_bytes": ""
+	"rows": [{
+			"token_id": 1397703940,
+			"token_contract_ac": "eosio.token",
+			"balance": "9.0000 EOS"
+		}
+	],
+	"more": false,
+	"next_key": "",
+	"next_key_bytes": ""
 }
 ```
 * fetch with (primary key, 1 limit, show payer)
 ```console
 $ cleost get table tippertipper tipuser11111 fund --lower 1397703940 --limit 1 --show-payer
 {
-  "rows": [{
-      "data": {
-        "token_id": 1397703940,
-        "token_contract_ac": "eosio.token",
-        "balance": "9.0000 EOS"
-      },
-      "payer": "tippertipper"
-    }
-  ],
-  "more": false,
-  "next_key": "",
-  "next_key_bytes": ""
+	"rows": [{
+			"data": {
+				"token_id": 1397703940,
+				"token_contract_ac": "eosio.token",
+				"balance": "9.0000 EOS"
+			},
+			"payer": "tippertipper"
+		}
+	],
+	"more": false,
+	"next_key": "",
+	"next_key_bytes": ""
 }
 ```
 * fetch with (secondary key, 1 limit)
 ```console
 $ cleost get table tippertipper tipuser11111 fund --lower eosio.token --key-type name --index 2
 {
-  "rows": [{
-      "token_id": 1397703940,
-      "token_contract_ac": "eosio.token",
-      "balance": "9.0000 EOS"
-    }
-  ],
-  "more": false,
-  "next_key": "",
-  "next_key_bytes": ""
+	"rows": [{
+			"token_id": 1397703940,
+			"token_contract_ac": "eosio.token",
+			"balance": "9.0000 EOS"
+		}
+	],
+	"more": false,
+	"next_key": "",
+	"next_key_bytes": ""
 }
 ```
 * fetch with (secondary key, 1 limit, show payer)
 ```console
 $ cleost get table tippertipper tipuser11111 fund --lower eosio.token --key-type name --index 2 --show-payer
 {
-  "rows": [{
-      "data": {
-        "token_id": 1397703940,
-        "token_contract_ac": "eosio.token",
-        "balance": "9.0000 EOS"
-      },
-      "payer": "tippertipper"
-    }
-  ],
-  "more": false,
-  "next_key": "",
-  "next_key_bytes": ""
+	"rows": [{
+			"data": {
+				"token_id": 1397703940,
+				"token_contract_ac": "eosio.token",
+				"balance": "9.0000 EOS"
+			},
+			"payer": "tippertipper"
+		}
+	],
+	"more": false,
+	"next_key": "",
+	"next_key_bytes": ""
 }
 ```
 * fetch with (secondary key, 1 limit)
 ```console
 $ cleost get table tippertipper tipuser11111 fund --lower eosio.token --key-type name --index 2 --limit 1
 {
-  "rows": [{
-      "token_id": 1397703940,
-      "token_contract_ac": "eosio.token",
-      "balance": "9.0000 EOS"
-    }
-  ],
-  "more": true,
-  "next_key": "14781000547611517456",
-  "next_key_bytes": ""
+	"rows": [{
+			"token_id": 1397703940,
+			"token_contract_ac": "eosio.token",
+			"balance": "9.0000 EOS"
+		}
+	],
+	"more": true,
+	"next_key": "14781000547611517456",
+	"next_key_bytes": ""
 }
 ```
 * fetch with (secondary key, 1 limit, show payer)
 ```console
 $ cleost get table tippertipper tipuser11111 fund --show-payer --lower eosio.token --key-type name --index 2 --limit 1
 {
-  "rows": [{
-      "data": {
-        "token_id": 1397703940,
-        "token_contract_ac": "eosio.token",
-        "balance": "9.0000 EOS"
-      },
-      "payer": "tippertipper"
-    }
-  ],
-  "more": true,
-  "next_key": "14781000547611517456",
-  "next_key_bytes": ""
+	"rows": [{
+			"data": {
+				"token_id": 1397703940,
+				"token_contract_ac": "eosio.token",
+				"balance": "9.0000 EOS"
+			},
+			"payer": "tippertipper"
+		}
+	],
+	"more": true,
+	"next_key": "14781000547611517456",
+	"next_key_bytes": ""
 }
 ```
 * fetch with (secondary key, show payer)
 ```console
 $ cleost get table tippertipper tipuser11111 fund --show-payer --lower eosio.token --key-type name --index 2
 {
-  "rows": [{
-      "data": {
-        "token_id": 1397703940,
-        "token_contract_ac": "eosio.token",
-        "balance": "9.0000 EOS"
-      },
-      "payer": "tippertipper"
-    },{
-      "data": {
-        "token_id": "21479244531320324",
-        "token_contract_ac": "tokenfutbol1",
-        "balance": "9.0000 FUTBOL"
-      },
-      "payer": "tippertipper"
-    }
-  ],
-  "more": false,
-  "next_key": "",
-  "next_key_bytes": ""
+	"rows": [{
+			"data": {
+				"token_id": 1397703940,
+				"token_contract_ac": "eosio.token",
+				"balance": "9.0000 EOS"
+			},
+			"payer": "tippertipper"
+		},{
+			"data": {
+				"token_id": "21479244531320324",
+				"token_contract_ac": "tokenfutbol1",
+				"balance": "9.0000 FUTBOL"
+			},
+			"payer": "tippertipper"
+		}
+	],
+	"more": false,
+	"next_key": "",
+	"next_key_bytes": ""
 }
 ```
 
@@ -399,13 +399,13 @@ ptr._item->primary_key() == input_primary
 		+ E.g. below:
 ```cpp
 addresses.emplace(user, [&]( auto& row ) {
-      row.key = user;
-      row.first_name = first_name;
-      row.last_name = last_name;
-      row.street = street;
-      row.city = city;
-      row.state = state;
-    });
+			row.key = user;
+			row.first_name = first_name;
+			row.last_name = last_name;
+			row.street = street;
+			row.city = city;
+			row.state = state;
+		});
 ``` 
 	- `modify`: Update a record in the table. This method accepts 3 arguments: [Source](https://developers.eos.io/welcome/latest/getting-started/smart-contract-development/data-persistence)
 		+ a. The iterator defined earlier, presently set to the user as declared when calling this action.
@@ -414,13 +414,13 @@ addresses.emplace(user, [&]( auto& row ) {
 		+ E.g. below:
 ```cpp
 addresses.modify(iterator, user, [&]( auto& row ) {
-      row.key = user;
-      row.first_name = first_name;
-      row.last_name = last_name;
-      row.street = street;
-      row.city = city;
-      row.state = state;
-    });
+			row.key = user;
+			row.first_name = first_name;
+			row.last_name = last_name;
+			row.street = street;
+			row.city = city;
+			row.state = state;
+		});
 ```
 		+ modify the table by secondary index. Basically, get the index via `get_index` & then add `find`, `modify` to it
 ```cpp
@@ -477,10 +477,10 @@ $ cleost push action cabeos1test2 create '["cabeos1user1", "Abhijit"]' -p cabeos
 ```cpp
 	template<typename T>
 	void eraseall(T& table) {
-	  auto itr = table.begin();
-	  while(itr != table.end()) {
-	    itr = table.erase(itr);
-	  }
+		auto itr = table.begin();
+		while(itr != table.end()) {
+			itr = table.erase(itr);
+		}
 	}
 
 	ACTION deleteall() {
@@ -557,12 +557,12 @@ $ cleost push action cabeos1test2 create '["cabeos1user1", "Abhijit"]' -p cabeos
 	- ripemd160 (checksum160)
 
 * All possible combinations of Table params:
-  - [ ] vector of maps like this: ```vector<map<string, string>> balances;```
-  - [x] Map: 
-    + [`map<extended_symbol, uint64_t> balances;` used in __eosio_tipuser_contracts__](https://github.com/abhi3700/eosio_tipuser_contracts)
-  - [x] Vector
-  - [x] Vector of pairs:
-    + [`vector<pair<string, checksum256>> txn_vector;` used in __tabletest2__](./base/tabletest2)
+	- [ ] vector of maps like this: ```vector<map<string, string>> balances;```
+	- [x] Map: 
+		+ [`map<extended_symbol, uint64_t> balances;` used in __eosio_tipuser_contracts__](https://github.com/abhi3700/eosio_tipuser_contracts)
+	- [x] Vector
+	- [x] Vector of pairs:
+		+ [`vector<pair<string, checksum256>> txn_vector;` used in __tabletest2__](./base/tabletest2)
 
 ## Account Permission
 * Multisig
@@ -655,9 +655,9 @@ Basically, try to see the values of local variables defined in the action
 * So, try to see the variables like this:
 	- Here, in the console, the 3 vars output can be seen.
 ```cpp
-		print("get_self(): ", get_self(), " | ");	// for debugging
-		print("get_first_receiver(): ", get_first_receiver(), " | ");	// for debugging
-		print("get_first_receiver() value: ", get_first_receiver().value, " |");	// for debugging
+print("get_self(): ", get_self(), " | ");	// for debugging
+print("get_first_receiver(): ", get_first_receiver(), " | ");	// for debugging
+print("get_first_receiver() value: ", get_first_receiver().value, " |");	// for debugging
 ```
 
 ```console
@@ -667,6 +667,17 @@ executed transaction: 71b204a40f008a24779a3f739af718a48299562b97837cc805be284f85
 >> get_self(): cabeos1test2 | get_first_receiver(): cabeos1test2 | get_first_receiver() value: 4723900389413761568 |
 warning: transaction executed locally, but may not be confirmed by the network yet         ]
 ```
+
+## Resources
+* __RAM__: Here, the developer has the option of setting the `ram_payer` either as contract or user/caller (of SC function) in creating/modifying multi-index table.
+* __CPU__ & __NET__:
+	- Usage: considered total as transaction fee.
+	- [How to set a payer](https://developers.eos.io/manuals/eosjs/latest/how-to-guides/how-to-set-a-payer)
+	- Here, the developer has the option of setting the `RESOURCE_PAYER` in `eosio.cdt-v1.8`, `eosio-v2.2`. Refer [this](https://developers.eos.io/manuals/eosio.cdt/latest/features/resource_payer).
+	- History: Earlier in `eosio-v1.8`, which was a highly anticipated upgrade for the EOS network, which included the ability for DAPPS to pay CPU for users. [KARMA Launches“We Pay CPU” Upgrade On EOSIO](https://medium.com/@karmaapp/karma-launches-we-pay-cpu-upgrade-on-eosio-329963cc4667), [EOSIO - How to pay for users' CPU](https://cmichel.io/eosio-how-to-pay-for-users-cpu/), [EOS issue-6332](https://github.com/EOSIO/eos/issues/6332)
+	- The differences b/w `eosio` `v1.8` & `v2.2` are:
+		+ In `v1.8` (only on-chain), only doable from smart contract, but not otherwise as full stack developer.
+		+ In `v2.2` (on-chain & off-chain), doable from both smart contract & using `eosjs` lib. Refer [this](https://developers.eos.io/manuals/eosjs/latest/how-to-guides/how-to-set-a-payer).
 
 
 ## Troubleshooting
@@ -716,10 +727,10 @@ read datastream of length 56 over by -26
 ```cpp
 	template<typename T>
 	void eraseall(T& table) {
-	  auto itr = table.begin();
-	  while(itr != table.end()) {
-	    itr = table.erase(itr);
-	  }
+		auto itr = table.begin();
+		while(itr != table.end()) {
+			itr = table.erase(itr);
+		}
 	}
 
 	ACTION deleteall() {
@@ -737,17 +748,17 @@ read datastream of length 56 over by -26
 ```console
 $ cleost get table cabeos1test2 cabeos1test2 people
 {
-  "rows": [{
-      "key": "cabeos1user1",
-      "first_name": "abhijit",
-      "last_name": "roy",
-      "street": "27",
-      "city": "r79, (top floor) \n Sec-74",
-      "state": "Mohali"
-    }
-  ],
-  "more": false,
-  "next_key": ""
+	"rows": [{
+			"key": "cabeos1user1",
+			"first_name": "abhijit",
+			"last_name": "roy",
+			"street": "27",
+			"city": "r79, (top floor) \n Sec-74",
+			"state": "Mohali"
+		}
+	],
+	"more": false,
+	"next_key": ""
 }
 ```
 	- Here, you are getting the data which was hindering the new data to get parsed as per the new data structure.
@@ -762,9 +773,9 @@ warning: transaction executed locally, but may not be confirmed by the network y
 ```console
 $ cleost get table cabeos1test2 cabeos1test2 people
 {
-  "rows": [],
-  "more": false,
-  "next_key": ""
+	"rows": [],
+	"more": false,
+	"next_key": ""
 }
 ```
 	- DONE!
@@ -839,7 +850,7 @@ pending console output:
 ```console
 ...
 ./../include/toetaxiride.hpp:242:80: error: function 'get_secondary_1' with deduced return type cannot be used before it is defined
-                                                                        indexed_by<"bydriver"_n, const_mem_fun<ridetaxi, uint64_t, &ridetaxi::get_secondary_1>>,
+																																				indexed_by<"bydriver"_n, const_mem_fun<ridetaxi, uint64_t, &ridetaxi::get_secondary_1>>,
 
 ...
 ...                                                                                                                                              ^
@@ -896,14 +907,14 @@ could not insert object, most likely a uniqueness constraint was violated: pendi
 ```console
 $ cleost get table toe13rwallet toecom111111 ridewallet
 {
-  "rows": [{
-      "balance": "0.0001 TOE"
-    },{
-      "balance": "15.8000 TOE"
-    }
-  ],
-  "more": false,
-  "next_key": ""
+	"rows": [{
+			"balance": "0.0001 TOE"
+		},{
+			"balance": "15.8000 TOE"
+		}
+	],
+	"more": false,
+	"next_key": ""
 }
 ```
 	- There is clear problem in the data structure in the table.
@@ -936,8 +947,8 @@ $ cleost get table toe13rwallet toecom111111 ridewallet
 * Error during action_wrapper for inline action to external contracts
 ```console
 /mnt/f/Coding/github_repos/toe_contracts/toeridetaxi/src/toeridetaxi.cpp:648:2: error: type 'toeridewallet::disburse_action' (aka 'action_wrapper<operator""_n<char, 'd',
-      'i', 's', 'b', 'u', 'r', 's', 'e'>(), &toeridewallet::disburse>') does not provide a call operator
-        disburse(receiver_ac, wallet_holder, quantity, memo);
+			'i', 's', 'b', 'u', 'r', 's', 'e'>(), &toeridewallet::disburse>') does not provide a call operator
+				disburse(receiver_ac, wallet_holder, quantity, memo);
 ```
 	- missing `send()`. So, the modified code is:
 ```cpp
@@ -1000,23 +1011,23 @@ pending console output:
 	- __Before:__ The source code used:
 ```cpp
 void toeridex::initridex(
-                     
-                        const name& ride_type,
-                        const asset& toe_qty,
-                        uint64_t ride_qty ) 
+										 
+												const name& ride_type,
+												const asset& toe_qty,
+												uint64_t ride_qty ) 
 {
-    // require the authority of toe_owner ac - "bhubtoeindia"
-    require_auth(token_issuer);
-    // require_auth(get_self());
+		// require the authority of toe_owner ac - "bhubtoeindia"
+		require_auth(token_issuer);
+		// require_auth(get_self());
 ...
 ...
 ...
-    action(
-        permission_level{token_issuer, "active"_n},
-        token_contract_ac,
-        "transfer"_n,
-        std::make_tuple(token_issuer, ridex_supply_ac, toe_qty, std::string("transfer initial toe quantity"))
-    ).send();
+		action(
+				permission_level{token_issuer, "active"_n},
+				token_contract_ac,
+				"transfer"_n,
+				std::make_tuple(token_issuer, ridex_supply_ac, toe_qty, std::string("transfer initial toe quantity"))
+		).send();
 ...
 ...
 ...
@@ -1034,10 +1045,10 @@ action-1: via on_notify("token::transfer") token_issuer transfers to contract_ac
 
 action-2: inside contract's action `initridex`
 		action(
-		    permission_level{get_self(), "active"_n},
-		    token_contract_ac,
-		    "transfer"_n,
-		    std::make_tuple(get_self(), ridex_supply_ac, toe_qty, std::string("transfer initial toe quantity"))
+				permission_level{get_self(), "active"_n},
+				token_contract_ac,
+				"transfer"_n,
+				std::make_tuple(get_self(), ridex_supply_ac, toe_qty, std::string("transfer initial toe quantity"))
 		).send();
 ```
 
@@ -1123,23 +1134,23 @@ pending console output:
 	- previous code of action:
 ```cpp
 void tropiumstake::remadmin(const name& type, 
-                    const name& admin) {
-    require_auth(get_self());
+										const name& admin) {
+		require_auth(get_self());
 
-    admin_index admin_table(get_self(), get_self().value);
-    auto admin_it = admin_table.find(type.value);
+		admin_index admin_table(get_self(), get_self().value);
+		auto admin_it = admin_table.find(type.value);
 
-    check(admin_it != admin_table.end(), "set admins list using action - \'setadmins\'.");
-    check(admin_it->vector_admin.size() != 0, "empty admin list");
-    
-    auto vec = admin_it->vector_admin;
-    auto vec_it = std::find(vec.begin(), vec.end(), admin);
+		check(admin_it != admin_table.end(), "set admins list using action - \'setadmins\'.");
+		check(admin_it->vector_admin.size() != 0, "empty admin list");
+		
+		auto vec = admin_it->vector_admin;
+		auto vec_it = std::find(vec.begin(), vec.end(), admin);
 
-    check(vec_it != vec.end(), "the parsed admin is not in the list."); 
+		check(vec_it != vec.end(), "the parsed admin is not in the list."); 
 
-    admin_table.modify(admin_it, get_self(), [&](auto& row){    // found & erase it
-        row.vector_admin.erase(vec_it);
-    });
+		admin_table.modify(admin_it, get_self(), [&](auto& row){    // found & erase it
+				row.vector_admin.erase(vec_it);
+		});
 
 }
 ```
@@ -1147,21 +1158,21 @@ void tropiumstake::remadmin(const name& type,
 	- Rectify that by removing that copy. So, the modified code is:
 ```cpp
 void tropiumstake::remadmin(const name& type, 
-                    const name& admin) {
-    require_auth(get_self());
+										const name& admin) {
+		require_auth(get_self());
 
-    admin_index admin_table(get_self(), get_self().value);
-    auto admin_it = admin_table.find(type.value);
+		admin_index admin_table(get_self(), get_self().value);
+		auto admin_it = admin_table.find(type.value);
 
-    check(admin_it != admin_table.end(), "set admins list using action - \'setadmins\'.");
-    check(admin_it->vector_admin.size() != 0, "empty admin list");
-    
-    auto vec_it = std::find(admin_it->vector_admin.begin(), admin_it->vector_admin.end(), admin);
-    check(vec_it != admin_it->vector_admin.end(), "the parsed admin is not in the list."); 
+		check(admin_it != admin_table.end(), "set admins list using action - \'setadmins\'.");
+		check(admin_it->vector_admin.size() != 0, "empty admin list");
+		
+		auto vec_it = std::find(admin_it->vector_admin.begin(), admin_it->vector_admin.end(), admin);
+		check(vec_it != admin_it->vector_admin.end(), "the parsed admin is not in the list."); 
 
-    admin_table.modify(admin_it, get_self(), [&](auto& row){    // found & erase it
-        row.vector_admin.erase(vec_it);
-    });
+		admin_table.modify(admin_it, get_self(), [&](auto& row){    // found & erase it
+				row.vector_admin.erase(vec_it);
+		});
 
 }
 ```
@@ -1174,10 +1185,10 @@ add_ridequota("driver"_n, 1)`
 	- M-2: like this:
 ```cpp
 action(
-    permission_level{get_self(), "active"_n},
-    ridex_contract_ac,
-    "addridequota"_n,
-    std::make_tuple("driver"_n, 1)
+		permission_level{get_self(), "active"_n},
+		ridex_contract_ac,
+		"addridequota"_n,
+		std::make_tuple("driver"_n, 1)
 ).send();
 ```
 
@@ -1192,58 +1203,58 @@ pending console output:
 	- Soln: Cast the `1` like this:
 ```cpp
 action(
-    permission_level{get_self(), "active"_n},
-    ridex_contract_ac,
-    "addridequota"_n,
-    std::make_tuple("driver"_n, (uint64_t)1)
+		permission_level{get_self(), "active"_n},
+		ridex_contract_ac,
+		"addridequota"_n,
+		std::make_tuple("driver"_n, (uint64_t)1)
 ).send();
 ```
 * Error like this:
 ```console
 error: no member named 'symbol' in 'oyanftmarket::asset'
-                                        make_pair(extended_symbol(qty.symbol, capture_contract_in_map( frm_account_it->balances, qty )), qty.amount)
-                                                                  ~~~ ^
+																				make_pair(extended_symbol(qty.symbol, capture_contract_in_map( frm_account_it->balances, qty )), qty.amount)
+																																	~~~ ^
 /mnt/f/Coding/github_repos/eosio_oya_contracts/oyanftmarket/oyanftmarket.hpp:981:107: error: no member named 'amount' in 'oyanftmarket::asset'
-                                        make_pair(extended_symbol(qty.symbol, capture_contract_in_map( frm_account_it->balances, qty )), qty.amount)
-                                                                                                                                         ~~~ ^
+																				make_pair(extended_symbol(qty.symbol, capture_contract_in_map( frm_account_it->balances, qty )), qty.amount)
+																																																																				 ~~~ ^
 /mnt/f/Coding/github_repos/eosio_oya_contracts/oyanftmarket/oyanftmarket.hpp:1098:59: error: no member named 'symbol' in 'oyanftmarket::asset'
-                                                        [&](auto& ms) {return ms.first.get_symbol() == qty.symbol;});
+																												[&](auto& ms) {return ms.first.get_symbol() == qty.symbol;});
 ```
-  - Problem: the eosio::asset is not getting recognized
-  - there is a table with struct asset defined like this:
+	- Problem: the eosio::asset is not getting recognized
+	- there is a table with struct asset defined like this:
 ```cpp
-  TABLE asset
-  {
-    uint64_t asset_id;
-    uint64_t creator_id;      // creator telegram_id    
-    string asset_name;        // asset name
-    string asset_desc;        // asset description
+	TABLE asset
+	{
+		uint64_t asset_id;
+		uint64_t creator_id;      // creator telegram_id    
+		string asset_name;        // asset name
+		string asset_desc;        // asset description
 
-    auto primary_key() const { return asset_id; }
-    uint64_t by_creator() const { return creator_id; }
-  };
+		auto primary_key() const { return asset_id; }
+		uint64_t by_creator() const { return creator_id; }
+	};
 
-  using asset_index = multi_index<"assets"_n, asset,
-                indexed_by< "bycreator"_n, const_mem_fun<asset, uint64_t, &asset::by_creator>>
-                >;
+	using asset_index = multi_index<"assets"_n, asset,
+								indexed_by< "bycreator"_n, const_mem_fun<asset, uint64_t, &asset::by_creator>>
+								>;
 
 ```
-  - Solution: just rename asset (in TABLE asset) with some other name like 'oasset'
+	- Solution: just rename asset (in TABLE asset) with some other name like 'oasset'
 ```cpp
-  TABLE oasset
-  {
-    uint64_t asset_id;
-    uint64_t creator_id;      // creator telegram_id    
-    string asset_name;        // asset name
-    string asset_desc;        // asset description
+	TABLE oasset
+	{
+		uint64_t asset_id;
+		uint64_t creator_id;      // creator telegram_id    
+		string asset_name;        // asset name
+		string asset_desc;        // asset description
 
-    auto primary_key() const { return asset_id; }
-    uint64_t by_creator() const { return creator_id; }
-  };
+		auto primary_key() const { return asset_id; }
+		uint64_t by_creator() const { return creator_id; }
+	};
 
-  using asset_index = multi_index<"assets"_n, oasset,
-                indexed_by< "bycreator"_n, const_mem_fun<oasset, uint64_t, &oasset::by_creator>>
-                >;
+	using asset_index = multi_index<"assets"_n, oasset,
+								indexed_by< "bycreator"_n, const_mem_fun<oasset, uint64_t, &oasset::by_creator>>
+								>;
 
 ```
 
@@ -1259,9 +1270,9 @@ bid_t
 * Problem: defined the contract table like this:
 ```cpp
 typedef struct {
-  bool claimed_by_bidder;
-  asset bid_crypto_price;
-  float bid_fiat_price_usd;
+	bool claimed_by_bidder;
+	asset bid_crypto_price;
+	float bid_fiat_price_usd;
 } bid_t;
 
 // scope: self i.e. oyanftmarket
@@ -1269,43 +1280,43 @@ TABLE auction
 {
 ...
 
-  map<uint64_t, bid_t> map_bidderid_info;
+	map<uint64_t, bid_t> map_bidderid_info;
 ...
 }
 ```
 * ABI generated like this:
 ```json
 {
-  "name": "pair_uint64_bid_t",
-  "base": "",
-  "fields": [
-      {
-          "name": "key",
-          "type": "uint64"
-      },
-      {
-          "name": "value",
-          "type": "bid_t"
-      }
-  ]
+	"name": "pair_uint64_bid_t",
+	"base": "",
+	"fields": [
+			{
+					"name": "key",
+					"type": "uint64"
+			},
+			{
+					"name": "value",
+					"type": "bid_t"
+			}
+	]
 },
 ```
 * Solution: tried `struct bid_t {…}` [Source](https://t.me/c/1139062279/276517)
 ```cpp
 struct bid_t {
-  bool claimed_by_bidder;
-  asset bid_crypto_price;
-  float bid_fiat_price_usd;
+	bool claimed_by_bidder;
+	asset bid_crypto_price;
+	float bid_fiat_price_usd;
 };
 ```
 * Output:
 ```console
 $ cleost get table oyanftmarket oyanftmarket accounts
 {
-  "rows": [],
-  "more": false,
-  "next_key": "",
-  "next_key_bytes": ""
+	"rows": [],
+	"more": false,
+	"next_key": "",
+	"next_key_bytes": ""
 }
 ```
 
@@ -1319,18 +1330,18 @@ no mapping for imported function
 pending console output:
 ```
 * Problem:
-  - `regex` lib is used hence, string processing has to be performed by the contract.
-  - that's why the contract is to be free from heavy processing in EOSIO VM.
+	- `regex` lib is used hence, string processing has to be performed by the contract.
+	- that's why the contract is to be free from heavy processing in EOSIO VM.
 * Solution:
-  - Do the processing outside of the contract
+	- Do the processing outside of the contract
 * More info:
-  - [Here's how to find out: run the wasm through wasm2wat and grep for import. Look for anything which isn't an eosio intrinsic](https://t.me/c/1139062279/278714)
-  - [It's not recommended to do any heavy string processing inside a contract](https://t.me/c/1139062279/278721)
-  - [No, regex is not a part of C++, it's a lib](https://t.me/c/1139062279/278726)
-  - [You have 30ms for everything, and RAM is quite expensive](https://t.me/c/1139062279/278728)
-  - [The version of eosiolib which comes with the cdt includes a very hacked-up version of the C++ runtime library. It was made compatible with wasm in a rush. A lot of it was sacrificed.](https://t.me/c/1139062279/278732)
-  - [Maybe there's a regexp library for microprocessors, but it's really a wrong place to do](https://t.me/c/1139062279/278732)
-  - [clsdk uses the wasi-sdk,  a much more complete port of the RTL. But string processing is still a pretty heavy task for contracts.](https://t.me/c/1139062279/278734)
+	- [Here's how to find out: run the wasm through wasm2wat and grep for import. Look for anything which isn't an eosio intrinsic](https://t.me/c/1139062279/278714)
+	- [It's not recommended to do any heavy string processing inside a contract](https://t.me/c/1139062279/278721)
+	- [No, regex is not a part of C++, it's a lib](https://t.me/c/1139062279/278726)
+	- [You have 30ms for everything, and RAM is quite expensive](https://t.me/c/1139062279/278728)
+	- [The version of eosiolib which comes with the cdt includes a very hacked-up version of the C++ runtime library. It was made compatible with wasm in a rush. A lot of it was sacrificed.](https://t.me/c/1139062279/278732)
+	- [Maybe there's a regexp library for microprocessors, but it's really a wrong place to do](https://t.me/c/1139062279/278732)
+	- [clsdk uses the wasi-sdk,  a much more complete port of the RTL. But string processing is still a pretty heavy task for contracts.](https://t.me/c/1139062279/278734)
 
 #### For more errors log, Click [here](https://www.dfuse.io/en/blog/common-errors-on-eosio-and-how-to-get-past-them)
 
