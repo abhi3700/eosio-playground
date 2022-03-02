@@ -1,3 +1,25 @@
+## Version
+* Client version:
+```console
+❯ cleos version client
+v2.1.0
+```
+* Full version:
+```console
+❯ cleos version full
+v2.1.0-26a4d285d0be1052d962149e431eb81500782991
+```
+
+## Wallet
+* Create a wallet with password display in console
+```console
+❯ cleos wallet create -n ndwax --to-console                                   ⏎
+Creating wallet: ndwax
+Save password to use in the future to unlock this wallet.
+Without password imported keys will not be retrievable.
+"PW5JA4Mv9oaoNveyFhDyXwtxwMqTU22x8tu9z9KcgACBqAHMDEdvi"
+```
+
 ## Contract
 * Set the contract
 ```console
