@@ -8,66 +8,68 @@ Dependency repositories:
 * [x] [Oraclize EOS API header](https://github.com/oraclize/eos-api)
 
 ## Installation
-* System: 
-	- Linux
-	- WSL
+* System (EOSIO tools & SC toolkit): 
+	- Linux (using WSL)
 	- Mac
+* Editor (ST3 or VSC)
 
-### Follow the steps for EOSIO components - cleos, nodeos, keosd
-#### Linux
+Below is the details for installing both on Linux & Mac OS.
+
+### Linux
+#### Follow the steps for EOSIO components - cleos, nodeos, keosd
 * M-1 (from setup file)
   - download latest (stable) version of `.deb` file from [here](https://github.com/EOSIO/eosio/releases).
   - Install
-```console
-$ wget https://github.com/eosio/eos/releases/download/v2.0.9/eosio_2.0.9-1-ubuntu-18.04_amd64.deb
-$ sudo apt install ./eosio_2.0.9-1-ubuntu-18.04_amd64.deb
-```
-	- Uninstall
+	```console
+	$ wget https://github.com/eosio/eos/releases/download/v2.0.9/eosio_2.0.9-1-ubuntu-18.04_amd64.deb
+	$ sudo apt install ./eosio_2.0.9-1-ubuntu-18.04_amd64.deb
+	```
+  - Uninstall
 ```console
 $ sudo apt remove eosio
 ```
 
 * M-2 (from scratch)
   - Install
-```console
-$ git clone --recursive https://github.com/eosio/eos
-$ cd eosio
-$ ./scripts/eosio_build.sh
-$ sudo ./scripts/eosio_install.sh
-```
+	```console
+	$ git clone --recursive https://github.com/eosio/eos
+	$ cd eosio
+	$ ./scripts/eosio_build.sh
+	$ sudo ./scripts/eosio_install.sh
+	```
   - Uninstall
-```console
-$ cd eosio
-$ ./scripts/eosio_build.sh
-$ sudo ./scripts/eosio_install.sh
-```
+	```console
+	$ cd eosio
+	$ ./scripts/eosio_build.sh
+	$ sudo ./scripts/eosio_install.sh
+	```
 
 #### Follow the steps [for Compiler i.e. eosio-cpp, ....]
 * M-1 (from setup file)
   - download latest (stable) version of `.deb` file from [here](https://github.com/EOSIO/eosio.cdt/releases).
   - in the bash terminal
-```console
-$ wget https://github.com/eosio/eosio.cdt/releases/download/v1.7.0/eosio.cdt_1.7.0-1-ubuntu-18.04_amd64.deb
-$ sudo apt install ./eosio.cdt_1.7.0-1-ubuntu-18.04_amd64.deb
-```
-	- Uninstall
-```console
-$ sudo apt remove eosio.cdt
-```
+	```console
+	$ wget https://github.com/eosio/eosio.cdt/releases/download/v1.7.0/eosio.cdt_1.7.0-1-ubuntu-18.04_amd64.deb
+	$ sudo apt install ./eosio.cdt_1.7.0-1-ubuntu-18.04_amd64.deb
+	```
+  - Uninstall
+	```console
+	$ sudo apt remove eosio.cdt
+	```
 * M-2 (from scratch)
   - in the bash terminal
-```console
-$ git clone --recursive https://github.com/eosio/eosio.cdt
-$ cd eosio.cdt
-$ ./scripts/eosiocdt_build.sh
-$ sudo ./scripts/eosiocdt_install.sh
-```
+	```console
+	$ git clone --recursive https://github.com/eosio/eosio.cdt
+	$ cd eosio.cdt
+	$ ./scripts/eosiocdt_build.sh
+	$ sudo ./scripts/eosiocdt_install.sh
+	```
   - Uninstall
-```console
-$ cd eosio.cdt
-$ ./scripts/eosiocdt_build.sh
-$ sudo ./scripts/eosiocdt_install.sh
-```
+	```console
+	$ cd eosio.cdt
+	$ ./scripts/eosiocdt_build.sh
+	$ sudo ./scripts/eosiocdt_install.sh
+	```
 
 ### Mac
 #### Follow the steps for EOSIO components - cleos, nodeos, keosd
@@ -83,6 +85,20 @@ $ sudo ./scripts/eosiocdt_install.sh
 	- pre-requisite: Cover [this](https://github.com/abhi3700/my_coding_toolkit/blob/master/mac_for_win.md#3-unable-to-use-software-requiring-x86_64-architecture-on-m1-macbook) first.
 	- `ibrew tap eosio/eosio.cdt`
 	- `ibrew install eosio.cdt`
+
+#### Editor
+* VSC
+	- Install the packages:
+		+ [C++ Intellisense](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools)
+		```
+		1. Create a cpp config file named "c_cpp_properties.json" inside ".vscode" in the workspace/repository by clicking on the 'C++' in bottom menu in the editor.
+
+		2. Add this folder for EOSIO enabling:
+		"/usr/local/Cellar/eosio.cdt/1.8.1/opt/eosio.cdt/include/"
+
+		NOTE: update the eosio.cdt version. Also, confirm the directory path exists via `$ find / -type d -name "*eosio.cdt*"` in terminal. 
+		```
+		+ [TabNine](https://marketplace.visualstudio.com/items?itemName=TabNine.tabnine-vscode)
 
 ## Setup for Dependency Libraries
 Follow the steps:
