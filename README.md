@@ -89,9 +89,9 @@ $ sudo apt remove eosio
 #### Editor
 * VSC
 	- Install the packages:
-		+ [C++ Intellisense](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools)
+		+ [C/C++](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools)
 		```
-		1. Create a cpp config file named "c_cpp_properties.json" inside ".vscode" in the workspace/repository by clicking on the 'C++' in bottom menu in the editor.
+		1. Create a cpp config file named "c_cpp_properties.json" inside ".vscode" in the workspace/repository by clicking on the 'C++' in bottom menu in the editor. Get this file [here](./.vscode/c_cpp_properties.json)
 
 		2. Add this folder for EOSIO enabling:
 		"/usr/local/Cellar/eosio.cdt/1.8.1/opt/eosio.cdt/include/"
