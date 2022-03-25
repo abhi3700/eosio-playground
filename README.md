@@ -89,7 +89,7 @@ $ sudo apt remove eosio
 #### Editor
 * VSC
 	- Install as per instruction:
-		+ Refer [this](https://github.com/abhi3700/my_coding_toolkit/blob/master/vsc_all.md#cc) for installing packages & put the include paths in the settings page as mentioned below:
+		+ Refer [this](https://github.com/abhi3700/my_coding_toolkit/blob/master/vsc_all.md#cc) for installing packages & put the include paths (for linting) in the settings page as mentioned below:
 
 		```
 		M-1
@@ -118,6 +118,16 @@ $ sudo apt remove eosio
     	],
 		```
 		+ [TabNine](https://marketplace.visualstudio.com/items?itemName=TabNine.tabnine-vscode): For AI based suggestion
+
+> For linting in VSCode, there will be a clang based error like this, which is OK 🆒
+<img width="730" alt="image" src="https://user-images.githubusercontent.com/16472948/160118817-4c699444-771a-4257-a66f-a06b3e84155f.png">
+
+> Rest the file looks very clean ✅ without error.
+
+> TODO also looks in good color like this
+<img width="705" alt="image" src="https://user-images.githubusercontent.com/16472948/160118920-6db571d9-20a5-4cb8-9122-768a8406ea87.png">
+
+
 * ST
 	- Install the tabnine package
 
