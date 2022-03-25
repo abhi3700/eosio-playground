@@ -104,25 +104,9 @@ $ sudo apt remove eosio
 		OR
 
 		M-2 [RECOMMENDED]
-		1. Add this to "settings.json" in vscode. <kbd>cmd+shift+p</kbd> >> "Preferences: Open Settings (JSON)"
-		
-		"C_Cpp.default.includePath": [
-        "${workspaceFolder}/**",
-        "/usr/local/Cellar/eosio.cdt/1.8.1/opt/eosio.cdt/include",
-        "/usr/local/Cellar/eosio.cdt/1.8.1/opt/eosio.cdt/include/libc",
-        "/usr/local/Cellar/eosio.cdt/1.8.1/opt/eosio.cdt/include/libcxx",
-        "/usr/local/Cellar/eosio.cdt/1.8.1/opt/eosio.cdt/include/eosiolib/capi",
-        "/usr/local/Cellar/eosio.cdt/1.8.1/opt/eosio.cdt/include/eosiolib/contracts",
-        "/usr/local/Cellar/eosio.cdt/1.8.1/opt/eosio.cdt/include/eosiolib/core",
-        "/usr/local/Cellar/eosio.cdt/1.8.1/opt/eosio.cdt/include/eosiolib/native"
-    	],
+		1. Add [this](https://github.com/abhi3700/my_coding_toolkit/blob/master/vsc_all.md#settings-json) to "settings.json" in vscode. <kbd>cmd+shift+p</kbd> >> "Preferences: Open Settings (JSON)"
 		```
 		+ [TabNine](https://marketplace.visualstudio.com/items?itemName=TabNine.tabnine-vscode): For AI based suggestion
-
-> For linting in VSCode, there will be a clang based error like this, which is OK 🆒
-<img width="730" alt="image" src="https://user-images.githubusercontent.com/16472948/160118817-4c699444-771a-4257-a66f-a06b3e84155f.png">
-
-> Rest the file looks very clean ✅ without error.
 
 > TODO also looks in good color like this
 <img width="705" alt="image" src="https://user-images.githubusercontent.com/16472948/160118920-6db571d9-20a5-4cb8-9122-768a8406ea87.png">
