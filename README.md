@@ -109,7 +109,7 @@ $ sudo apt remove eosio
 		+ [TabNine](https://marketplace.visualstudio.com/items?itemName=TabNine.tabnine-vscode): For AI based suggestion
 
 
-> NOTE: There will be an error shown like this, but it's ok ✅. Rest looks clean 🆒
+> NOTE: There will be an error shown like this, but it's ok ✅. This linting error can be removed by uncommenting "c-cpp-flylint.includePaths" in this [settings](https://github.com/abhi3700/my_coding_toolkit/blob/master/vsc_all.md#settings-json). Rest looks clean 🆒
 <img width="723" alt="image" src="https://user-images.githubusercontent.com/16472948/160161121-adfaf809-f6c0-4866-95c6-2f155a531b0b.png">
 
 > TODO also looks in good color like this
