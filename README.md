@@ -108,6 +108,10 @@ $ sudo apt remove eosio
 		```
 		+ [TabNine](https://marketplace.visualstudio.com/items?itemName=TabNine.tabnine-vscode): For AI based suggestion
 
+
+> NOTE: There will be an error shown like this, but it's ok ✅. Rest looks clean 🆒
+<img width="723" alt="image" src="https://user-images.githubusercontent.com/16472948/160161121-adfaf809-f6c0-4866-95c6-2f155a531b0b.png">
+
 > TODO also looks in good color like this
 <img width="705" alt="image" src="https://user-images.githubusercontent.com/16472948/160118920-6db571d9-20a5-4cb8-9122-768a8406ea87.png">
 
