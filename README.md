@@ -88,8 +88,9 @@ $ sudo apt remove eosio
 
 #### Editor
 * VSC
-	- Install the packages:
-		+ [C/C++](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools)
+	- Install as per instruction:
+		+ Refer [this](https://github.com/abhi3700/my_coding_toolkit/blob/master/vsc_all.md#cc) for installing packages & put the include paths in the settings page as mentioned below:
+
 		```
 		M-1
 		1. Create a cpp config file named "c_cpp_properties.json" inside ".vscode" in the workspace/repository by clicking on the 'C++' in bottom menu in the editor. Get this file [here](./.vscode/c_cpp_properties.json)
@@ -116,7 +117,7 @@ $ sudo apt remove eosio
         "/usr/local/Cellar/eosio.cdt/1.8.1/opt/eosio.cdt/include/eosiolib/native"
     	],
 		```
-		+ [TabNine](https://marketplace.visualstudio.com/items?itemName=TabNine.tabnine-vscode)
+		+ [TabNine](https://marketplace.visualstudio.com/items?itemName=TabNine.tabnine-vscode): For AI based suggestion
 * ST
 	- Install the tabnine package
 
