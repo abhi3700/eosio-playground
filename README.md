@@ -91,14 +91,34 @@ $ sudo apt remove eosio
 	- Install the packages:
 		+ [C/C++](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools)
 		```
+		M-1
 		1. Create a cpp config file named "c_cpp_properties.json" inside ".vscode" in the workspace/repository by clicking on the 'C++' in bottom menu in the editor. Get this file [here](./.vscode/c_cpp_properties.json)
 
 		2. Add this folder for EOSIO enabling:
 		"/usr/local/Cellar/eosio.cdt/1.8.1/opt/eosio.cdt/include/"
 
-		NOTE: update the eosio.cdt version. Also, confirm the directory path exists via `$ find / -type d -name "*eosio.cdt*"` in terminal. 
+		NOTE: update the eosio.cdt version. Also, confirm the directory path exists via `$ find / -type d -name "*eosio.cdt*"` in terminal.
+
+
+		OR
+
+		M-2 [RECOMMENDED]
+		1. Add this to "settings.json" in vscode. <kbd>cmd+shift+p</kbd> >> "Preferences: Open Settings (JSON)"
+		
+		"C_Cpp.default.includePath": [
+        "${workspaceFolder}/**",
+        "/usr/local/Cellar/eosio.cdt/1.8.1/opt/eosio.cdt/include",
+        "/usr/local/Cellar/eosio.cdt/1.8.1/opt/eosio.cdt/include/libc",
+        "/usr/local/Cellar/eosio.cdt/1.8.1/opt/eosio.cdt/include/libcxx",
+        "/usr/local/Cellar/eosio.cdt/1.8.1/opt/eosio.cdt/include/eosiolib/capi",
+        "/usr/local/Cellar/eosio.cdt/1.8.1/opt/eosio.cdt/include/eosiolib/contracts",
+        "/usr/local/Cellar/eosio.cdt/1.8.1/opt/eosio.cdt/include/eosiolib/core",
+        "/usr/local/Cellar/eosio.cdt/1.8.1/opt/eosio.cdt/include/eosiolib/native"
+    	],
 		```
 		+ [TabNine](https://marketplace.visualstudio.com/items?itemName=TabNine.tabnine-vscode)
+* ST
+	- Install the tabnine package
 
 ## Setup for Dependency Libraries
 Follow the steps:
